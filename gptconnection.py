@@ -2,10 +2,8 @@ import openai
 import os
 from dotenv import load_dotenv
 
-#load_dotenv()
-#openai.api_key = os.getenv('OPENAI_API_KEY')
-
-openai.api_key = "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"
+load_dotenv()
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 """
 Have an openai model respond to a user prompt with its completion feature
