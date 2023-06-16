@@ -3,12 +3,20 @@ from gptconnection import openai_chatcompletion
 import csv
 import os
 import time
+import math
 import threading
 
 # A flag to tell the thread to stop
 stop_thread = False
 final_time_elapsed = 0
 
+"""
+Show the total elapsed time of the program
+Parameters:
+    None
+Returns:
+    None
+"""
 def show_time_elapsed():
     global final_time_elapsed
     start_time = time.time()
@@ -20,6 +28,13 @@ def show_time_elapsed():
             final_time_elapsed = elapsed_time
             break
 
+"""
+Convert the gpt responses into a CSV file
+Parameters:
+    input_string(string): The GPT response that will be converted into a CSV file
+Returns:
+    output.csv: the CSV file that contains the converted responses
+"""
 def convert_gpt_to_csv(input_string):
     output_filename = 'output.csv'
     
@@ -55,26 +70,68 @@ def convert_gpt_to_csv(input_string):
             for item in data[1]:
                 writer.writerow([group, item])
 
-# Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
-def label_datapoints(file):
-    print("Generating GPT response . . .\n")
+"""
+Asks GPT for a response for the data chunks then calls 'convert_gpt_to_csv' to compile the responses into a CSV file
+Parameters:
+    start(int): the starting index that moves up for each "chunk" of data
+    stop(int): the stop indext that ensures we move only the amount of data the chunk requires
+    row_list(list): the list of each data point
+    completed_gpt_requests(int): the number of chunks completed
+    num_of_gpt_requests(int): the final number of chunk requests to GPT
+    gpt_template(string): the template prompt that asks GPT to generate our data
+Returns completed_gpt_requests(int):
+    the number of completed GPT requests to fulfill the while loop conditional 
+"""
+def ask_and_compile_gpt(start, stop, row_list, completed_gpt_requests, num_of_gpt_requests, gpt_template):
+    for i in range(start, stop):
+        gpt_template += row_list[i] + '\n'
+
+    response = openai_chatcompletion(gpt_template)
+    completed_gpt_requests += 1
+    print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
+    time.sleep(1)
+    convert_gpt_to_csv(response)
+    print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
     
-    gpt_template = "Group the following data based on similarity using as many groups as you find appropriate. Ensure that each group has a group label that describes them. List each data point in the groups with a hyphen:\n"
+    return completed_gpt_requests
+"""
+Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
+Parameters:
+    file(csv file): the user's csv file that contains all of their data
+Returns:
+    None
+"""
+def label_datapoints(file):
+    
+    if os.path.exists('output.csv'):
+        os.remove('output.csv')
+        print("'output.csv' deleted successfully.")
+    
+    print("Generating GPT response . . .\n")
+    row_list = []
+    chunk_size = 25
+    
+    gpt_template = "Group the following data based on similarity using as many groups as you find appropriate. Ensure that each group has a group label that describes them. List each data point in the groups with a hyphen. If any datapoints are not grouped, label them as 'Not Grouped':\n"
     with open(file, newline='') as f:
         reader = csv.reader(f)
-        count2 = 0
-        count = 0
         for row in reader:
-            gpt_template += (row[0]) + '\n'
-            if count == 25:
-                response = openai_chatcompletion(gpt_template)
-                print('Successfully generated one GPT response.\nGenerating a CSV file . . .')
-                convert_gpt_to_csv(response)
-                count = -1
-            count += 1
-            if count2 == 100:
-                break
-            count2 += 1
+            row_list.append(row[0])
+    
+    num_of_gpt_requests = math.ceil(len(row_list) / chunk_size)
+    completed_gpt_requests = 0
+    
+    print("Average time: " + str(num_of_gpt_requests * 19.88 / 60) + " minutes\n")
+    
+    start = 0
+    stop = chunk_size
+
+    while completed_gpt_requests < num_of_gpt_requests:
+        completed_gpt_requests = ask_and_compile_gpt(start, stop, row_list, completed_gpt_requests, num_of_gpt_requests, gpt_template)
+        start = stop
+        stop += chunk_size
+        if stop > len(row_list):
+            stop = len(row_list)
+    
     print("Job's done.")
     
 
@@ -100,19 +157,17 @@ def label_datapoints(file):
 
 
 def main():
-    # Begin loading the labels with their datapoints
     label_datapoints('student_dataset.csv')
-    # convert_gpt_to_csv('input.txt')
     
     
     
-# # Start the loading thread
+# # Start the loading thread for the time elapsed
 loading_thread = threading.Thread(target=show_time_elapsed)
 loading_thread.start()
 
 main()
 
-# # Stop the loading thread
+# Stop the loading thread and show the total amount of time elapsed
 stop_thread = True
 loading_thread.join()
 print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
