@@ -36,7 +36,7 @@ def openai_chatcompletion(user_message, model_name = "gpt-3.5-turbo-16k", temper
     completion = openai.ChatCompletion.create(
         model = model_name,
         messages = [{"role": "user", "content": user_message}],
-        max_tokens = 1000,
+        # max_tokens = 1000,
         temperature = temperature
     )
 
