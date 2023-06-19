@@ -5,6 +5,9 @@ import os
 import time
 import math
 import threading
+import json
+
+GPT_TEMPLATES = json.load(open('prompts.json'))
 
 # A flag to tell the thread to stop
 stop_thread = False
@@ -94,6 +97,7 @@ def ask_and_compile_gpt(start, stop, row_list, completed_gpt_requests, num_of_gp
     print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
     
     return completed_gpt_requests
+
 """
 Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
 Parameters:
@@ -111,7 +115,7 @@ def label_datapoints(file):
     row_list = []
     chunk_size = 25
     
-    gpt_template = "Group the following data based on similarity using as many groups as you find appropriate. Ensure that each group has a group label that describes them. List each data point in the groups with a hyphen. If any datapoints are not grouped, label them as 'Not Grouped':\n"
+    gpt_template = GPT_TEMPLATES['group_data']
     with open(file, newline='') as f:
         reader = csv.reader(f)
         for row in reader:
