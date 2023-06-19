@@ -23,13 +23,14 @@ Returns:
 def show_time_elapsed():
     global final_time_elapsed
     start_time = time.time()
-    while True:
+
+    while not stop_thread:
         time.sleep(0.1)  # update every second
         elapsed_time = time.time() - start_time
         print(f"Time elapsed: {elapsed_time:.1f} seconds", end='\r')  # end='\r' overwrites the line
+
         if stop_thread:
             final_time_elapsed = elapsed_time
-            break
 
 """
 Convert the gpt responses into a CSV file
@@ -161,17 +162,20 @@ def label_datapoints(file):
 
 
 def main():
+    global stop_thread
+
+    # # Start the loading thread for the time elapsed
+    loading_thread = threading.Thread(target=show_time_elapsed)
+    loading_thread.start()
+
     label_datapoints('student_dataset.csv')
     
+    # Stop the loading thread and show the total amount of time elapsed
+    stop_thread = True
+    loading_thread.join()
+    print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
     
-    
-# # Start the loading thread for the time elapsed
-loading_thread = threading.Thread(target=show_time_elapsed)
-loading_thread.start()
+if __name__ == "__main__":
+    main()
 
-main()
 
-# Stop the loading thread and show the total amount of time elapsed
-stop_thread = True
-loading_thread.join()
-print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
