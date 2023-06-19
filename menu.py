@@ -173,16 +173,20 @@ def label_datapoints(file):
 
 
 def main():
-    
+    global stop_thread
+
+    # Start the loading thread for the time elapsed
+    loading_thread = threading.Thread(target=show_time_elapsed)
+    loading_thread.start()
+
     label_datapoints('student_dataset.csv')
 
+    stop_thread = True
+    loading_thread.join()
+    print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
 
     
-# Start the loading thread for the time elapsed
-loading_thread = threading.Thread(target=show_time_elapsed)
-loading_thread.start()
-main()
-stop_thread = True
-loading_thread.join()
-print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
+if __name__ == "__main__":
+    main()
+
 
