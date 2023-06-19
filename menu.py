@@ -1,13 +1,10 @@
 # The starting menu for the QuAD system
-from gptconnection import openai_chatcompletion
+from gptconnection import openai_sys_chatcompletion
 import csv
 import os
 import time
 import math
 import threading
-import json
-
-GPT_TEMPLATES = json.load(open('prompts.json'))
 
 # A flag to tell the thread to stop
 stop_thread = False
@@ -77,20 +74,20 @@ def convert_gpt_to_csv(input_string):
 """
 Asks GPT for a response for the data chunks then calls 'convert_gpt_to_csv' to compile the responses into a CSV file
 Parameters:
-    start(int): the starting index that moves up for each "chunk" of data
-    stop(int): the stop indext that ensures we move only the amount of data the chunk requires
-    row_list(list): the list of each data point
+    list_of_data(list): the list of each data point
     completed_gpt_requests(int): the number of chunks completed
     num_of_gpt_requests(int): the final number of chunk requests to GPT
     gpt_template(string): the template prompt that asks GPT to generate our data
 Returns:
     completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional 
 """
-def ask_and_compile_gpt(start, stop, row_list, completed_gpt_requests, num_of_gpt_requests, gpt_template):
-    for i in range(start, stop):
-        gpt_template += row_list[i] + '\n'
+def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template):
+    
+    user_input_string = ''
+    for data in parsed_list_of_data:
+        user_input_string += data
 
-    response = openai_chatcompletion(gpt_template)
+    response = openai_sys_chatcompletion(gpt_template, user_input_string)
     completed_gpt_requests += 1
     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
     time.sleep(1)
@@ -113,29 +110,30 @@ def label_datapoints(file):
         print("'output.csv' deleted successfully.")
     
     print("Generating GPT response . . .\n")
-    row_list = []
+    list_of_data = []
     chunk_size = 25
     
-    gpt_template = GPT_TEMPLATES['group_data']
+    gpt_template = 'group_data'
     with open(file, newline='') as f:
         reader = csv.reader(f)
         for row in reader:
-            row_list.append(row[0])
+            list_of_data.append(row[0])
     
-    num_of_gpt_requests = math.ceil(len(row_list) / chunk_size)
+    num_of_gpt_requests = math.ceil(len(list_of_data) / chunk_size)
     completed_gpt_requests = 0
     
-    print("Average time: " + str(num_of_gpt_requests * 19.88 / 60) + " minutes\n")
-    
-    start = 0
-    stop = chunk_size
+    print("Average time: " + str(math.ceil(num_of_gpt_requests * 19.88 / 60)) + " minutes\n")
+
+    # x and y are the indices indicating the chunks of data to parse through
+    x = 0
+    y = chunk_size
 
     while completed_gpt_requests < num_of_gpt_requests:
-        completed_gpt_requests = ask_and_compile_gpt(start, stop, row_list, completed_gpt_requests, num_of_gpt_requests, gpt_template)
-        start = stop
-        stop += chunk_size
-        if stop > len(row_list):
-            stop = len(row_list)
+        completed_gpt_requests = ask_and_compile_gpt(list_of_data[x:y], completed_gpt_requests, num_of_gpt_requests, gpt_template)
+        x = y
+        y += chunk_size  
+        if y > len(list_of_data):
+            y = len(list_of_data)
     
     print("Job's done.")
     
