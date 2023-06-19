@@ -1,6 +1,7 @@
 import openai
 import os
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -60,6 +61,38 @@ def openai_chatcompletion(user_message, model_name = "gpt-3.5-turbo-16k", max_to
         )
 
     return completion.choices[0].message.content
+
+"""
+Have an openai model respond to a pre-set system prompt and user input, with the model's chat completion feature
+Parameters:
+    sys_key(string): Key to get the system input from imported dictionary
+        Possible options:
+
+    user_message(string): User input sent to openai model
+    model_name(string): Name of the model the user hopes to use
+    max_tokens(int): Max number of tokens to expect as output; none if using the default max token
+    temperature(float): from 0 to 2; the higher it is the more random the response gets
+Returns(string):
+    the message that the model gives back as response
+"""
+def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-3.5-turbo-16k", max_tokens = None, temperature = 0):
+    if max_tokens is None:
+        completion = openai.ChatCompletion.create(
+            model = model_name,
+            messages = [{"role": "system", "content": user_message}, {"role": "user", "content": user_message}],
+            temperature = temperature
+        )
+    else:  
+        completion = openai.ChatCompletion.create(
+            model = model_name,
+            messages = [{"role": "system", "content": user_message}, {"role": "user", "content": user_message}],
+            max_tokens = max_tokens,
+            temperature = temperature
+        )
+
+    return completion.choices[0].message.content
+
+
 
 
 """Controls operation of the program."""
