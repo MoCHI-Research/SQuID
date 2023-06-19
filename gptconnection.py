@@ -66,8 +66,7 @@ def openai_chatcompletion(user_message, model_name = "gpt-3.5-turbo-16k", max_to
 Have an openai model respond to a pre-set system prompt and user input, with the model's chat completion feature
 Parameters:
     sys_key(string): Key to get the system input from imported dictionary
-        Possible options:
-
+        - See prompts.json for options
     user_message(string): User input sent to openai model
     model_name(string): Name of the model the user hopes to use
     max_tokens(int): Max number of tokens to expect as output; none if using the default max token
@@ -76,16 +75,20 @@ Returns(string):
     the message that the model gives back as response
 """
 def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-3.5-turbo-16k", max_tokens = None, temperature = 0):
+    filename = "prompts.json"
+    json_file = open(filename)
+    sys_prompt = json.load(json_file)[sys_key]
+
     if max_tokens is None:
         completion = openai.ChatCompletion.create(
             model = model_name,
-            messages = [{"role": "system", "content": user_message}, {"role": "user", "content": user_message}],
+            messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user_message}],
             temperature = temperature
         )
     else:  
         completion = openai.ChatCompletion.create(
             model = model_name,
-            messages = [{"role": "system", "content": user_message}, {"role": "user", "content": user_message}],
+            messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user_message}],
             max_tokens = max_tokens,
             temperature = temperature
         )
@@ -99,10 +102,12 @@ def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-3.5-turbo
 def main():
     user_message = input("Please enter your prompt: ")
     #user_message = "Tell me a lie."
-    completion_response = openai_completion(user_message)
-    chat_response = openai_chatcompletion(user_message)
-    print("This is the response from Completion:", completion_response)
-    print("This is the response from chatCompletion:", chat_response)
+    #completion_response = openai_completion(user_message)
+    #chat_response = openai_chatcompletion(user_message)
+    sys_response = openai_sys_chatcompletion("test", user_message)
+    #print("This is the response from Completion:", completion_response)
+    #print("This is the response from chatCompletion:", chat_response)
+    print("This is the response with system input:", sys_response)
 
 if __name__ == "__main__":
     main()
