@@ -6,9 +6,13 @@ import time
 import math
 import threading
 
+# GLOBAL VARIABLES
+SIZE_OF_BATCHES = 75
+
 # A flag to tell the thread to stop
 stop_thread = False
 final_time_elapsed = 0
+
 
 """
 Show the total elapsed time of the program
@@ -19,6 +23,7 @@ Returns:
 """
 def show_time_elapsed():
     global final_time_elapsed
+    global stop_thread
     start_time = time.time()
     while True:
         time.sleep(0.1)  # update every second
@@ -71,22 +76,26 @@ def convert_gpt_to_csv(input_string):
                 writer.writerow([group, item])
 
 """
-Asks GPT for a response for the data chunks then calls 'convert_gpt_to_csv' to compile the responses into a CSV file
+Asks GPT for a response for the data batches then calls 'convert_gpt_to_csv' to compile the responses into a CSV file
 Parameters:
     list_of_data(list): the list of each data point
-    completed_gpt_requests(int): the number of chunks completed
-    num_of_gpt_requests(int): the final number of chunk requests to GPT
+    completed_gpt_requests(int): the number of batches completed
+    num_of_gpt_requests(int): the final number of batches requests to GPT
     gpt_template(string): the template prompt that asks GPT to generate our data
 Returns:
     completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional 
 """
 def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template):
     
+    response = None
     user_input_string = ''
     for data in parsed_list_of_data:
         user_input_string += data
 
-    response = openai_sys_chatcompletion(gpt_template, user_input_string)
+    while response == None:
+        response = openai_sys_chatcompletion(gpt_template, user_input_string)
+    
+    
     completed_gpt_requests += 1
     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
     time.sleep(1)
@@ -110,7 +119,7 @@ def label_datapoints(file):
     
     print("Generating GPT response . . .\n")
     list_of_data = []
-    chunk_size = 25
+    batch_size = SIZE_OF_BATCHES
     
     gpt_template = 'group_data'
     with open(file, newline='') as f:
@@ -118,19 +127,23 @@ def label_datapoints(file):
         for row in reader:
             list_of_data.append(row[0])
     
-    num_of_gpt_requests = math.ceil(len(list_of_data) / chunk_size)
+    num_of_gpt_requests = math.ceil(len(list_of_data) / batch_size)
     completed_gpt_requests = 0
-    
-    print("Average time: " + str(math.ceil(num_of_gpt_requests * 19.88 / 60)) + " minutes\n")
 
-    # x and y are the indices indicating the chunks of data to parse through
+    print(f'Batches to complete: {num_of_gpt_requests}')
+    
+    # x and y are the indices indicating the batches of data to parse through
     x = 0
-    y = chunk_size
+    y = batch_size
+
+    # Initial check to see if batch is bigger than the dataset
+    if y > len(list_of_data):
+        y = len(list_of_data)
 
     while completed_gpt_requests < num_of_gpt_requests:
         completed_gpt_requests = ask_and_compile_gpt(list_of_data[x:y], completed_gpt_requests, num_of_gpt_requests, gpt_template)
         x = y
-        y += chunk_size  
+        y += batch_size  
         if y > len(list_of_data):
             y = len(list_of_data)
     
@@ -159,17 +172,16 @@ def label_datapoints(file):
 
 
 def main():
+    
     label_datapoints('student_dataset.csv')
+
+
     
-    
-    
-# # Start the loading thread for the time elapsed
+# Start the loading thread for the time elapsed
 loading_thread = threading.Thread(target=show_time_elapsed)
 loading_thread.start()
-
 main()
-
-# Stop the loading thread and show the total amount of time elapsed
 stop_thread = True
 loading_thread.join()
 print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
+
