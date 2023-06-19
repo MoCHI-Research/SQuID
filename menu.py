@@ -79,8 +79,8 @@ Parameters:
     completed_gpt_requests(int): the number of chunks completed
     num_of_gpt_requests(int): the final number of chunk requests to GPT
     gpt_template(string): the template prompt that asks GPT to generate our data
-Returns completed_gpt_requests(int):
-    the number of completed GPT requests to fulfill the while loop conditional 
+Returns:
+    completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional 
 """
 def ask_and_compile_gpt(start, stop, row_list, completed_gpt_requests, num_of_gpt_requests, gpt_template):
     for i in range(start, stop):
