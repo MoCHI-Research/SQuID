@@ -4,6 +4,9 @@ import csv
 import os
 import time
 import threading
+import json
+
+GPT_TEMPLATES = json.load(open('prompts.json'))
 
 # A flag to tell the thread to stop
 stop_thread = False
@@ -59,7 +62,7 @@ def convert_gpt_to_csv(input_string):
 def label_datapoints(file):
     print("Generating GPT response . . .\n")
     
-    gpt_template = "Group the following data based on similarity using as many groups as you find appropriate. Ensure that each group has a group label that describes them. List each data point in the groups with a hyphen:\n"
+    gpt_template = GPT_TEMPLATES['group_data']
     with open(file, newline='') as f:
         reader = csv.reader(f)
         count2 = 0
