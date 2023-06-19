@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 import json
 
+GPT_TEMPLATES = json.load(open('prompts.json'))
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
@@ -75,9 +76,7 @@ Returns(string):
     the message that the model gives back as response
 """
 def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-3.5-turbo-16k", max_tokens = None, temperature = 0):
-    filename = "prompts.json"
-    json_file = open(filename)
-    sys_prompt = json.load(json_file)[sys_key]
+    sys_prompt = GPT_TEMPLATES[sys_key]
 
     if max_tokens is None:
         completion = openai.ChatCompletion.create(
