@@ -97,6 +97,7 @@ def ask_and_compile_gpt(start, stop, row_list, completed_gpt_requests, num_of_gp
     print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
     
     return completed_gpt_requests
+
 """
 Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
 Parameters:
