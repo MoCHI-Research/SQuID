@@ -87,14 +87,26 @@ Returns:
     completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional 
 """
 def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template):
+
+    data_num = len(parsed_list_of_data)
     
+    data_included = [False for _ in range(data_num)]
+
     response = None
     user_input_string = ''
-    for data in parsed_list_of_data:
-        user_input_string += data
+
+    #for data in parsed_list_of_data:
+        #user_input_string += data
+
+    for i in range(data_num):
+        current_data = str(i) + ". " + parsed_list_of_data[i] + "\n"
+        user_input_string += current_data
+
+    print(user_input_string)
 
     while response == None:
         response = openai_sys_chatcompletion(gpt_template, user_input_string)
+    print(response)
     
     
     completed_gpt_requests += 1
@@ -122,7 +134,8 @@ def label_datapoints(file):
     list_of_data = []
     batch_size = SIZE_OF_BATCHES
     
-    gpt_template = 'group_data'
+    #gpt_template = 'group_data'
+    gpt_template = 'group_data_in_numbers'
     with open(file, newline='') as f:
         reader = csv.reader(f)
         for row in reader:
@@ -140,6 +153,7 @@ def label_datapoints(file):
     # Initial check to see if batch is bigger than the dataset
     if y > len(list_of_data):
         y = len(list_of_data)
+
 
     while completed_gpt_requests < num_of_gpt_requests:
         completed_gpt_requests = ask_and_compile_gpt(list_of_data[x:y], completed_gpt_requests, num_of_gpt_requests, gpt_template)
@@ -179,7 +193,8 @@ def main():
     loading_thread = threading.Thread(target=show_time_elapsed)
     loading_thread.start()
 
-    label_datapoints('student_dataset.csv')
+    #label_datapoints('student_dataset.csv')
+    label_datapoints('test_dataset.csv')
 
     stop_thread = True
     loading_thread.join()
