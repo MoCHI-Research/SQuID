@@ -3,6 +3,7 @@ from gptconnection import openai_sys_chatcompletion
 import csv
 import os
 import time
+import re
 import math
 import threading
 
@@ -77,6 +78,61 @@ def convert_gpt_to_csv(input_string):
                 writer.writerow([group, item])
 
 """
+Convert the gpt responses, with numbers representing data points, into a CSV file
+Parameters:
+    gpt_response(string): The GPT response that includes data points as numbers
+    data_list(list of strings): the list of all data points concerned
+Returns:
+    output.csv: the CSV file that contains the converted responses
+"""
+def convert_num_to_csv(gpt_response, data_list):
+    output_filename = 'output.csv'
+    group_name = ''
+    group_data = []
+    csv_data = []
+
+    response_include = [False for _ in range(len(data_list))]
+
+    lines = gpt_response.split('\n')
+
+    for line in lines:
+        line = line.strip()
+        if line.startswith('Group'):
+            if group_name:
+                csv_data.append((group_name, group_data))
+            group_name = line.split(':', 1)[1].strip()
+            group_data = []
+        elif line:
+            sentence_indices = (re.findall("[0-9]+", line))
+
+            for sent_index in sentence_indices:
+                current_index = int(sent_index)
+                group_data.append(data_list[current_index])
+                response_include[current_index] = True
+    
+    if group_name and group_data:  # Add the last group
+        csv_data.append((group_name, group_data))
+
+    not_grouped_data = []
+    for current_index in range(len(response_include)):
+        if not response_include[current_index]:
+            not_grouped_data.append(data_list[current_index])
+    csv_data.append(('Not Grouped', not_grouped_data))
+
+    file_exists = os.path.exists(output_filename)
+     # Write to CSV
+    with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
+        writer = csv.writer(file)
+        if not file_exists:  # Write the header only if the file didn't exist
+            writer.writerow(['Group', 'Items'])
+        for data in csv_data:
+            group = data[0]
+            for item in data[1]:
+                writer.writerow([group, item])
+    
+    
+
+"""
 Asks GPT for a response for the data batches then calls 'convert_gpt_to_csv' to compile the responses into a CSV file
 Parameters:
     list_of_data(list): the list of each data point
@@ -89,8 +145,6 @@ Returns:
 def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template):
 
     data_num = len(parsed_list_of_data)
-    
-    data_included = [False for _ in range(data_num)]
 
     response = None
     user_input_string = ''
@@ -102,17 +156,14 @@ def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_
         current_data = str(i) + ". " + parsed_list_of_data[i] + "\n"
         user_input_string += current_data
 
-    print(user_input_string)
-
     while response == None:
         response = openai_sys_chatcompletion(gpt_template, user_input_string)
-    print(response)
-    
     
     completed_gpt_requests += 1
     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
     time.sleep(1)
-    convert_gpt_to_csv(response)
+    #convert_gpt_to_csv(response)
+    convert_num_to_csv(response, parsed_list_of_data)
     print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
     
     return completed_gpt_requests
@@ -194,7 +245,7 @@ def main():
     loading_thread.start()
 
     #label_datapoints('student_dataset.csv')
-    label_datapoints('test_dataset.csv')
+    label_datapoints('student_dataset.csv')
 
     stop_thread = True
     loading_thread.join()
