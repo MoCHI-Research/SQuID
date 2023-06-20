@@ -85,13 +85,13 @@ def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-3.5-turbo
         if max_tokens is None:
             completion = openai.ChatCompletion.create(
                 model = model_name,
-                messages = [{"role": "system", "content": sys_prompt}, {"role": "system", "content": GPT_TEMPLATES['numbered_example']}, {"role": "user", "content": user_message}],
+                messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user_message}],
                 temperature = temperature
             )
         else:  
             completion = openai.ChatCompletion.create(
                 model = model_name,
-                messages = [{"role": "system", "content": sys_prompt}, {"role": "system", "content": GPT_TEMPLATES['numbered_example']}, {"role": "user", "content": user_message}],
+                messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user_message}],
                 max_tokens = max_tokens,
                 temperature = temperature
             )
