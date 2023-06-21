@@ -185,6 +185,10 @@ def label_datapoints(file):
     list_of_data = []
     batch_size = SIZE_OF_BATCHES
     
+    # Initial check to see if batch is bigger than the dataset
+    if batch_size > len(list_of_data):
+        batch_size = len(list_of_data)
+    
     #gpt_template = 'group_data'
     gpt_template = 'group_data_in_numbers'
     with open(file, newline='') as f:
@@ -200,10 +204,6 @@ def label_datapoints(file):
     # x and y are the indices indicating the batches of data to parse through
     x = 0
     y = batch_size
-
-    # Initial check to see if batch is bigger than the dataset
-    if y > len(list_of_data):
-        y = len(list_of_data)
 
 
     while completed_gpt_requests < num_of_gpt_requests:
@@ -254,5 +254,4 @@ def main():
     
 if __name__ == "__main__":
     main()
-
 
