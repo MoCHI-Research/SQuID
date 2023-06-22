@@ -8,7 +8,7 @@ import math
 import threading
 
 # GLOBAL VARIABLES
-SIZE_OF_BATCHES = 75
+SIZE_OF_BATCHES = 100
 
 # A flag to tell the thread to stop
 stop_thread = False
@@ -159,6 +159,8 @@ def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_
     while response == None:
         response = openai_sys_chatcompletion(gpt_template, user_input_string)
     
+    print(response)
+    
     completed_gpt_requests += 1
     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
     time.sleep(1)
@@ -185,16 +187,16 @@ def label_datapoints(file):
     list_of_data = []
     batch_size = SIZE_OF_BATCHES
     
-    # Initial check to see if batch is bigger than the dataset
-    if batch_size > len(list_of_data):
-        batch_size = len(list_of_data)
-    
     #gpt_template = 'group_data'
     gpt_template = 'group_data_in_numbers'
     with open(file, newline='') as f:
         reader = csv.reader(f)
         for row in reader:
             list_of_data.append(row[0])
+
+    # Initial check to see if batch is bigger than the dataset
+    if batch_size > len(list_of_data):
+        batch_size = len(list_of_data)
     
     num_of_gpt_requests = math.ceil(len(list_of_data) / batch_size)
     completed_gpt_requests = 0
