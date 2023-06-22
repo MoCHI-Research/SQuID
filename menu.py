@@ -90,7 +90,7 @@ def convert_num_to_csv(gpt_response, data_list):
     group_name = ''
     group_data = []
     csv_data = []
-
+    
     response_include = [False for _ in range(len(data_list))]
 
     lines = gpt_response.split('\n')
@@ -107,8 +107,9 @@ def convert_num_to_csv(gpt_response, data_list):
 
             for sent_index in sentence_indices:
                 current_index = int(sent_index)
-                group_data.append(data_list[current_index])
-                response_include[current_index] = True
+                if current_index < len(data_list):
+                    group_data.append(data_list[current_index])
+                    response_include[current_index] = True
     
     if group_name and group_data:  # Add the last group
         csv_data.append((group_name, group_data))
@@ -193,10 +194,18 @@ def label_datapoints(file):
         reader = csv.reader(f)
         for row in reader:
             list_of_data.append(row[0])
+<<<<<<< HEAD
 
     # Initial check to see if batch is bigger than the dataset
     if batch_size > len(list_of_data):
         batch_size = len(list_of_data)
+=======
+            
+    # Initial check to see if batch is bigger than the dataset
+    if batch_size > len(list_of_data):
+        batch_size = len(list_of_data)
+    
+>>>>>>> 440530e5a70c970cfec1ee5cbf778de0ad152d9b
     
     num_of_gpt_requests = math.ceil(len(list_of_data) / batch_size)
     completed_gpt_requests = 0
@@ -206,7 +215,6 @@ def label_datapoints(file):
     # x and y are the indices indicating the batches of data to parse through
     x = 0
     y = batch_size
-
 
     while completed_gpt_requests < num_of_gpt_requests:
         completed_gpt_requests = ask_and_compile_gpt(list_of_data[x:y], completed_gpt_requests, num_of_gpt_requests, gpt_template)
@@ -219,41 +227,50 @@ def label_datapoints(file):
     
 
 # # A function that accepts file inputs and returns the inputted file
-# def file_input():
-#     filename = input("Filename: ")
-#     file_out = open(filename, "r")
-#     return file_out
+def file_input():
+    file_out = input("Filename: ")
+    return file_out
 
-# # A simple menu system that takes in an integer from the user to select a feature
-# def menu():
-#     print("[1] Regenerate all group labels\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Create an Affinity Diagram\n")
-#     user_choice = int(input("Choice: "))
-#     match user_choice:
-#         case 1:
-#             print("Regenerate all group labels")
-#         case 2:
-#             print("Reason for a label")
-#         case 3:
-#             print("Change label merge threshold")
-#         case 4:
-#             label_datapoints(file_input())
+# A simple menu system that takes in an integer from the user to select a feature
+def menu():
+    exit = 0
+    
+    while(exit != 1):
+        print("[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n [5] Readability scores\n[6] Exit\n")
+        user_choice = int(input("Choice: "))
+        match user_choice:
+            case 1 | 4:
+                file = file_input()
+                time.sleep(1.5)
+                
+                global stop_thread
+                # Start the loading thread for the time elapsed
+                loading_thread = threading.Thread(target=show_time_elapsed)
+                loading_thread.start()
 
+                label_datapoints(file)
+                
+                stop_thread = True
+                loading_thread.join()
+                print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
+            case 2:
+                print("Reason for a label not yet implemented\n")
+                
+            case 3:
+                print("Change label merge threshold not yet implemented\n")
+            case 5:
+                print("Readability scores not yet implemented . . .")
+            case 6:
+                print("Exiting the program . . .\n")
+                exit = 1
+            case _:
+                print("That is not an option. Please select an option from the list.\n")
+        time.sleep(3)
 
 def main():
-    global stop_thread
+    menu()
 
-    # Start the loading thread for the time elapsed
-    loading_thread = threading.Thread(target=show_time_elapsed)
-    loading_thread.start()
 
-    #label_datapoints('student_dataset.csv')
-    label_datapoints('student_dataset.csv')
-
-    stop_thread = True
-    loading_thread.join()
-    print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
-
-    
 if __name__ == "__main__":
     main()
 
