@@ -185,16 +185,17 @@ def label_datapoints(file):
     list_of_data = []
     batch_size = SIZE_OF_BATCHES
     
-    # Initial check to see if batch is bigger than the dataset
-    if batch_size > len(list_of_data):
-        batch_size = len(list_of_data)
-    
     #gpt_template = 'group_data'
     gpt_template = 'group_data_in_numbers'
     with open(file, newline='') as f:
         reader = csv.reader(f)
         for row in reader:
             list_of_data.append(row[0])
+            
+    # Initial check to see if batch is bigger than the dataset
+    if batch_size > len(list_of_data):
+        batch_size = len(list_of_data)
+    
     
     num_of_gpt_requests = math.ceil(len(list_of_data) / batch_size)
     completed_gpt_requests = 0
@@ -244,8 +245,7 @@ def main():
     loading_thread = threading.Thread(target=show_time_elapsed)
     loading_thread.start()
 
-    #label_datapoints('student_dataset.csv')
-    label_datapoints('student_dataset.csv')
+    label_datapoints('bioinformatics.csv')
 
     stop_thread = True
     loading_thread.join()
