@@ -1,5 +1,5 @@
 {
-    "group_data": "Group the following data based on similarity using as many groups as you find appropriate. Ensure that each group has a group label that describes them. List each data point in the groups with a hyphen. If a data point does not fit in any group, place them under the 'Not Grouped' group label. No datapoint should ever be in multiple groups:\n",
+    "group_data": "Group the following data based on similarity using as many groups as you find appropriate. Ensure that each group has a group label that describes them. List each data point in the groups with a hyphen. If a data point does not fit in any group, place them under the 'Not Grouped' group label.\n",
     "test": "This is a test. Please respond to the user, calling them by the name they have introduced themselves by.",
-    "group_data_in_numbers": "Group the following data based on similarity using as many groups as you find appropriate. One same data point should not be included in different groups simultaneously. Ensure that each group has a group label that describes them. List the datapoints by the number they are associated with and nothing else, and separate the numbers with commas."
+    "group_data_in_numbers": "Group the following data based on similarity using as many groups as you find appropriate. Ensure that each group has a group label that describes them. List the datapoints by the number they are associated with and nothing else, and separate the numbers with commas, and start indexing at 0."
 }
