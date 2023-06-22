@@ -194,18 +194,11 @@ def label_datapoints(file):
         reader = csv.reader(f)
         for row in reader:
             list_of_data.append(row[0])
-<<<<<<< HEAD
-
-    # Initial check to see if batch is bigger than the dataset
-    if batch_size > len(list_of_data):
-        batch_size = len(list_of_data)
-=======
             
     # Initial check to see if batch is bigger than the dataset
     if batch_size > len(list_of_data):
         batch_size = len(list_of_data)
     
->>>>>>> 440530e5a70c970cfec1ee5cbf778de0ad152d9b
     
     num_of_gpt_requests = math.ceil(len(list_of_data) / batch_size)
     completed_gpt_requests = 0
@@ -236,7 +229,7 @@ def menu():
     exit = 0
     
     while(exit != 1):
-        print("[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n [5] Readability scores\n[6] Exit\n")
+        print("[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n[5] Readability scores\n[6] Exit\n")
         user_choice = int(input("Choice: "))
         match user_choice:
             case 1 | 4:

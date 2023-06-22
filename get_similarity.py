@@ -25,9 +25,10 @@ def test_similarity(sent_1, sent_2, model_name = "text-embedding-ada-002"):
 
 
 
+
 def main():
-    sent_1 = "Hi! I'm Kerry. Nice to meet you!"
-    sent_2 = "My name's Kevin. Nice to meet you too!"
+    sent_1 = "Lessons learned about time management and commitments"
+    sent_2 = "Lessons learned about goal-setting and planning"
 
     test_similarity(sent_1, sent_2)
 
