@@ -4,8 +4,8 @@ import networkx
 import pandas
 import csv
 from dotenv import load_dotenv
-
 from openai.embeddings_utils import get_embedding, cosine_similarity
+from gptconnection import openai_sys_chatcompletion
 
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -61,7 +61,7 @@ Parametgers:
 Returns(pandas.DataFrame):
     the dataframe that saves all embeddings 
 """
-def get_embeddings(text_list, model_name = "text-embedding-ada-002", output_file = INTERMEDIATE_PATH + "embeddings.csv"):
+def get_label_embeddings(text_list, model_name = "text-embedding-ada-002", output_file = INTERMEDIATE_PATH + "embeddings.csv"):
     embedding_frame = pandas.DataFrame(columns=["text"])
     embedding_frame["text"] = text_list
 
@@ -114,22 +114,6 @@ def convert_text_to_list(list_text):
     return embeddings
 
 """
-Read label embeddings from the embedding csv file and generate a similarity data frame containing similarity
-between any two labels. Save the similarities in a csv file.
-Parameters:
-    input_filename(string): name of the file that saves the embeddings
-    output_filename(string): name of the file to save similarity
-Returns(pandas.DataFrame):
-    the dataframe that contains similarities of all pairs
-"""
-def read_generate_similarity(input_filename = INTERMEDIATE_PATH + "embeddings.csv", output_filename = INTERMEDIATE_PATH + "similarity.csv"):
-    embedding_frame = pandas.read_csv(input_filename)
-    for _, current_row in embedding_frame.iterrows():
-        current_row['embedding'] = convert_text_to_list(current_row['embedding'])
-    
-    return get_similarity(embedding_frame, output_file = output_filename)
-
-"""
 Read similarity of each pair from a csv file and make a Graph that contains all pairs with similarity above 
 a threshold
 Parameters:
@@ -160,7 +144,10 @@ Group labels using Girvan-Newman
 Parameters:
     current_graph(networkx.Graph): the graph to run Girvan-Newman on
     output_file(string): name of the file to save results
+                         None if you do not want the file to be saved
     iteration_num(int): number of iterations to run Girvan-Newman
+Returns(pandas.DataFrame):
+    the data frame that contains all groups
 """
 def group_labels(current_graph, output_file = INTERMEDIATE_PATH + "grouped_labels.csv", iteration_num = 2):
 
@@ -171,8 +158,11 @@ def group_labels(current_graph, output_file = INTERMEDIATE_PATH + "grouped_label
         print("One community iteration done.")
         current_communities = next(communities_generator)
 
-    group_frame = pandas.DataFrame(sorted(map(sorted, current_communities)))
-    group_frame.to_csv(output_file, header = False, index = False)
+    if not output_file is None:
+        group_frame = pandas.DataFrame(sorted(map(sorted, current_communities)))
+        group_frame.to_csv(output_file, header = False, index = False)
+
+    return group_frame
 
 """
 Given groups of data and their labels, merge the groups based on given info about which groups to merge
@@ -181,7 +171,7 @@ Parameters:
     labels_to_merge(dictionary): Keys are new group labels that replace old ones, and values are lists of old labels
                                  that need to be changed
 """
-def merge_labels(data_dict, labels_to_merge):
+def merge_dict_labels(data_dict, labels_to_merge):
     for new_label in labels_to_merge:
         new_data = []
         for old_label in labels_to_merge[new_label]:
@@ -189,6 +179,98 @@ def merge_labels(data_dict, labels_to_merge):
                 new_data.extend(data_dict[old_label])
                 data_dict.pop(old_label)
         data_dict[new_label] = new_data
+
+"""
+Read label embeddings from the embedding csv file and generate a similarity data frame containing similarity
+between any two labels. Save the similarities in a csv file.
+Parameters:
+    input_filename(string): name of the file that saves the embeddings
+    output_filename(string): name of the file to save similarity
+Returns(pandas.DataFrame):
+    the dataframe that contains similarities of all pairs
+"""
+def read_generate_similarity(input_filename = INTERMEDIATE_PATH + "embeddings.csv", output_filename = INTERMEDIATE_PATH + "similarity.csv"):
+    embedding_frame = pandas.read_csv(input_filename)
+    for _, current_row in embedding_frame.iterrows():
+        current_row['embedding'] = convert_text_to_list(current_row['embedding'])
+    
+    return get_similarity(embedding_frame, output_file = output_filename)
+
+"""
+Given a list of labels, find the label that can best represent all labels.
+Parameters:
+    label_list(list of string): the list of all labels to merge
+Returns(string):
+    the label that can best represent all labels
+"""
+def get_best_label(label_list):
+    labels_text = ""
+    for current_label in label_list:
+        labels_text += current_label + "; "
+
+    labels_text = current_label[:-2]
+    
+    return openai_sys_chatcompletion("find_best_represent", labels_text)
+
+
+"""
+Given a data frame that contains grouped labels, return a dictionary that informs how to merge labels
+Parameters:
+    label_frame(pandas.DataFrame): the dataframe that contains grouped labels
+Returns(dict):
+    a dictionary. Each key is a label that best represents a group of labels, and the group of labels are the values, 
+    which are lists, following each key
+"""
+def find_to_merge_dict(label_frame):
+    to_merge_dict = {}
+    for _, current_row in label_frame.iterrows():
+        similar_labels = []
+        for current_label in current_row:
+            if current_label is None:
+                break
+            similar_labels.append(current_label)
+        
+        best_label = get_best_label(similar_labels)
+        to_merge_dict[best_label] = similar_labels
+
+    return to_merge_dict
+
+
+"""
+The function that does all the work. First read original data grouped by GPT, then possibly generate embeddings and similarity, and finally
+merge the labels and write the output to another csv file
+Parameters:
+    original_file(string): name of the file that saves groups before merging
+    output_file(string): name of the file to save results after merging
+    new_embedding(bool): True if new embeddings need to be created; False if using existing embeddings
+    new_embedding(bool): True if new similarity needs to be created; False if using exsiting similarities
+"""
+def merge_labels(original_file = "output.csv", output_file = "labels_merged.csv", new_embedding = False, new_similarity = False):
+    group_dict = csv_to_dict(original_file)
+    label_list = [label for label in group_dict]
+
+    if new_similarity:
+        if new_embedding:
+            get_similarity(get_label_embeddings(label_list))
+        else:
+            read_generate_similarity()
+
+    to_merge_frame = group_labels(graph_similarity())
+    to_merge_dict = find_to_merge_dict(to_merge_frame)
+
+    merge_dict_labels(group_dict, to_merge_dict)
+
+    file_exists = os.path.exists(output_file)
+    with open(output_file, 'a' if file_exists else 'w', newline='') as file:
+        writer = csv.writer(file)
+        if not file_exists:  # Write the header only if the file didn't exist
+            writer.writerow(['Group', 'Items'])
+        for label in group_dict:
+            for sent in group_dict[label]:
+                writer.writerow([label, sent])
+    
+    file.close()
+
 
 """
 Controls operation of the program
@@ -202,8 +284,7 @@ def main():
     get_similarity(get_embeddings(label_list))"""
     #convert_text_to_list([])
 
-    group_labels(graph_similarity())
-
+    merge_labels()
     #print(intermediate_path)
 
 if __name__ == "__main__":
