@@ -8,7 +8,7 @@ import math
 import threading
 
 # GLOBAL VARIABLES
-SIZE_OF_BATCHES = 100
+SIZE_OF_BATCHES = 220
 
 # A flag to tell the thread to stop
 stop_thread = False
