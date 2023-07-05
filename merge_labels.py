@@ -122,7 +122,7 @@ Parameters:
 Returns(networkx.Graph):
     graph that contains all pairs with similarity above the threshold
 """
-def graph_similarity(similarity_file = INTERMEDIATE_PATH + "similarity.csv", similarity_threshold = 0.905):
+def graph_similarity(similarity_file = INTERMEDIATE_PATH + "similarity.csv", similarity_threshold = 0.91):
     result_graph = networkx.Graph()
 
     with open(similarity_file) as csvfile:
@@ -176,7 +176,9 @@ def merge_dict_labels(data_dict, labels_to_merge):
         new_data = []
         for old_label in labels_to_merge[new_label]:
             if old_label in data_dict:
-                new_data.extend(data_dict[old_label])
+                for data_point in data_dict[old_label]:
+                    if not data_point in new_data:
+                        new_data.append(data_point)
                 data_dict.pop(old_label)
         data_dict[new_label] = new_data
 
