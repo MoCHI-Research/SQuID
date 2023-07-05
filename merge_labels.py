@@ -247,7 +247,7 @@ Parameters:
     new_embedding(bool): True if new embeddings need to be created; False if using existing embeddings
     new_embedding(bool): True if new similarity needs to be created; False if using exsiting similarities
 """
-def merge_labels(original_file = "output.csv", output_file = "labels_merged.csv", new_embedding = False, new_similarity = False):
+def merge_labels(original_file = "output.csv", output_file = "labels_merged.csv", new_embedding = True, new_similarity = True):
     group_dict = csv_to_dict(original_file)
     label_list = [label for label in group_dict]
 
@@ -278,7 +278,7 @@ def merge_labels(original_file = "output.csv", output_file = "labels_merged.csv"
 Controls operation of the program
 """
 def main():
-    merge_labels(new_embedding = True, new_similarity = True)
+    merge_labels()
 
 if __name__ == "__main__":
     main()

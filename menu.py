@@ -1,5 +1,6 @@
 # The starting menu for the QuAD system
 from gptconnection import openai_sys_chatcompletion
+from merge_labels import merge_labels
 import csv
 import os
 import time
@@ -227,16 +228,16 @@ def file_input():
 # A simple menu system that takes in an integer from the user to select a feature
 def menu():
     exit = 0
+    global stop_thread
     
     while(exit != 1):
-        print("[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n[5] Readability scores\n[6] Exit\n")
+        print("[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n[5] Readability scores\n[6] Merge groups that are identical or similar\n[7] Exit\n")
         user_choice = int(input("Choice: "))
         match user_choice:
             case 1 | 4:
                 file = file_input()
                 time.sleep(1.5)
                 
-                global stop_thread
                 # Start the loading thread for the time elapsed
                 loading_thread = threading.Thread(target=show_time_elapsed)
                 loading_thread.start()
@@ -254,6 +255,15 @@ def menu():
             case 5:
                 print("Readability scores not yet implemented . . .")
             case 6:
+                loading_thread = threading.Thread(target=show_time_elapsed)
+                loading_thread.start()
+
+                merge_labels()
+
+                stop_thread = True
+                loading_thread.join()
+                print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
+            case 7:
                 print("Exiting the program . . .\n")
                 exit = 1
             case _:
