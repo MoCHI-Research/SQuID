@@ -261,7 +261,7 @@ def merge_labels(original_file = "output.csv", output_file = "labels_merged.csv"
     merge_dict_labels(group_dict, to_merge_dict)
 
     file_exists = os.path.exists(output_file)
-    with open(output_file, 'a' if file_exists else 'w', newline='') as file:
+    with open(output_file, 'w', newline='') as file:
         writer = csv.writer(file)
         if not file_exists:  # Write the header only if the file didn't exist
             writer.writerow(['Group', 'Items'])
@@ -276,16 +276,7 @@ def merge_labels(original_file = "output.csv", output_file = "labels_merged.csv"
 Controls operation of the program
 """
 def main():
-    """data_dict = csv_to_dict()
-    label_list = []
-    for label in data_dict:
-        label_list.append(label)
-    
-    get_similarity(get_embeddings(label_list))"""
-    #convert_text_to_list([])
-
-    merge_labels()
-    #print(intermediate_path)
+    merge_labels(new_embedding = True, new_similarity = True)
 
 if __name__ == "__main__":
     main()
