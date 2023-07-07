@@ -229,9 +229,11 @@ def file_input():
 def menu():
     exit = 0
     global stop_thread
+
+    merge_threshold = 0.91
     
     while(exit != 1):
-        print("[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n[5] Readability scores\n[6] Merge groups that are identical or similar\n[7] Exit\n")
+        print("\n[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n[5] Readability scores\n[6] Merge groups that are identical or similar\n[7] Exit\n")
         user_choice = int(input("Choice: "))
         match user_choice:
             case 1 | 4:
@@ -251,14 +253,33 @@ def menu():
                 print("Reason for a label not yet implemented\n")
                 
             case 3:
-                print("Change label merge threshold not yet implemented\n")
+                print("Your label merge threshold is currently:", merge_threshold)
+                print("\nNote: The higher the threshold is, the more unlikely groups will get merged, and the more groups the end result will have. Our suggested threshold is 0.91.\n")
+                new_threshold = 0
+                user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
+                while (not new_threshold) and user_input != "":
+                    try:
+                        new_threshold = float(user_input)
+                        if new_threshold <= 0 or new_threshold >= 1:
+                            print("Your input is outside of the valid threshold range. it should be a decimal between 0 and 1(exclusive).\n")
+                            new_threshold = 0
+                            user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
+                        else:
+                            merge_threshold = new_threshold
+                    except:
+                        print("Your input is not valid. Please try again.\n")
+                        user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
+
+                print("Your label merge threshold is now", merge_threshold)
+
+                    
             case 5:
                 print("Readability scores not yet implemented . . .")
             case 6:
                 loading_thread = threading.Thread(target=show_time_elapsed)
                 loading_thread.start()
 
-                merge_labels()
+                merge_labels(merge_threshold = merge_threshold)
 
                 stop_thread = True
                 loading_thread.join()

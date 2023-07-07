@@ -242,12 +242,13 @@ def find_to_merge_dict(label_frame):
 The function that does all the work. First read original data grouped by GPT, then possibly generate embeddings and similarity, and finally
 merge the labels and write the output to another csv file
 Parameters:
+    merge_threshold(float): the similarity threshold; pairs of labels with similarity higher than it will be considered in groups
     original_file(string): name of the file that saves groups before merging
     output_file(string): name of the file to save results after merging
     new_embedding(bool): True if new embeddings need to be created; False if using existing embeddings
     new_embedding(bool): True if new similarity needs to be created; False if using exsiting similarities
 """
-def merge_labels(original_file = "output.csv", output_file = "labels_merged.csv", new_embedding = True, new_similarity = True):
+def merge_labels(merge_threshold = 0.91, original_file = "output.csv", output_file = "labels_merged.csv", new_embedding = True, new_similarity = True):
     group_dict = csv_to_dict(original_file)
     label_list = [label for label in group_dict]
 
@@ -257,7 +258,7 @@ def merge_labels(original_file = "output.csv", output_file = "labels_merged.csv"
         else:
             read_generate_similarity()
 
-    to_merge_frame = group_labels(graph_similarity())
+    to_merge_frame = group_labels(graph_similarity(similarity_threshold = merge_threshold))
     to_merge_dict = find_to_merge_dict(to_merge_frame)
 
     merge_dict_labels(group_dict, to_merge_dict)
