@@ -177,6 +177,7 @@ def merge_dict_labels(data_dict, labels_to_merge):
         for old_label in labels_to_merge[new_label]:
             if old_label in data_dict:
                 for data_point in data_dict[old_label]:
+                    if not data_point in new_data:
                         new_data.append(data_point)
                 data_dict.pop(old_label)
         data_dict[new_label] = new_data
