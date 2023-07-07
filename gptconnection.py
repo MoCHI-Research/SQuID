@@ -50,7 +50,7 @@ Parameters:
 Returns(string):
     the message that the model gives back as response
 """
-def openai_chatcompletion(user_message, model_name = "gpt-3.5-turbo-16k", max_tokens = None, temperature = 0):
+def openai_chatcompletion(user_message, model_name = "gpt-4", max_tokens = None, temperature = 0):
     if max_tokens is None:
         completion = openai.ChatCompletion.create(
             model = model_name,
@@ -79,7 +79,7 @@ Parameters:
 Returns(string):
     the message that the model gives back as response
 """
-def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-3.5-turbo-16k", max_tokens = None, temperature = 0):
+def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-4", max_tokens = None, temperature = 0):
     sys_prompt = GPT_TEMPLATES[sys_key]
     try:
         if max_tokens is None:
