@@ -1,5 +1,5 @@
 # The starting menu for the QuAD system
-from gptconnection import openai_sys_chatcompletion
+from gptconnection import openai_sys_chatcompletion, openai_example_chatcompletion
 from merge_labels import merge_labels
 import csv
 import os
@@ -10,6 +10,7 @@ import threading
 
 # GLOBAL VARIABLES
 SIZE_OF_BATCHES = 75
+DATASET_PATH = "datasets/"
 
 # A flag to tell the thread to stop
 stop_thread = False
@@ -159,7 +160,7 @@ def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_
         user_input_string += current_data
 
     while response == None:
-        response = openai_sys_chatcompletion(gpt_template, user_input_string)
+        response = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
     
     print(response)
     
@@ -194,7 +195,8 @@ def label_datapoints(file):
     with open(file, newline='') as f:
         reader = csv.reader(f)
         for row in reader:
-            list_of_data.append(row[0])
+            if row:
+                list_of_data.append(row[0])
             
     # Initial check to see if batch is bigger than the dataset
     if batch_size > len(list_of_data):
@@ -244,7 +246,7 @@ def menu():
                 loading_thread = threading.Thread(target=show_time_elapsed)
                 loading_thread.start()
 
-                label_datapoints(file)
+                label_datapoints(DATASET_PATH + file)
                 
                 stop_thread = True
                 loading_thread.join()

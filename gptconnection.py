@@ -122,8 +122,72 @@ def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-4", max_t
         pass
 
 
-    
+"""
+messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": example_user}, {"role": "assistant", "content": example_assistant}, {"role": "user", "content": user_message}],
+"""
 
+"""
+Have an openai model respond to a pre-set system prompt and user input, as well as examples of what the input and output look like
+Parameters:
+    sys_key(string): Key to get the system input from imported dictionary
+    eg_input_key(string): Key to retrieve example of user input
+    eg_output_key(string): Key to retireve example of output
+    user_message(string): User input sent to openai model
+    model_name(string): Name of the model the user hopes to use
+    max_tokens(int): Max number of tokens to expect as output; none if using the default max token
+    temperature(float): from 0 to 2; the higher it is the more random the response gets
+Returns(string):
+    the message that the model gives back as response
+"""
+def openai_example_chatcompletion(sys_key, eg_input_key, eg_output_key, user_message, model_name = "gpt-4", max_tokens = None, temperature = 0):
+    sys_prompt = GPT_TEMPLATES[sys_key]
+    example_user = GPT_TEMPLATES[eg_input_key]
+    example_assistant= GPT_TEMPLATES[eg_output_key]
+    try:
+        if max_tokens is None:
+            completion = openai.ChatCompletion.create(
+                model = model_name,
+                messages = [{"role": "system", "content": sys_prompt}, 
+                            {"role": "user", "content": example_user}, 
+                            {"role": "assistant", "content": example_assistant}, 
+                            {"role": "user", "content": user_message}],
+                temperature = temperature
+            )
+        else:  
+            completion = openai.ChatCompletion.create(
+                model = model_name,
+                messages = [{"role": "system", "content": sys_prompt}, 
+                            {"role": "user", "content": example_user}, 
+                            {"role": "assistant", "content": example_assistant}, 
+                            {"role": "user", "content": user_message}],
+                max_tokens = max_tokens,
+                temperature = temperature
+            )
+        return completion.choices[0].message.content
+    except openai.error.APIError as e:
+        print(f'OpenAI API returned an API Error: {e}')
+        if ERROR_WAIT_TOGGLE:
+            print(f'Waiting for {ERROR_WAIT_TIME} seconds')
+            sleep(ERROR_WAIT_TIME)
+            print('Trying again')
+        return None
+    except openai.error.Timeout as e:
+        print(f'OpenAI API returned a Timeout Error: {e}')
+        if ERROR_WAIT_TOGGLE:
+            print(f'Waiting for {ERROR_WAIT_TIME} seconds')
+            sleep(ERROR_WAIT_TIME)
+            print('Trying again')
+        return None
+    except openai.error.RateLimitError as e:
+        print(f"OpenAI API request exceeded rate limit: {e}")
+        if ERROR_WAIT_TOGGLE:
+            print(f'Waiting for {ERROR_WAIT_TIME} seconds')
+            sleep(ERROR_WAIT_TIME)
+            print('Trying again')
+        return None
+    except openai.error.APIConnectionError as e:
+        print(f"Failed to connect to OpenAI API: {e}")
+        pass
 
 
 

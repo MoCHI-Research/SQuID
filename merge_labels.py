@@ -155,8 +155,12 @@ def group_labels(current_graph, output_file = INTERMEDIATE_PATH + "grouped_label
     current_communities = []
 
     for i in range(0, iteration_num):
-        print("One community iteration done.")
-        current_communities = next(communities_generator)
+        try:
+            current_communities = next(communities_generator)
+            print("One community iteration done.")
+        except StopIteration:
+            print("Iteration stopped. There is no more edge to prune in the graph.")
+
 
     if not output_file is None:
         group_frame = pandas.DataFrame(sorted(map(sorted, current_communities)))
