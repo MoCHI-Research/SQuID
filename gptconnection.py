@@ -41,7 +41,7 @@ def openai_completion(user_message, model_name = "text-davinci-003", max_tokens 
 
 """
 Have an openai model respond to a user prompt with its chat completion feature
-This is the function to call with model gpt-3.5-turbo-16k, for the model only supports chat completion
+This is the function to call with model gpt-3.5-turbo-16k and gpt-4, for the models only support chat completion
 Parameters:
     user_message(string): The message user sends to openai model
     model_name(string): Name of the model the user hopes to use

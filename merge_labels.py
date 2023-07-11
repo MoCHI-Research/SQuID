@@ -214,8 +214,8 @@ def get_best_label(label_list):
     for current_label in label_list:
         labels_text += current_label + "; "
 
-    labels_text = current_label[:-2]
-    
+    labels_text = labels_text[:-2]
+
     return openai_sys_chatcompletion("find_best_represent", labels_text)
 
 
@@ -237,6 +237,7 @@ def find_to_merge_dict(label_frame):
             similar_labels.append(current_label)
         
         best_label = get_best_label(similar_labels)
+        print(best_label)
         to_merge_dict[best_label] = similar_labels
 
     return to_merge_dict
@@ -283,7 +284,7 @@ def merge_labels(merge_threshold = 0.91, original_file = "output.csv", output_fi
 Controls operation of the program
 """
 def main():
-    merge_labels()
+    merge_labels(new_embedding=False, new_similarity=False)
 
 if __name__ == "__main__":
     main()
