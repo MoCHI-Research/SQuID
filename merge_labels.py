@@ -237,7 +237,6 @@ def find_to_merge_dict(label_frame):
             similar_labels.append(current_label)
         
         best_label = get_best_label(similar_labels)
-        print(best_label)
         to_merge_dict[best_label] = similar_labels
 
     return to_merge_dict
