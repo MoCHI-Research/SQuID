@@ -230,10 +230,8 @@ def file_input():
     return file_out
 
 # # A function that prints a reason for labeling a data the
-def reason_for_label():
-
+def reason_for_label(filename = "output.csv"):
     # Check if file exists
-    filename = "output.csv"  # Replace with your file name
     if not os.path.isfile(filename):
         print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
     else:
@@ -290,24 +288,30 @@ def menu():
 
     while(exit != 1):
         print("\n[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n[5] Readability scores\n[6] Merge groups that are identical or similar\n[7] Exit\n")
-        user_choice = int(input("Choice: "))
+        user_choice = input("Choice: ")
         match user_choice:
-            case 1 | 4:
+            case '1' | '4':
                 file = file_input()
                 time.sleep(1.5)
 
                 # Start the loading thread for the time elapsed
                 loading_thread = threading.Thread(target=show_time_elapsed)
                 loading_thread.start()
-
-                label_datapoints(DATASET_PATH + file)
-
+                
+                try:
+                    label_datapoints(DATASET_PATH + file)
+                except PermissionError:
+                    print("Failed to access the output file. Please close it if it is open. Going back to the main menu...\n")
+                except FileNotFoundError:
+                    print("Failed to find the file. Please check your file name and make sure it is in the dataset directory. Going back to the main menu...\n")
+                
                 stop_thread = True
                 loading_thread.join()
                 print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
-            case 2:
+                
+            case '2':
                 reason_for_label()
-            case 3:
+            case '3':
                 print("Your label merge threshold is currently:", merge_threshold)
                 print("\nNote: The higher the threshold is, the more unlikely groups will get merged, and the more groups the end result will have. Our suggested threshold is 0.91.\n")
                 new_threshold = 0
@@ -328,9 +332,9 @@ def menu():
                 print("Your label merge threshold is now", merge_threshold)
 
 
-            case 5:
+            case '5':
                 print("Readability scores not yet implemented . . .")
-            case 6:
+            case '6':
                 loading_thread = threading.Thread(target=show_time_elapsed)
                 loading_thread.start()
 
@@ -339,7 +343,7 @@ def menu():
                 stop_thread = True
                 loading_thread.join()
                 print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
-            case 7:
+            case '7':
                 print("Exiting the program . . .\n")
                 exit = 1
             case _:
