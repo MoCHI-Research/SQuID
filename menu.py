@@ -46,9 +46,9 @@ Returns:
 """
 def convert_gpt_to_csv(input_string):
     output_filename = 'output.csv'
-    
+
     lines = input_string.split('\n')
-    
+
     group_name = ''
     group_data = []
     csv_data = []
@@ -66,7 +66,7 @@ def convert_gpt_to_csv(input_string):
 
     if group_name and group_data:  # Add the last group
         csv_data.append((group_name, group_data))
-        
+
     file_exists = os.path.exists(output_filename)
 
     # Write to CSV
@@ -92,7 +92,7 @@ def convert_num_to_csv(gpt_response, data_list):
     group_name = ''
     group_data = []
     csv_data = []
-    
+
     response_include = [False for _ in range(len(data_list))]
 
     lines = gpt_response.split('\n')
@@ -112,7 +112,7 @@ def convert_num_to_csv(gpt_response, data_list):
                 if current_index < len(data_list):
                     group_data.append(data_list[current_index])
                     response_include[current_index] = True
-    
+
     if group_name and group_data:  # Add the last group
         csv_data.append((group_name, group_data))
 
@@ -132,8 +132,8 @@ def convert_num_to_csv(gpt_response, data_list):
             group = data[0]
             for item in data[1]:
                 writer.writerow([group, item])
-    
-    
+
+
 
 """
 Asks GPT for a response for the data batches then calls 'convert_gpt_to_csv' to compile the responses into a CSV file
@@ -143,7 +143,7 @@ Parameters:
     num_of_gpt_requests(int): the final number of batches requests to GPT
     gpt_template(string): the template prompt that asks GPT to generate our data
 Returns:
-    completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional 
+    completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional
 """
 def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template):
 
@@ -161,16 +161,16 @@ def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_
 
     while response == None:
         response = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
-    
+
     print(response)
-    
+
     completed_gpt_requests += 1
     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
     time.sleep(1)
     #convert_gpt_to_csv(response)
     convert_num_to_csv(response, parsed_list_of_data)
     print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
-    
+
     return completed_gpt_requests
 
 """
@@ -181,15 +181,15 @@ Returns:
     None
 """
 def label_datapoints(file):
-    
+
     if os.path.exists('output.csv'):
         os.remove('output.csv')
         print("'output.csv' deleted successfully.")
-    
+
     print("Generating GPT response . . .\n")
     list_of_data = []
     batch_size = SIZE_OF_BATCHES
-    
+
     #gpt_template = 'group_data'
     gpt_template = 'group_data_in_numbers'
     with open(file, newline='') as f:
@@ -197,17 +197,17 @@ def label_datapoints(file):
         for row in reader:
             if row:
                 list_of_data.append(row[0])
-            
+
     # Initial check to see if batch is bigger than the dataset
     if batch_size > len(list_of_data):
         batch_size = len(list_of_data)
-    
-    
+
+
     num_of_gpt_requests = math.ceil(len(list_of_data) / batch_size)
     completed_gpt_requests = 0
 
     print(f'Batches to complete: {num_of_gpt_requests}')
-    
+
     # x and y are the indices indicating the batches of data to parse through
     x = 0
     y = batch_size
@@ -215,17 +215,69 @@ def label_datapoints(file):
     while completed_gpt_requests < num_of_gpt_requests:
         completed_gpt_requests = ask_and_compile_gpt(list_of_data[x:y], completed_gpt_requests, num_of_gpt_requests, gpt_template)
         x = y
-        y += batch_size  
+        y += batch_size
         if y > len(list_of_data):
             y = len(list_of_data)
-    
+
     print("Job's done.")
-    
+
 
 # # A function that accepts file inputs and returns the inputted file
 def file_input():
     file_out = input("Filename: ")
     return file_out
+
+# # A function that prints a reason for labeling a data the
+def reason_for_label():
+
+    # Check if file exists
+    filename = "output.csv"  # Replace with your file name
+    if not os.path.isfile(filename):
+        print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
+    else:
+        # Prompt user for label
+        label_to_search = input("Type the label that you are looking for: ")
+
+        # Open the file and search
+        all_data_with_label = []
+        label_and_data = ()
+        with open(filename, 'r') as file:
+             csv_reader = csv.reader(file)
+             for row in csv_reader:
+                 if len(row) > 0:
+                     if row[0] == label_to_search:
+                        label_and_data = (row[0], row[1])
+                        all_data_with_label.append(label_and_data)
+
+        # Asks which data with the label they would like a reason for (if label exists) and generates reason
+        print("")
+        if len(all_data_with_label) > 0:
+            print("Which data from the label \"" + label_to_search + "\" would you like to have a reason for: ")
+            count = 1
+            for pairs in all_data_with_label:
+                print("[" + str(count) + "] " + pairs[1])
+                count += 1
+
+            print("")
+            data_num = input("Data Number: ")
+            generate_reason(all_data_with_label, data_num, label_to_search)
+        else:
+            print("There is no such label in the file.")
+        print("")
+
+def generate_reason(all_data, data_index, label):
+    data = all_data[int(data_index) - 1][1]
+    user_input_string = "Provide a reason for giving the label " + label + " to the the following data: " + data
+    response = None
+    gpt_template = "provide_reason"
+
+    # Prompts GPT-4 for the reason
+    while response == None:
+        response = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
+
+    print("Data: " + data)
+    print("GPT-4 Response: " + response)
+
 
 # A simple menu system that takes in an integer from the user to select a feature
 def menu():
@@ -233,7 +285,7 @@ def menu():
     global stop_thread
 
     merge_threshold = 0.91
-    
+
     while(exit != 1):
         print("\n[1] Create an Affinity Diagram\n[2] Reason for a label\n[3] Change label merge threshold\n[4] Regenerate all group labels\n[5] Readability scores\n[6] Merge groups that are identical or similar\n[7] Exit\n")
         user_choice = int(input("Choice: "))
@@ -241,19 +293,18 @@ def menu():
             case 1 | 4:
                 file = file_input()
                 time.sleep(1.5)
-                
+
                 # Start the loading thread for the time elapsed
                 loading_thread = threading.Thread(target=show_time_elapsed)
                 loading_thread.start()
 
                 label_datapoints(DATASET_PATH + file)
-                
+
                 stop_thread = True
                 loading_thread.join()
                 print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
             case 2:
-                print("Reason for a label not yet implemented\n")
-                
+                reason_for_label()
             case 3:
                 print("Your label merge threshold is currently:", merge_threshold)
                 print("\nNote: The higher the threshold is, the more unlikely groups will get merged, and the more groups the end result will have. Our suggested threshold is 0.91.\n")
@@ -274,7 +325,7 @@ def menu():
 
                 print("Your label merge threshold is now", merge_threshold)
 
-                    
+
             case 5:
                 print("Readability scores not yet implemented . . .")
             case 6:
@@ -299,4 +350,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
