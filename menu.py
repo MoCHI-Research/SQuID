@@ -161,6 +161,7 @@ def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_
 
     while response == None:
         response = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
+        #response = openai_sys_chatcompletion(gpt_template, user_input_string)
 
     print(response)
 
@@ -191,6 +192,7 @@ def label_datapoints(file):
     batch_size = SIZE_OF_BATCHES
 
     #gpt_template = 'group_data'
+    #gpt_template = 'group_data_no_example'
     gpt_template = 'group_data_in_numbers'
     with open(file, newline='') as f:
         reader = csv.reader(f)
@@ -273,7 +275,7 @@ def generate_reason(all_data, data_index, label):
 
     # Prompts GPT-4 for the reason
     while response == None:
-        response = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
+        response = openai_sys_chatcompletion(gpt_template, user_input_string)
 
     print("Data: " + data)
     print("GPT-4 Response: " + response)

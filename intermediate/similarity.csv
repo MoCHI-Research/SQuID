@@ -1,136 +1,561 @@
-0.9535291678214031,Uncertainty about the Future,Fear and Uncertainty about the Future
-0.9105902123794989,Community Response to Crisis,Government and Medical System Response to Crisis
-0.9048419992908897,Impact on Performers and Service Industry Workers,Impact on Business and Employees
-0.8910866770968854,Impact on Performers and Service Industry Workers,Impact on Specific Professions
-0.8839847764731074,Concerns about Public Health and Safety,Concerns about Medical Resources and Healthcare
-0.8718986017367224,Impact on Specific Professions,Impact on Business and Employees
-0.8654349810217234,Financial Concerns and Unemployment,Fear and Uncertainty about the Future
-0.8645251814320151,Government and Medical System Response to Crisis,Concerns about Medical Resources and Healthcare
-0.8638142356015841,Community Support and Hope,Community Response to Crisis
-0.8499519763243724,Panic Buying and Resource Scarcity,Fear and Uncertainty about the Future
-0.8479472804774089,Community Support and Hope,Housing Policies and Community Impact
-0.8453608231805991,Personal Care and Activities,Personal Experiences and Challenges
-0.8449207186314522,Financial Concerns and Unemployment,Uncertainty about the Future
-0.8413700442714069,Concerns about Public Health and Safety,Fear and Uncertainty about the Future
-0.83787841194433,Concerns about Medical Resources and Healthcare,Panic Buying and Resource Scarcity
-0.8324694862853522,Frustration and Criticism of Leadership,Fear and Uncertainty about the Future
-0.8311664416851684,Concerns about Public Health and Safety,Government and Medical System Response to Crisis
-0.8276874043105185,Impact on Business and Employees,Housing Policies and Community Impact
-0.8265187954253314,Financial Concerns and Unemployment,Concerns about Medical Resources and Healthcare
-0.8254298120138999,Housing Policies and Community Impact,Community Response to Crisis
-0.824829322297036,Uncertainty about the Future,Frustration and Criticism of Leadership
-0.8244804167493367,Frustration and Criticism of Leadership,Personal Experiences and Challenges
-0.8242778056008956,Impact on Business and Employees,Community Response to Crisis
-0.8239178159410189,Concerns about Medical Resources and Healthcare,Fear and Uncertainty about the Future
-0.8232166070142946,Community Support and Hope,Fear and Uncertainty about the Future
-0.8225837210940292,Financial Concerns and Unemployment,Impact on Business and Employees
-0.822554172680571,Uncertainty about the Future,Concerns about Medical Resources and Healthcare
-0.8194761114332314,Community Response to Crisis,Frustration and Criticism of Leadership
-0.8187654677093613,Concerns about Public Health and Safety,Community Response to Crisis
-0.8186724887967952,Community Response to Crisis,Concerns about Medical Resources and Healthcare
-0.818434052661805,Uncertainty about the Future,Panic Buying and Resource Scarcity
-0.8177863961691357,Concerns about Public Health and Safety,Impact on Business and Employees
-0.8177344275453546,Concerns about Public Health and Safety,Financial Concerns and Unemployment
-0.8169686260009535,Concerns about Public Health and Safety,Uncertainty about the Future
-0.816948999874548,Community Response to Crisis,Panic Buying and Resource Scarcity
-0.8167129977051641,Impact on Performers and Service Industry Workers,Community Response to Crisis
-0.815782301446431,Community Support and Hope,Uncertainty about the Future
-0.8153772870380877,Financial Concerns and Unemployment,Panic Buying and Resource Scarcity
-0.8148314605572178,Impact on Performers and Service Industry Workers,Housing Policies and Community Impact
-0.8142918751708234,Concerns about Public Health and Safety,Housing Policies and Community Impact
-0.814068713899627,Community Support and Hope,Concerns about Medical Resources and Healthcare
-0.8135382187247353,Personal Experiences and Challenges,Fear and Uncertainty about the Future
-0.8132810674371842,Impact on Performers and Service Industry Workers,Concerns about Public Health and Safety
-0.8131416919210743,Community Support and Hope,Government and Medical System Response to Crisis
-0.8121755376639841,Community Support and Hope,Personal Experiences and Challenges
-0.8100051149219457,Community Response to Crisis,Fear and Uncertainty about the Future
-0.8091477551999872,Community Support and Hope,Concerns about Public Health and Safety
-0.8085261076325052,Impact on Performers and Service Industry Workers,Financial Concerns and Unemployment
-0.8084730178568433,Community Support and Hope,Financial Concerns and Unemployment
-0.8079135929809073,Impact on Business and Employees,Concerns about Medical Resources and Healthcare
-0.807719815564777,Uncertainty about the Future,Personal Experiences and Challenges
-0.8065593967584728,Financial Concerns and Unemployment,Personal Experiences and Challenges
-0.8056436036083579,Impact on Business and Employees,Fear and Uncertainty about the Future
-0.8035977000118858,Government and Medical System Response to Crisis,Panic Buying and Resource Scarcity
-0.8030006868630573,Uncertainty about the Future,Impact on Business and Employees
-0.8029314054968214,Impact on Specific Professions,Community Response to Crisis
-0.802921414762198,Impact on Specific Professions,Housing Policies and Community Impact
-0.8025827031433566,Impact on Specific Professions,Personal Experiences and Challenges
-0.8024820491261434,Community Support and Hope,Frustration and Criticism of Leadership
-0.8019409575384531,Community Support and Hope,Personal Care and Activities
-0.80178331845599,Community Support and Hope,Impact on Business and Employees
-0.8011041006404753,Financial Concerns and Unemployment,Community Response to Crisis
-0.7999100847428826,Financial Concerns and Unemployment,Housing Policies and Community Impact
-0.7995668963131327,Government and Medical System Response to Crisis,Fear and Uncertainty about the Future
-0.7990807523985258,Concerns about Public Health and Safety,Panic Buying and Resource Scarcity
-0.7990329868442662,Impact on Business and Employees,Frustration and Criticism of Leadership
-0.7988974055269684,Personal Care and Activities,Concerns about Medical Resources and Healthcare
-0.7988886725339306,Impact on Performers and Service Industry Workers,Fear and Uncertainty about the Future
-0.7985741692824282,Impact on Performers and Service Industry Workers,Concerns about Medical Resources and Healthcare
-0.7982000949489589,Impact on Business and Employees,Government and Medical System Response to Crisis
-0.7980872716104316,Community Response to Crisis,Personal Experiences and Challenges
-0.7976535475823789,Housing Policies and Community Impact,Concerns about Medical Resources and Healthcare
-0.7966018269711138,Concerns about Medical Resources and Healthcare,Personal Experiences and Challenges
-0.7965738914149891,Impact on Specific Professions,Concerns about Medical Resources and Healthcare
-0.7955467905181762,Frustration and Criticism of Leadership,Panic Buying and Resource Scarcity
-0.7951480424817418,Financial Concerns and Unemployment,Frustration and Criticism of Leadership
-0.795132298679598,Frustration and Criticism of Leadership,Concerns about Medical Resources and Healthcare
-0.7949065297957062,Impact on Performers and Service Industry Workers,Government and Medical System Response to Crisis
-0.7943716105315709,Concerns about Public Health and Safety,Personal Experiences and Challenges
-0.7943392003318404,Impact on Performers and Service Industry Workers,Community Support and Hope
-0.7941175268419965,Impact on Business and Employees,Personal Experiences and Challenges
-0.7940116109482113,Concerns about Public Health and Safety,Personal Care and Activities
-0.7920173598742006,Concerns about Public Health and Safety,Impact on Specific Professions
-0.7918294866400118,Government and Medical System Response to Crisis,Frustration and Criticism of Leadership
-0.7916989295496526,Financial Concerns and Unemployment,Impact on Specific Professions
-0.7916617641248919,Concerns about Public Health and Safety,Frustration and Criticism of Leadership
-0.7895851934664129,Impact on Performers and Service Industry Workers,Personal Experiences and Challenges
-0.788752266593009,Uncertainty about the Future,Community Response to Crisis
-0.7881088659477221,Impact on Performers and Service Industry Workers,Uncertainty about the Future
-0.7861098347614425,Financial Concerns and Unemployment,Government and Medical System Response to Crisis
-0.7858637469250236,Impact on Specific Professions,Government and Medical System Response to Crisis
-0.7850137724122926,Impact on Specific Professions,Uncertainty about the Future
-0.7846867039941381,Impact on Specific Professions,Fear and Uncertainty about the Future
-0.7840408092479859,Personal Experiences and Challenges,Panic Buying and Resource Scarcity
-0.7839684967356287,Community Support and Hope,Panic Buying and Resource Scarcity
-0.7825862881466589,Housing Policies and Community Impact,Fear and Uncertainty about the Future
-0.7825480407555162,Impact on Business and Employees,Panic Buying and Resource Scarcity
-0.7823012282259002,Housing Policies and Community Impact,Government and Medical System Response to Crisis
-0.7817973229728252,Impact on Specific Professions,Frustration and Criticism of Leadership
-0.7803110410654502,Uncertainty about the Future,Government and Medical System Response to Crisis
-0.7797313992398511,Impact on Performers and Service Industry Workers,Personal Care and Activities
-0.7791618138543542,Housing Policies and Community Impact,Personal Experiences and Challenges
-0.7787605685380571,Impact on Performers and Service Industry Workers,Frustration and Criticism of Leadership
-0.7780770451828088,Impact on Specific Professions,Personal Care and Activities
-0.7779565191872799,Financial Concerns and Unemployment,Personal Care and Activities
-0.7772380960233329,Impact on Performers and Service Industry Workers,Panic Buying and Resource Scarcity
-0.7760710012778322,Not Grouped,Personal Care and Activities
-0.7741265271560127,Personal Care and Activities,Housing Policies and Community Impact
-0.7733807321262344,Community Support and Hope,Impact on Specific Professions
-0.7725865455297337,Uncertainty about the Future,Housing Policies and Community Impact
-0.771582360310422,Personal Care and Activities,Community Response to Crisis
-0.7715001304332755,Government and Medical System Response to Crisis,Personal Experiences and Challenges
-0.7709367740610498,Impact on Business and Employees,Personal Care and Activities
-0.770572209905928,Personal Care and Activities,Fear and Uncertainty about the Future
-0.769744022864567,Uncertainty about the Future,Personal Care and Activities
-0.7680974772793401,Housing Policies and Community Impact,Frustration and Criticism of Leadership
-0.765438995123623,Housing Policies and Community Impact,Panic Buying and Resource Scarcity
-0.7651550768047655,Uncertainty about the Future,Not Grouped
-0.7623752416075118,Community Support and Hope,Not Grouped
-0.7591960471408558,Personal Care and Activities,Government and Medical System Response to Crisis
-0.7581435516961225,Personal Care and Activities,Panic Buying and Resource Scarcity
-0.7571698624349184,Impact on Specific Professions,Panic Buying and Resource Scarcity
-0.7537554679056507,Personal Care and Activities,Frustration and Criticism of Leadership
-0.7525629018134079,Not Grouped,Fear and Uncertainty about the Future
-0.7517851395599725,Not Grouped,Frustration and Criticism of Leadership
-0.7512114750520367,Financial Concerns and Unemployment,Not Grouped
-0.748996702494652,Not Grouped,Personal Experiences and Challenges
-0.7480851626244255,Not Grouped,Community Response to Crisis
-0.7456469402145075,Not Grouped,Housing Policies and Community Impact
-0.7451119711150829,Concerns about Public Health and Safety,Not Grouped
-0.7439520765682681,Not Grouped,Government and Medical System Response to Crisis
-0.7430744220420655,Impact on Performers and Service Industry Workers,Not Grouped
-0.742961254730157,Not Grouped,Impact on Business and Employees
-0.7405953367178961,Not Grouped,Panic Buying and Resource Scarcity
-0.7346574128437293,Impact on Specific Professions,Not Grouped
-0.7331329663958258,Not Grouped,Concerns about Medical Resources and Healthcare
+0.975362679291438,Lessons from Technical/Project Mistakes,Learning from Technical/Project Mistakes
+0.970323464581461,Self-Reflection and Personal Growth,Lessons from Self-Reflection and Personal Growth
+0.9675762652585983,Learning from Mistakes and Failures,Learning from Mistakes
+0.9665213851453854,Personal Growth and Self-Realization,Self-Improvement and Personal Growth
+0.9577726732753814,Learning from Mistakes and Misconceptions,Learning from Mistakes
+0.9576511033993667,Importance of User Interface and User Experience,Importance of Design and User Interface
+0.957262801239395,Self-Reflection and Personal Growth,Self-Improvement and Personal Growth
+0.9473235468643808,Importance of Communication and Teamwork,Importance of Teamwork and Collaboration
+0.946215824021966,Learning from Mistakes and Failures,Learning from Mistakes and Misconceptions
+0.9459684205949,Importance of Communication and Teamwork,Importance of Communication
+0.944782503809714,Personal Growth and Self-Realization,Self-Reflection and Personal Growth
+0.9441184835755277,Importance of Research and Understanding,Importance of Data and Research
+0.9426079022519726,Importance of Asking for Help and Collaboration,Importance of Communication and Asking for Help
+0.9336492236852096,Self-Reflection and Personal Growth,Importance of Self-awareness and Personal Growth
+0.9314322395168049,Importance of Attention to Detail and Planning,Importance of Planning and Preparation
+0.9309240820368724,Lessons from Self-Reflection and Personal Growth,Self-Improvement and Personal Growth
+0.9301870644132407,Importance of Asking for Help and Collaboration,Importance of Teamwork and Collaboration
+0.9278174854710073,Importance of Self-awareness and Personal Growth,Self-Improvement and Personal Growth
+0.9271510090586037,Lessons from Teamwork and Collaboration,Importance of Teamwork and Collaboration
+0.9260026144866725,Learning from Technical/Project Mistakes,Learning from Mistakes
+0.9238987266789856,Personal Growth and Self-Realization,Importance of Self-awareness and Personal Growth
+0.9238347799223318,Lessons from Self-Reflection and Personal Growth,Importance of Self-awareness and Personal Growth
+0.9208931184422312,Importance of Communication and Asking for Help,Importance of Communication
+0.9177669053282007,Personal Growth and Self-Realization,Lessons from Self-Reflection and Personal Growth
+0.9126756224828065,Importance of Communication and Teamwork,Importance of Communication and Asking for Help
+0.9103205617419734,Learning from Mistakes and Failures,Learning from Technical/Project Mistakes
+0.9060155042733592,Learning from Mistakes and Misconceptions,Learning from Technical/Project Mistakes
+0.9022819956803697,Lessons from Technical/Project Mistakes,Learning from Mistakes
+0.9002149288586521,Time Management and Workload Balance,Time Management and Meeting Deadlines
+0.8977810069684916,Learning from Mistakes and Misconceptions,Lessons from Miscommunication and Assumptions
+0.8936790643812763,Learning from Mistakes and Failures,Lessons from Technical/Project Mistakes
+0.8886485751686293,Learning from Mistakes and Misconceptions,Lessons from Technical/Project Mistakes
+0.8883891513259132,Importance of Asking for Help and Collaboration,Lessons from Teamwork and Collaboration
+0.8879998519491734,Importance of Communication and Teamwork,Importance of Asking for Help and Collaboration
+0.8862841506508943,Lessons from Miscommunication and Assumptions,Lessons from Technical/Project Mistakes
+0.8840963510116973,Importance of Communication and Teamwork,Lessons from Teamwork and Collaboration
+0.8794499880074329,Importance of Research and Understanding,Importance of Communication
+0.8749145995192703,Importance of Considering Different Perspectives,Importance of Research and Understanding
+0.8743025731779046,Importance of Teamwork and Collaboration,Importance of Communication
+0.8740697625046653,Lessons from Miscommunication and Assumptions,Lessons from Teamwork and Collaboration
+0.8734492771053841,Lessons from Technical/Project Mistakes,Lessons from Teamwork and Collaboration
+0.8708368754010218,Lessons from Miscommunication and Assumptions,Impact of Assumptions and Judgements
+0.8698547974758079,Importance of Communication and Asking for Help,Importance of Teamwork and Collaboration
+0.8668103623438332,Importance of Research and Understanding,Importance of Planning and Preparation
+0.8655089021857304,Lessons from Teamwork and Collaboration,Lessons from Self-Reflection and Personal Growth
+0.8654021201263026,Lessons from Miscommunication and Assumptions,Learning from Mistakes
+0.8646791325647591,Importance of Testing and Validation,Importance of Research and Understanding
+0.8626878684115369,Importance of Teamwork and Collaboration,Importance of Planning and Preparation
+0.8625013582673623,Importance of Communication,Importance of Data and Research
+0.862304992259396,Importance of Research and Understanding,Importance of Communication and Asking for Help
+0.8613588084387329,Importance of Testing and Validation,Importance of Data and Research
+0.8602414777455534,Learning from Mistakes and Failures,Lessons from Self-Reflection and Personal Growth
+0.8599709884554506,Importance of Communication,Importance of Planning and Preparation
+0.8572372107011191,Importance of Communication and Teamwork,Importance of Research and Understanding
+0.8565589457604275,Learning from Mistakes and Failures,Lessons from Miscommunication and Assumptions
+0.8564605362431994,Importance of Communication and Teamwork,Importance of Planning and Preparation
+0.8560360770471683,Importance of Research and Understanding,Importance of Self-awareness and Personal Growth
+0.8558679097108106,Lessons from Miscommunication and Assumptions,Learning from Technical/Project Mistakes
+0.8552292059175278,Learning from Mistakes and Failures,Lessons from Teamwork and Collaboration
+0.8543602707480067,Importance of User Interface and User Experience,Understanding and Catering to User Needs
+0.8537010408299482,Value of Documentation and Self-Learning,Self-Improvement and Personal Growth
+0.8523341993238529,Coding and Technical Skills,Technical Challenges and Solutions
+0.8520298919866184,Importance of Research and Understanding,Importance of Teamwork and Collaboration
+0.8519504283636833,Importance of Attention to Detail and Planning,Importance of Teamwork and Collaboration
+0.8500961092933466,Importance of Communication and Asking for Help,Importance of Data and Research
+0.8497922496996299,Importance of Planning and Preparation,Importance of Data and Research
+0.8497689310967563,Importance of Asking for Help and Collaboration,Importance of Planning and Preparation
+0.8495148603196375,Importance of Considering Different Perspectives,Importance of Teamwork and Collaboration
+0.8489519749747617,Importance of Design and User Interface,Importance of Research and Understanding
+0.8489231305055417,Importance of Asking for Help and Collaboration,Importance of Research and Understanding
+0.8483019469548692,Importance of Asking for Help and Collaboration,Importance of Communication
+0.8482335617401758,Importance of Considering Different Perspectives,Importance of Asking for Help and Collaboration
+0.8480763517001233,Importance of Research and Understanding,Importance of Attention to Detail and Planning
+0.8475806051846018,Importance of Considering Different Perspectives,Importance of Data and Research
+0.8475556866517249,Importance of Communication and Asking for Help,Importance of Planning and Preparation
+0.8475262207265118,Understanding and Catering to User Needs,Importance of Design and User Interface
+0.8472819420511231,Importance of Communication and Teamwork,Importance of Attention to Detail and Planning
+0.8468717357661851,Value of Documentation and Self-Learning,Self-Reflection and Personal Growth
+0.8466807263279384,Importance of Testing and Validation,Importance of Planning and Preparation
+0.846376068567878,Importance of User Interface and User Experience,Importance of Research and Understanding
+0.8457769047569734,Lessons from Teamwork and Collaboration,Learning from Mistakes
+0.8453214056755451,Importance of Communication and Teamwork,Importance of Data and Research
+0.8451749826607201,Value of Documentation and Self-Learning,Personal Growth and Self-Realization
+0.845079143812791,Lessons from Self-Reflection and Personal Growth,Learning from Mistakes
+0.8440923510005004,Importance of Teamwork and Collaboration,Importance of Data and Research
+0.8440808964095335,Lessons from Miscommunication and Assumptions,Lessons from Self-Reflection and Personal Growth
+0.8439157423349452,Importance of Considering Different Perspectives,Importance of Communication
+0.8438642581066076,Value of Documentation and Self-Learning,Importance of Self-awareness and Personal Growth
+0.8433072935947725,Lessons from Teamwork and Collaboration,Learning from Technical/Project Mistakes
+0.8423106951766341,Importance of Design and User Interface,Importance of Data and Research
+0.8416864062521068,Learning from Mistakes and Misconceptions,Lessons from Self-Reflection and Personal Growth
+0.8413055842938134,Importance of Asking for Help and Collaboration,Importance of Data and Research
+0.8412897696431616,Time Management and Meeting Deadlines,Importance of Attention to Detail and Planning
+0.8412122278263676,Importance of Attention to Detail and Planning,Importance of Data and Research
+0.8411101310023005,Lessons from Technical/Project Mistakes,Lessons from Self-Reflection and Personal Growth
+0.8406813409336713,Learning from Mistakes and Misconceptions,Lessons from Teamwork and Collaboration
+0.840447802514953,Importance of Considering Different Perspectives,Importance of Planning and Preparation
+0.8398518961305389,Importance of Communication and Teamwork,Importance of Considering Different Perspectives
+0.8398309806954294,Importance of Design and User Interface,Importance of Attention to Detail and Planning
+0.83964405245569,Learning from Mistakes and Misconceptions,Impact of Assumptions and Judgements
+0.838692458854649,Importance of Testing and Validation,Importance of Communication
+0.8385820395138723,Importance of Testing and Validation,Importance of Design and User Interface
+0.8384194315699848,Lessons from Technical/Project Mistakes,Technical Challenges and Solutions
+0.8377570974457619,Lessons from Miscommunication and Assumptions,Importance of Communication and Asking for Help
+0.8371101818203589,Learning from Mistakes and Failures,Self-Improvement and Personal Growth
+0.8369178519274982,Importance of Attention to Detail and Planning,Importance of Communication
+0.8364565098477712,Importance of Design and User Interface,Importance of Communication
+0.8361353768681805,Importance of Testing and Validation,Importance of Teamwork and Collaboration
+0.8357269366010458,Importance of Considering Different Perspectives,Importance of Self-awareness and Personal Growth
+0.8355965840827869,Importance of Communication and Asking for Help,Importance of Self-awareness and Personal Growth
+0.8350834287462441,Importance of Considering Different Perspectives,Importance of Communication and Asking for Help
+0.8350458162655653,Importance of Testing and Validation,Importance of Attention to Detail and Planning
+0.8347808990272051,Value of Documentation and Self-Learning,Lessons from Self-Reflection and Personal Growth
+0.8345163141864558,Lessons from Teamwork and Collaboration,Technical Challenges and Solutions
+0.8343133069113683,Importance of Considering Different Perspectives,Importance of Attention to Detail and Planning
+0.8340507230736499,Importance of Considering Different Perspectives,Impact of Assumptions and Judgements
+0.8339158230448412,Lessons from Self-Reflection and Personal Growth,Personal Experiences and Anecdotes
+0.8334575926101293,Importance of User Interface and User Experience,Importance of Communication
+0.832970991190289,Importance of User Interface and User Experience,Importance of Testing and Validation
+0.8325744759692378,Learning from Mistakes and Failures,Self-Reflection and Personal Growth
+0.8321811711022435,Importance of Self-awareness and Personal Growth,Importance of Planning and Preparation
+0.8317000160228941,Importance of Design and User Interface,Importance of Planning and Preparation
+0.8316471732278103,Importance of User Interface and User Experience,Importance of Data and Research
+0.8315769377476682,Importance of User Interface and User Experience,Importance of Teamwork and Collaboration
+0.8308505481098531,Importance of Communication and Teamwork,Importance of Self-awareness and Personal Growth
+0.8306679077074952,Importance of Asking for Help and Collaboration,Importance of Attention to Detail and Planning
+0.8304769384443228,Importance of Communication and Teamwork,Lessons from Miscommunication and Assumptions
+0.8303778218788251,Lessons from Teamwork and Collaboration,Importance of Communication and Asking for Help
+0.8300266034393076,Importance of Self-awareness and Personal Growth,Importance of Communication
+0.828939093037882,Importance of Testing and Validation,Importance of Communication and Teamwork
+0.8289305744975392,Importance of Design and User Interface,Importance of Teamwork and Collaboration
+0.8285498462675842,Understanding and Catering to User Needs,Importance of Research and Understanding
+0.8285382142299457,Importance of User Interface and User Experience,Importance of Communication and Teamwork
+0.8285107644050852,Learning from Technical/Project Mistakes,Technical Challenges and Solutions
+0.8278367109273689,Time Management and Meeting Deadlines,Importance of Planning and Preparation
+0.8277252120147448,Lessons from Miscommunication and Assumptions,Importance of Communication
+0.8276436152473182,Importance of Self-awareness and Personal Growth,Importance of Data and Research
+0.8271415899911404,Learning from Mistakes and Misconceptions,Personal Experiences and Anecdotes
+0.8268247740382749,Importance of Communication and Teamwork,Importance of Design and User Interface
+0.8265948914237992,Importance of Attention to Detail and Planning,Importance of Communication and Asking for Help
+0.8255322262773857,Importance of Attention to Detail and Planning,Importance of Self-awareness and Personal Growth
+0.8254797934269085,Importance of Testing and Validation,Importance of Asking for Help and Collaboration
+0.8253788885473702,Time Management and Workload Balance,Technical Challenges and Solutions
+0.8249896115200994,Understanding and Catering to User Needs,Technical Challenges and Solutions
+0.8246468629160837,Importance of Teamwork and Collaboration,Importance of Self-awareness and Personal Growth
+0.8244130366492634,Coding and Technical Skills,Learning from Technical/Project Mistakes
+0.824129796242652,Time Management and Meeting Deadlines,Importance of Teamwork and Collaboration
+0.8240219037063851,Importance of Communication and Teamwork,Time Management and Meeting Deadlines
+0.8239502225379249,Importance of Testing and Validation,Importance of Considering Different Perspectives
+0.8237430263470705,Importance of User Interface and User Experience,Importance of Communication and Asking for Help
+0.823646608365055,Self-Reflection and Personal Growth,Personal Experiences and Anecdotes
+0.8234079691372904,Time Management and Meeting Deadlines,Lessons from Teamwork and Collaboration
+0.8228114173423684,Importance of Considering Different Perspectives,Lessons from Teamwork and Collaboration
+0.822632112419246,Value of Documentation and Self-Learning,Coding and Technical Skills
+0.8223391742300334,Lessons from Self-Reflection and Personal Growth,Learning from Technical/Project Mistakes
+0.822136829244784,Coding and Technical Skills,Lessons from Technical/Project Mistakes
+0.8212053237077167,Importance of Testing and Validation,Importance of Communication and Asking for Help
+0.8209341543646228,Self-Improvement and Personal Growth,Personal Experiences and Anecdotes
+0.8205735618975467,Time Management and Workload Balance,Lessons from Teamwork and Collaboration
+0.8203584264436595,Self-Reflection and Personal Growth,Lessons from Teamwork and Collaboration
+0.8202394497270548,Importance of Design and User Interface,Importance of Communication and Asking for Help
+0.8201156008709006,Importance of Teamwork and Collaboration,Technical Challenges and Solutions
+0.8198332300742138,Learning from Mistakes and Misconceptions,Self-Improvement and Personal Growth
+0.8194438735795463,Time Management and Meeting Deadlines,Technical Challenges and Solutions
+0.8194281344270417,Personal Growth and Self-Realization,Personal Experiences and Anecdotes
+0.819389437915061,Learning from Mistakes and Failures,Personal Growth and Self-Realization
+0.8188196884489105,Lessons from Teamwork and Collaboration,Self-Improvement and Personal Growth
+0.8187176320826617,Importance of Asking for Help and Collaboration,Importance of Self-awareness and Personal Growth
+0.8184684725972776,Value of Documentation and Self-Learning,Importance of Research and Understanding
+0.817517927504234,Importance of Asking for Help and Collaboration,Technical Challenges and Solutions
+0.817417385216189,Importance of User Interface and User Experience,Importance of Attention to Detail and Planning
+0.8172092524765391,Learning from Mistakes and Misconceptions,Self-Reflection and Personal Growth
+0.8170351078759492,Understanding and Catering to User Needs,Importance of Communication and Asking for Help
+0.8169460995329334,Importance of Considering Different Perspectives,Importance of Design and User Interface
+0.8167998933674746,Time Management and Workload Balance,Importance of Teamwork and Collaboration
+0.8166009280740567,Importance of User Interface and User Experience,Importance of Asking for Help and Collaboration
+0.8165641517368346,Learning from Mistakes and Failures,Importance of Self-awareness and Personal Growth
+0.8153608592626316,Importance of Design and User Interface,Importance of Asking for Help and Collaboration
+0.815345021099756,Importance of Testing and Validation,Impact of Assumptions and Judgements
+0.8152283109993825,Learning from Mistakes,Self-Improvement and Personal Growth
+0.8151830583021576,Value of Documentation and Self-Learning,Importance of Communication and Asking for Help
+0.815032544236145,Importance of User Interface and User Experience,Importance of Considering Different Perspectives
+0.8146273741454843,Importance of User Interface and User Experience,Importance of Planning and Preparation
+0.814370999286479,Importance of Research and Understanding,Impact of Assumptions and Judgements
+0.814093166781338,Learning from Mistakes and Failures,Personal Experiences and Anecdotes
+0.8140692679340479,Lessons from Teamwork and Collaboration,Importance of Planning and Preparation
+0.8136949698089694,Time Management and Meeting Deadlines,Self-Improvement and Personal Growth
+0.813318781256296,Importance of Attention to Detail and Planning,Lessons from Teamwork and Collaboration
+0.813127913816775,Time Management and Meeting Deadlines,Importance of Asking for Help and Collaboration
+0.8130939818318161,Value of Documentation and Self-Learning,Importance of Testing and Validation
+0.812718044427058,Value of Documentation and Self-Learning,Importance of Data and Research
+0.8125113174192854,Self-Reflection and Personal Growth,Learning from Mistakes
+0.8124065591309821,Importance of Considering Different Perspectives,Lessons from Miscommunication and Assumptions
+0.8122078942847184,Learning from Mistakes and Failures,Importance of Asking for Help and Collaboration
+0.8121718827509558,Importance of Asking for Help and Collaboration,Lessons from Miscommunication and Assumptions
+0.8119752267604501,Understanding and Catering to User Needs,Importance of Attention to Detail and Planning
+0.8119404920526282,Self-Improvement and Personal Growth,Importance of Planning and Preparation
+0.8118111660954901,Personal Growth and Self-Realization,Time Management and Meeting Deadlines
+0.8114783796980362,Time Management and Meeting Deadlines,Importance of Communication and Asking for Help
+0.8113006905885676,Value of Documentation and Self-Learning,Learning from Mistakes and Misconceptions
+0.8110568480298933,Learning from Mistakes and Failures,Value of Documentation and Self-Learning
+0.8110378467444734,Lessons from Teamwork and Collaboration,Personal Experiences and Anecdotes
+0.8110077541382452,Time Management and Workload Balance,Importance of Communication and Teamwork
+0.8104340275780534,Personal Growth and Self-Realization,Importance of Research and Understanding
+0.8101981163643306,Importance of Asking for Help and Collaboration,Lessons from Technical/Project Mistakes
+0.8096473950696458,Impact of Assumptions and Judgements,Learning from Mistakes
+0.8096433674182747,Personal Growth and Self-Realization,Lessons from Teamwork and Collaboration
+0.8089709800504483,Importance of Communication and Teamwork,Coding and Technical Skills
+0.8087394225067757,Time Management and Meeting Deadlines,Self-Reflection and Personal Growth
+0.8085672836586238,Coding and Technical Skills,Lessons from Teamwork and Collaboration
+0.8084721319613904,Personal Growth and Self-Realization,Learning from Mistakes and Misconceptions
+0.8083796131985977,Understanding and Catering to User Needs,Coding and Technical Skills
+0.8082342982281593,Importance of Considering Different Perspectives,Lessons from Self-Reflection and Personal Growth
+0.8081860643075761,Personal Growth and Self-Realization,Importance of Planning and Preparation
+0.8081746091904124,Learning from Mistakes and Misconceptions,Importance of Research and Understanding
+0.8080533581004361,Impact of Assumptions and Judgements,Importance of Self-awareness and Personal Growth
+0.8080141134825667,Importance of Considering Different Perspectives,Understanding and Catering to User Needs
+0.8078522270351284,Understanding and Catering to User Needs,Importance of Asking for Help and Collaboration
+0.8077338502322856,Importance of Communication and Teamwork,Technical Challenges and Solutions
+0.8076289074424726,Lessons from Technical/Project Mistakes,Personal Experiences and Anecdotes
+0.8073284813265589,Value of Documentation and Self-Learning,Learning from Mistakes
+0.807228488418008,Time Management and Workload Balance,Personal Growth and Self-Realization
+0.807163884583309,Time Management and Workload Balance,Importance of Attention to Detail and Planning
+0.8070902686044206,Self-Reflection and Personal Growth,Importance of Communication and Asking for Help
+0.8070842868560221,Value of Documentation and Self-Learning,Lessons from Teamwork and Collaboration
+0.8063649112762437,Lessons from Teamwork and Collaboration,Importance of Communication
+0.8062211831521098,Importance of Communication and Asking for Help,Self-Improvement and Personal Growth
+0.8056623884908357,Lessons from Miscommunication and Assumptions,Personal Experiences and Anecdotes
+0.8055422538717384,Learning from Mistakes and Failures,Impact of Assumptions and Judgements
+0.8053870234419783,Lessons from Teamwork and Collaboration,Importance of Self-awareness and Personal Growth
+0.8049615683446248,Time Management and Workload Balance,Self-Reflection and Personal Growth
+0.8049380380861585,Importance of Communication and Asking for Help,Technical Challenges and Solutions
+0.8049216148831518,Time Management and Workload Balance,Self-Improvement and Personal Growth
+0.8049094938407997,Value of Documentation and Self-Learning,Learning from Technical/Project Mistakes
+0.8047420362195602,Importance of Research and Understanding,Lessons from Miscommunication and Assumptions
+0.8044381315129432,Personal Growth and Self-Realization,Importance of Communication and Asking for Help
+0.8040870956581453,Importance of Considering Different Perspectives,Self-Reflection and Personal Growth
+0.804052366606909,Importance of Asking for Help and Collaboration,Learning from Technical/Project Mistakes
+0.803849169055357,Self-Improvement and Personal Growth,Technical Challenges and Solutions
+0.8037025722738861,Lessons from Technical/Project Mistakes,Impact of Assumptions and Judgements
+0.8034947657249087,Understanding and Catering to User Needs,Importance of Planning and Preparation
+0.8034844050209281,Importance of Communication and Teamwork,Understanding and Catering to User Needs
+0.803455484132763,Learning from Mistakes and Misconceptions,Importance of Self-awareness and Personal Growth
+0.8031532429920023,Lessons from Miscommunication and Assumptions,Importance of Teamwork and Collaboration
+0.8030784316841388,Technical Challenges and Solutions,Personal Experiences and Anecdotes
+0.802895714972635,Importance of Research and Understanding,Self-Improvement and Personal Growth
+0.8028048396342706,Importance of Teamwork and Collaboration,Self-Improvement and Personal Growth
+0.8027822481120378,Time Management and Workload Balance,Importance of Planning and Preparation
+0.8025794861607654,Importance of Testing and Validation,Importance of Self-awareness and Personal Growth
+0.8025615324986455,Importance of Testing and Validation,Technical Challenges and Solutions
+0.8023012744269244,Self-Reflection and Personal Growth,Technical Challenges and Solutions
+0.8022611019766439,Understanding and Catering to User Needs,Lessons from Teamwork and Collaboration
+0.8021194917944493,Impact of Assumptions and Judgements,Importance of Data and Research
+0.8021041615740583,Lessons from Miscommunication and Assumptions,Technical Challenges and Solutions
+0.8020825689530517,Learning from Mistakes and Failures,Importance of Communication and Asking for Help
+0.8019627383858765,Importance of Asking for Help and Collaboration,Learning from Mistakes
+0.8015501994723462,Value of Documentation and Self-Learning,Importance of Asking for Help and Collaboration
+0.80115535294083,Learning from Mistakes and Failures,Technical Challenges and Solutions
+0.8009883474690415,Lessons from Technical/Project Mistakes,Importance of Communication and Asking for Help
+0.8009390324464526,Importance of Self-awareness and Personal Growth,Personal Experiences and Anecdotes
+0.8008168205020214,Importance of Self-awareness and Personal Growth,Learning from Mistakes
+0.800423003724116,Technical Challenges and Solutions,Importance of Planning and Preparation
+0.800419152133663,Time Management and Meeting Deadlines,Lessons from Technical/Project Mistakes
+0.8003663117792089,Importance of Asking for Help and Collaboration,Self-Reflection and Personal Growth
+0.8000133646900182,Lessons from Self-Reflection and Personal Growth,Importance of Communication and Asking for Help
+0.7996983017930995,Self-Reflection and Personal Growth,Importance of Planning and Preparation
+0.7996824837017724,Personal Growth and Self-Realization,Learning from Mistakes
+0.7996185734028013,Understanding and Catering to User Needs,Importance of Teamwork and Collaboration
+0.799561967278864,Learning from Mistakes,Personal Experiences and Anecdotes
+0.7992263743225155,Value of Documentation and Self-Learning,Importance of Communication and Teamwork
+0.7988542508574643,Personal Growth and Self-Realization,Importance of Teamwork and Collaboration
+0.7988203031479181,Lessons from Teamwork and Collaboration,Impact of Assumptions and Judgements
+0.7987305314104083,Importance of Asking for Help and Collaboration,Lessons from Self-Reflection and Personal Growth
+0.7986472348222946,Self-Reflection and Personal Growth,Importance of Research and Understanding
+0.7986324853106919,Importance of Testing and Validation,Understanding and Catering to User Needs
+0.7984089584216315,Impact of Assumptions and Judgements,Personal Experiences and Anecdotes
+0.798319329987028,Importance of Research and Understanding,Lessons from Teamwork and Collaboration
+0.7983148435470332,Impact of Assumptions and Judgements,Importance of Teamwork and Collaboration
+0.7982952800201112,Impact of Assumptions and Judgements,Importance of Planning and Preparation
+0.7981543456139372,Personal Growth and Self-Realization,Importance of Considering Different Perspectives
+0.7979283572041026,Importance of Considering Different Perspectives,Learning from Mistakes and Misconceptions
+0.7976826465571104,Learning from Mistakes and Misconceptions,Importance of Asking for Help and Collaboration
+0.7976658886043418,Importance of Attention to Detail and Planning,Lessons from Technical/Project Mistakes
+0.7974722818665201,Importance of User Interface and User Experience,Impact of Assumptions and Judgements
+0.7974578028800754,Time Management and Meeting Deadlines,Understanding and Catering to User Needs
+0.7973992976656358,Importance of Communication and Teamwork,Self-Improvement and Personal Growth
+0.797363233834189,Lessons from Self-Reflection and Personal Growth,Impact of Assumptions and Judgements
+0.7973123776568494,Learning from Mistakes and Failures,Importance of Testing and Validation
+0.797278872077436,Learning from Mistakes and Failures,Time Management and Meeting Deadlines
+0.7971175726319089,Self-Reflection and Personal Growth,Lessons from Miscommunication and Assumptions
+0.7970999265243741,Learning from Mistakes and Failures,Importance of Planning and Preparation
+0.7970731325311107,Value of Documentation and Self-Learning,Importance of Communication
+0.797020100405341,Coding and Technical Skills,Self-Improvement and Personal Growth
+0.7969998832213282,Importance of Considering Different Perspectives,Technical Challenges and Solutions
+0.7968669978825315,Lessons from Self-Reflection and Personal Growth,Technical Challenges and Solutions
+0.796798755415407,Learning from Mistakes and Failures,Importance of Research and Understanding
+0.7967937989744205,Importance of Communication and Teamwork,Personal Growth and Self-Realization
+0.796770163063593,Importance of Asking for Help and Collaboration,Impact of Assumptions and Judgements
+0.7965929057751358,Importance of User Interface and User Experience,Technical Challenges and Solutions
+0.7964957823581373,Personal Growth and Self-Realization,Technical Challenges and Solutions
+0.7963465792176783,Learning from Technical/Project Mistakes,Personal Experiences and Anecdotes
+0.7962152823069779,Importance of Asking for Help and Collaboration,Self-Improvement and Personal Growth
+0.7958783762973091,Lessons from Miscommunication and Assumptions,Importance of Self-awareness and Personal Growth
+0.7957700908798959,Importance of Communication and Asking for Help,Learning from Mistakes
+0.7956502451649388,Time Management and Workload Balance,Importance of Asking for Help and Collaboration
+0.7956412916731448,Importance of Communication and Asking for Help,Impact of Assumptions and Judgements
+0.7956359909326105,Lessons from Technical/Project Mistakes,Importance of Teamwork and Collaboration
+0.795596821544058,Learning from Mistakes and Misconceptions,Importance of Communication and Asking for Help
+0.7955855760305708,Time Management and Meeting Deadlines,Lessons from Self-Reflection and Personal Growth
+0.7953887742584334,Importance of User Interface and User Experience,Importance of Self-awareness and Personal Growth
+0.7953755046344945,Importance of Attention to Detail and Planning,Self-Improvement and Personal Growth
+0.7952083685281778,Importance of Communication and Asking for Help,Learning from Technical/Project Mistakes
+0.7952035828475105,Time Management and Meeting Deadlines,Coding and Technical Skills
+0.7950866963696577,Lessons from Technical/Project Mistakes,Importance of Planning and Preparation
+0.7949087922998476,Lessons from Miscommunication and Assumptions,Importance of Planning and Preparation
+0.7949059311140839,Importance of Communication and Teamwork,Self-Reflection and Personal Growth
+0.7948427590297712,Coding and Technical Skills,Importance of Teamwork and Collaboration
+0.7945955448520058,Lessons from Self-Reflection and Personal Growth,Importance of Planning and Preparation
+0.7945180692709837,Time Management and Meeting Deadlines,Importance of Communication
+0.7944950236224074,Self-Reflection and Personal Growth,Learning from Technical/Project Mistakes
+0.7944315939965617,Importance of User Interface and User Experience,Value of Documentation and Self-Learning
+0.7944167366474787,Learning from Mistakes and Failures,Importance of Teamwork and Collaboration
+0.7943581359495399,Learning from Mistakes and Misconceptions,Technical Challenges and Solutions
+0.7943443741288454,Personal Growth and Self-Realization,Importance of Asking for Help and Collaboration
+0.7941926631265592,Importance of Research and Understanding,Lessons from Self-Reflection and Personal Growth
+0.7940005994708861,Value of Documentation and Self-Learning,Importance of Attention to Detail and Planning
+0.7939392523363122,Understanding and Catering to User Needs,Lessons from Miscommunication and Assumptions
+0.7937164895984734,Value of Documentation and Self-Learning,Personal Experiences and Anecdotes
+0.7935650136209318,Value of Documentation and Self-Learning,Time Management and Meeting Deadlines
+0.7932457754683865,Learning from Technical/Project Mistakes,Self-Improvement and Personal Growth
+0.7931039525716687,Importance of Testing and Validation,Lessons from Technical/Project Mistakes
+0.7928237879248343,Value of Documentation and Self-Learning,Lessons from Technical/Project Mistakes
+0.7927172954375351,Importance of Testing and Validation,Learning from Mistakes and Misconceptions
+0.7925705486416504,Learning from Mistakes and Failures,Importance of Attention to Detail and Planning
+0.7924048369462454,Self-Reflection and Personal Growth,Lessons from Technical/Project Mistakes
+0.7922670736641916,Personal Growth and Self-Realization,Importance of Attention to Detail and Planning
+0.7922140606084287,Understanding and Catering to User Needs,Importance of Data and Research
+0.792151927133798,Impact of Assumptions and Judgements,Importance of Communication
+0.7919360474816313,Self-Reflection and Personal Growth,Importance of Teamwork and Collaboration
+0.7918852173721818,Coding and Technical Skills,Importance of Communication and Asking for Help
+0.7916758001348067,Importance of Communication and Teamwork,Impact of Assumptions and Judgements
+0.7916364855677933,Importance of Research and Understanding,Learning from Mistakes
+0.7916107399121839,Impact of Assumptions and Judgements,Learning from Technical/Project Mistakes
+0.7914865910480233,Self-Reflection and Personal Growth,Impact of Assumptions and Judgements
+0.7914571916753657,Importance of Attention to Detail and Planning,Impact of Assumptions and Judgements
+0.7914179866069312,Self-Reflection and Personal Growth,Importance of Attention to Detail and Planning
+0.7913982534907048,Technical Challenges and Solutions,Importance of Data and Research
+0.7913942765792824,Understanding and Catering to User Needs,Importance of Communication
+0.7913854870273437,Time Management and Meeting Deadlines,Importance of Data and Research
+0.7912611292291372,Value of Documentation and Self-Learning,Importance of Design and User Interface
+0.7911833185229803,Value of Documentation and Self-Learning,Importance of Teamwork and Collaboration
+0.7910776600633109,Personal Growth and Self-Realization,Understanding and Catering to User Needs
+0.7909688437102561,Coding and Technical Skills,Self-Reflection and Personal Growth
+0.7904915043413709,Time Management and Meeting Deadlines,Importance of Self-awareness and Personal Growth
+0.7903356039234123,Importance of User Interface and User Experience,Lessons from Teamwork and Collaboration
+0.7901519482341827,Time Management and Workload Balance,Understanding and Catering to User Needs
+0.7895634487862689,Importance of Testing and Validation,Coding and Technical Skills
+0.7891076916006053,Personal Growth and Self-Realization,Importance of Communication
+0.7890871302648712,Importance of User Interface and User Experience,Personal Experiences and Anecdotes
+0.7890025673683135,Time Management and Workload Balance,Coding and Technical Skills
+0.7887253297219042,Time Management and Meeting Deadlines,Learning from Technical/Project Mistakes
+0.788612372883167,Importance of Attention to Detail and Planning,Lessons from Self-Reflection and Personal Growth
+0.7885334363486594,Importance of Communication,Self-Improvement and Personal Growth
+0.7884884201333775,Importance of Communication and Teamwork,Lessons from Technical/Project Mistakes
+0.7884067080612476,Importance of Design and User Interface,Coding and Technical Skills
+0.7883057929278066,Importance of Testing and Validation,Learning from Technical/Project Mistakes
+0.7882327203201855,Importance of Attention to Detail and Planning,Technical Challenges and Solutions
+0.7882309103625079,Lessons from Self-Reflection and Personal Growth,Importance of Teamwork and Collaboration
+0.7880469353268735,Lessons from Technical/Project Mistakes,Self-Improvement and Personal Growth
+0.7880250392631933,Time Management and Meeting Deadlines,Lessons from Miscommunication and Assumptions
+0.787945987027468,Understanding and Catering to User Needs,Learning from Mistakes and Misconceptions
+0.7879430249911358,Time Management and Workload Balance,Lessons from Self-Reflection and Personal Growth
+0.7878879855284665,Value of Documentation and Self-Learning,Understanding and Catering to User Needs
+0.7878486608623032,Self-Improvement and Personal Growth,Importance of Data and Research
+0.7878243361855957,Impact of Assumptions and Judgements,Technical Challenges and Solutions
+0.7876844947308969,Understanding and Catering to User Needs,Importance of Self-awareness and Personal Growth
+0.7876428095522392,Value of Documentation and Self-Learning,Importance of Planning and Preparation
+0.7873577574856445,Importance of Testing and Validation,Lessons from Teamwork and Collaboration
+0.7871421496355553,Value of Documentation and Self-Learning,Time Management and Workload Balance
+0.7871325958504668,Importance of User Interface and User Experience,Coding and Technical Skills
+0.7870741722633439,Lessons from Teamwork and Collaboration,Importance of Data and Research
+0.7868378530544748,Importance of Considering Different Perspectives,Self-Improvement and Personal Growth
+0.786744099777844,Personal Growth and Self-Realization,Importance of Data and Research
+0.7867011981532323,Importance of User Interface and User Experience,Time Management and Workload Balance
+0.7865127958233024,Understanding and Catering to User Needs,Self-Improvement and Personal Growth
+0.7864620305279117,Personal Growth and Self-Realization,Coding and Technical Skills
+0.7860619459942615,Lessons from Miscommunication and Assumptions,Self-Improvement and Personal Growth
+0.7860364954182228,Learning from Mistakes and Failures,Importance of Considering Different Perspectives
+0.7859225978366684,Time Management and Meeting Deadlines,Importance of Design and User Interface
+0.7858640582609716,Learning from Mistakes,Technical Challenges and Solutions
+0.7855069804103041,Importance of Considering Different Perspectives,Personal Experiences and Anecdotes
+0.7854810426684609,Importance of Considering Different Perspectives,Learning from Mistakes
+0.7854335082681853,Importance of Testing and Validation,Learning from Mistakes
+0.7853049574977442,Importance of Design and User Interface,Importance of Self-awareness and Personal Growth
+0.7851752810247339,Importance of Research and Understanding,Technical Challenges and Solutions
+0.7847559209132007,Time Management and Meeting Deadlines,Importance of Research and Understanding
+0.7847134077931316,Importance of Design and User Interface,Technical Challenges and Solutions
+0.7844083453250813,Value of Documentation and Self-Learning,Lessons from Miscommunication and Assumptions
+0.7843875807010359,Importance of Attention to Detail and Planning,Lessons from Miscommunication and Assumptions
+0.7843822544190466,Time Management and Workload Balance,Importance of Self-awareness and Personal Growth
+0.784108990344114,Time Management and Workload Balance,Lessons from Technical/Project Mistakes
+0.7840209273987926,Learning from Mistakes,Importance of Planning and Preparation
+0.7838717768410058,Personal Growth and Self-Realization,Lessons from Miscommunication and Assumptions
+0.783794935337869,Self-Reflection and Personal Growth,Importance of Data and Research
+0.7837162398474324,Time Management and Workload Balance,Importance of Considering Different Perspectives
+0.7836849503544429,Learning from Mistakes and Failures,Understanding and Catering to User Needs
+0.783435476298812,Learning from Mistakes and Misconceptions,Importance of Planning and Preparation
+0.7833053454330056,Value of Documentation and Self-Learning,Technical Challenges and Solutions
+0.7831862432584004,Value of Documentation and Self-Learning,Importance of Considering Different Perspectives
+0.7830448625872417,Importance of Testing and Validation,Lessons from Miscommunication and Assumptions
+0.7828443558418716,Importance of Design and User Interface,Lessons from Teamwork and Collaboration
+0.7825032195974113,Importance of User Interface and User Experience,Lessons from Technical/Project Mistakes
+0.7824015575716167,Importance of Considering Different Perspectives,Lessons from Technical/Project Mistakes
+0.7823780304101458,Importance of Communication and Teamwork,Lessons from Self-Reflection and Personal Growth
+0.7823059279470548,Importance of Attention to Detail and Planning,Learning from Mistakes
+0.7822812141410611,Importance of Teamwork and Collaboration,Learning from Technical/Project Mistakes
+0.7822519244458769,Coding and Technical Skills,Importance of Asking for Help and Collaboration
+0.7822206335686622,Importance of Considering Different Perspectives,Time Management and Meeting Deadlines
+0.7822057657843622,Time Management and Workload Balance,Importance of Communication and Asking for Help
+0.7821730515290766,Importance of Design and User Interface,Impact of Assumptions and Judgements
+0.7821649474856108,Value of Documentation and Self-Learning,Impact of Assumptions and Judgements
+0.7820246937794808,Importance of Communication and Asking for Help,Personal Experiences and Anecdotes
+0.7812913830547745,Coding and Technical Skills,Importance of Communication
+0.7810871596525518,Understanding and Catering to User Needs,Lessons from Technical/Project Mistakes
+0.7808310578430921,Importance of Research and Understanding,Personal Experiences and Anecdotes
+0.7807954004125265,Importance of Testing and Validation,Time Management and Meeting Deadlines
+0.7806197733959215,Importance of Data and Research,Personal Experiences and Anecdotes
+0.7804891758702373,Time Management and Meeting Deadlines,Personal Experiences and Anecdotes
+0.7802994135242635,Understanding and Catering to User Needs,Learning from Technical/Project Mistakes
+0.7802226032685009,Importance of User Interface and User Experience,Time Management and Meeting Deadlines
+0.7801997784566383,Lessons from Technical/Project Mistakes,Importance of Self-awareness and Personal Growth
+0.7798795913676813,Time Management and Workload Balance,Importance of Design and User Interface
+0.7793877068377137,Learning from Mistakes and Misconceptions,Importance of Teamwork and Collaboration
+0.7787750051584678,Self-Reflection and Personal Growth,Importance of Communication
+0.7787183538797149,Understanding and Catering to User Needs,Learning from Mistakes
+0.7786621088444305,Understanding and Catering to User Needs,Self-Reflection and Personal Growth
+0.7785835953783568,Learning from Mistakes and Failures,Time Management and Workload Balance
+0.7785191257923556,Time Management and Meeting Deadlines,Learning from Mistakes and Misconceptions
+0.7784785441044395,Learning from Mistakes and Failures,Importance of Data and Research
+0.7782263887593509,Importance of Self-awareness and Personal Growth,Learning from Technical/Project Mistakes
+0.7781814824254826,Importance of Attention to Detail and Planning,Learning from Technical/Project Mistakes
+0.7780868871500365,Importance of Asking for Help and Collaboration,Personal Experiences and Anecdotes
+0.7780467058211763,Importance of Testing and Validation,Self-Improvement and Personal Growth
+0.7780099528621932,Time Management and Meeting Deadlines,Learning from Mistakes
+0.7779171166175278,Time Management and Meeting Deadlines,Impact of Assumptions and Judgements
+0.7776715456325134,Understanding and Catering to User Needs,Impact of Assumptions and Judgements
+0.777622656049333,Importance of Teamwork and Collaboration,Learning from Mistakes
+0.7774721787972403,Learning from Mistakes and Misconceptions,Importance of Attention to Detail and Planning
+0.7774352014871425,Importance of Design and User Interface,Lessons from Technical/Project Mistakes
+0.7774060966721776,Importance of Research and Understanding,Learning from Technical/Project Mistakes
+0.7771943638650487,Importance of Communication and Teamwork,Learning from Technical/Project Mistakes
+0.7771104703984315,Learning from Mistakes and Failures,Importance of Communication and Teamwork
+0.7770812412245396,Learning from Mistakes and Misconceptions,Importance of Data and Research
+0.7769109989722337,Importance of Research and Understanding,Lessons from Technical/Project Mistakes
+0.7768321099104133,Importance of Communication,Technical Challenges and Solutions
+0.7765873325670264,Not Grouped,Lessons from Teamwork and Collaboration
+0.7765535607568853,Lessons from Self-Reflection and Personal Growth,Importance of Data and Research
+0.7760945126553869,Time Management and Workload Balance,Importance of Testing and Validation
+0.7760549187311111,Coding and Technical Skills,Lessons from Miscommunication and Assumptions
+0.7759496744910784,Coding and Technical Skills,Lessons from Self-Reflection and Personal Growth
+0.7759293918292536,Impact of Assumptions and Judgements,Self-Improvement and Personal Growth
+0.7755131833778864,Learning from Technical/Project Mistakes,Importance of Planning and Preparation
+0.7753384126089307,Importance of Self-awareness and Personal Growth,Technical Challenges and Solutions
+0.775183756681562,Understanding and Catering to User Needs,Personal Experiences and Anecdotes
+0.7749124129982556,Personal Growth and Self-Realization,Impact of Assumptions and Judgements
+0.7743752374996548,Coding and Technical Skills,Personal Experiences and Anecdotes
+0.7743467011468652,Importance of Testing and Validation,Self-Reflection and Personal Growth
+0.7742556799630218,Coding and Technical Skills,Learning from Mistakes and Misconceptions
+0.7742065918750586,Lessons from Miscommunication and Assumptions,Importance of Data and Research
+0.7740249944654843,Learning from Mistakes and Failures,Coding and Technical Skills
+0.7739943863840836,Coding and Technical Skills,Importance of Research and Understanding
+0.7739144812573543,Personal Growth and Self-Realization,Learning from Technical/Project Mistakes
+0.7734803964793193,Coding and Technical Skills,Importance of Planning and Preparation
+0.773419777021116,Understanding and Catering to User Needs,Lessons from Self-Reflection and Personal Growth
+0.7733812718408831,Time Management and Workload Balance,Learning from Technical/Project Mistakes
+0.7733122503210811,Coding and Technical Skills,Importance of Attention to Detail and Planning
+0.7730769180391438,Time Management and Workload Balance,Impact of Assumptions and Judgements
+0.7721752325772526,Coding and Technical Skills,Importance of Data and Research
+0.7720899517673734,Importance of Testing and Validation,Personal Growth and Self-Realization
+0.7714114186149008,Importance of User Interface and User Experience,Lessons from Miscommunication and Assumptions
+0.7710567944111126,Lessons from Technical/Project Mistakes,Importance of Data and Research
+0.7707176148902786,Personal Growth and Self-Realization,Lessons from Technical/Project Mistakes
+0.7705234952554932,Time Management and Workload Balance,Importance of Data and Research
+0.7704395825271021,Time Management and Workload Balance,Personal Experiences and Anecdotes
+0.7704206819211215,Importance of Communication and Teamwork,Learning from Mistakes and Misconceptions
+0.7703384646131813,Importance of User Interface and User Experience,Self-Improvement and Personal Growth
+0.7701664091790696,Importance of Teamwork and Collaboration,Personal Experiences and Anecdotes
+0.769858402517909,Time Management and Workload Balance,Lessons from Miscommunication and Assumptions
+0.7695414072739607,Personal Growth and Self-Realization,Not Grouped
+0.7691996428398361,Importance of User Interface and User Experience,Learning from Technical/Project Mistakes
+0.7690323861584052,Lessons from Self-Reflection and Personal Growth,Importance of Communication
+0.768877357710099,Coding and Technical Skills,Importance of Self-awareness and Personal Growth
+0.7688274609822114,Time Management and Workload Balance,Importance of Communication
+0.7684032780277417,Importance of Considering Different Perspectives,Learning from Technical/Project Mistakes
+0.7683486217727439,Learning from Technical/Project Mistakes,Importance of Data and Research
+0.7683472784888399,Time Management and Workload Balance,Importance of Research and Understanding
+0.7683421425858115,Learning from Mistakes,Importance of Data and Research
+0.7679633456182495,Importance of Testing and Validation,Lessons from Self-Reflection and Personal Growth
+0.7678121144402524,Time Management and Workload Balance,Learning from Mistakes and Misconceptions
+0.7674399851046395,Not Grouped,Self-Improvement and Personal Growth
+0.7667783338685764,Coding and Technical Skills,Learning from Mistakes
+0.766685633495403,Learning from Mistakes and Failures,Importance of User Interface and User Experience
+0.7665362550906017,Importance of User Interface and User Experience,Learning from Mistakes and Misconceptions
+0.7660430405072676,Importance of Communication and Teamwork,Learning from Mistakes
+0.7659426883264234,Importance of User Interface and User Experience,Personal Growth and Self-Realization
+0.7658541604248407,Lessons from Technical/Project Mistakes,Importance of Communication
+0.7651994179813422,Importance of Planning and Preparation,Personal Experiences and Anecdotes
+0.764402901401779,Coding and Technical Skills,Impact of Assumptions and Judgements
+0.763605560116884,Importance of Testing and Validation,Personal Experiences and Anecdotes
+0.7622802722181935,Importance of User Interface and User Experience,Self-Reflection and Personal Growth
+0.7622584632637495,Learning from Mistakes and Misconceptions,Importance of Communication
+0.762203123783329,Importance of Design and User Interface,Self-Improvement and Personal Growth
+0.7621867753838397,Learning from Mistakes,Importance of Communication
+0.7610843106183127,Importance of Design and User Interface,Learning from Technical/Project Mistakes
+0.7604484198073534,Importance of Attention to Detail and Planning,Personal Experiences and Anecdotes
+0.7604320173430678,Personal Growth and Self-Realization,Importance of Design and User Interface
+0.7604004761349613,Importance of Communication and Teamwork,Personal Experiences and Anecdotes
+0.7599473123394302,Time Management and Workload Balance,Learning from Mistakes
+0.7592610127030637,Not Grouped,Importance of Teamwork and Collaboration
+0.7591969103225918,Importance of User Interface and User Experience,Lessons from Self-Reflection and Personal Growth
+0.7587817619590413,Learning from Mistakes and Failures,Importance of Communication
+0.7587098518330243,Learning from Mistakes and Failures,Importance of Design and User Interface
+0.7586824586690254,Not Grouped,Personal Experiences and Anecdotes
+0.7571055723019389,Importance of User Interface and User Experience,Learning from Mistakes
+0.756799153846238,Importance of Considering Different Perspectives,Coding and Technical Skills
+0.7567965653075457,Understanding and Catering to User Needs,Not Grouped
+0.7567234727921772,Importance of Design and User Interface,Lessons from Miscommunication and Assumptions
+0.7550859453142225,Importance of Design and User Interface,Learning from Mistakes and Misconceptions
+0.7543288162963967,Not Grouped,Self-Reflection and Personal Growth
+0.7527564766306035,Time Management and Workload Balance,Not Grouped
+0.7526426012082663,Learning from Technical/Project Mistakes,Importance of Communication
+0.7525707610599012,Coding and Technical Skills,Not Grouped
+0.7518600890558063,Importance of Design and User Interface,Learning from Mistakes
+0.7516584641832643,Importance of Design and User Interface,Personal Experiences and Anecdotes
+0.7509135467900482,Importance of Design and User Interface,Self-Reflection and Personal Growth
+0.7496408436968883,Importance of Communication,Personal Experiences and Anecdotes
+0.7475780540821785,Not Grouped,Technical Challenges and Solutions
+0.7473383199331932,Importance of Design and User Interface,Lessons from Self-Reflection and Personal Growth
+0.7471379365397662,Time Management and Meeting Deadlines,Not Grouped
+0.7470351861578961,Importance of Communication and Teamwork,Not Grouped
+0.7469879005005409,Importance of Considering Different Perspectives,Not Grouped
+0.7440213745908425,Not Grouped,Lessons from Self-Reflection and Personal Growth
+0.7419902558428573,Not Grouped,Importance of Attention to Detail and Planning
+0.740913509364074,Not Grouped,Importance of Planning and Preparation
+0.7408949034921665,Not Grouped,Importance of Asking for Help and Collaboration
+0.7406141393756422,Not Grouped,Impact of Assumptions and Judgements
+0.7385597696005036,Not Grouped,Learning from Mistakes
+0.7383496244043868,Not Grouped,Lessons from Miscommunication and Assumptions
+0.7353616894454008,Importance of Design and User Interface,Not Grouped
+0.7328189605142323,Not Grouped,Importance of Self-awareness and Personal Growth
+0.7318511302163001,Not Grouped,Importance of Communication and Asking for Help
+0.7315476672537325,Learning from Mistakes and Failures,Not Grouped
+0.7302959502507651,Not Grouped,Learning from Mistakes and Misconceptions
+0.7292878724483681,Value of Documentation and Self-Learning,Not Grouped
+0.728627720525753,Importance of Testing and Validation,Not Grouped
+0.7283642375728787,Not Grouped,Importance of Communication
+0.7274433889556919,Not Grouped,Lessons from Technical/Project Mistakes
+0.7253627084790291,Importance of User Interface and User Experience,Not Grouped
+0.7238817247530748,Not Grouped,Importance of Data and Research
+0.722791815508064,Not Grouped,Importance of Research and Understanding
+0.716564587836528,Not Grouped,Learning from Technical/Project Mistakes
