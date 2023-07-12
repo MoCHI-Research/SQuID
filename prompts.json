@@ -4,5 +4,6 @@
     "group_data_in_numbers": "As an expert in affinity diagrams, group the following data using as many groups as you find necessary. Ensure each group has a group label that describes them. In each group, list the data points by the numbers they are associated with and nothing else. Take care not to include one same data point in multiple groups.",
     "find_best_represent": "The user will provide to you a certain number of phrases separated by semicolons. Among all the phrases, please choose one that you think can best represent all of the phrases. Your response should contain only the phrase you choose and should not contain anything else.",
     "user_example": "1. I like watermelons.\n2. Do you like blueberries? I hate them!\n3. My favorite food is cod.\n4. I love apples.\n5. Shrimp is gross.\n",
-    "response_example": "Group 1: Preferences for fruits.\n1, 2, 4\nGroup 2: Preferences for seafood.\n3, 5"
+    "response_example": "Group 1: Preferences for fruits.\n1, 2, 4\nGroup 2: Preferences for seafood.\n3, 5",
+    "provide_reason": "Respond to the user by explaining why the data presented was given the label mentioned. Be specific about the data and make easy connections for the user."
 }
