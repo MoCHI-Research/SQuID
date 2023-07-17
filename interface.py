@@ -1,5 +1,13 @@
 import tkinter as tk
 import customtkinter as ctk
+from menu import label_datapoints
+from menu import reason_for_label
+from menu import generate_reason
+from menu import merge_labels
+
+DATASET_PATH = "datasets/"
+
+ctk.set_appearance_mode("System")
     
 class App(ctk.CTk):
     def __init__(self, *args, **kwargs):
@@ -23,16 +31,18 @@ class App(ctk.CTk):
         self.filename = ''
         
         file_button = ctk.CTkButton(master=self, text="Submit File", corner_radius=10, command=self.set_file)
-        generate_labels_button = ctk.CTkButton(master=self, text="Generate Labels", corner_radius=10, command=self.foo)
+        generate_labels_button = ctk.CTkButton(master=self, text="Generate Labels", corner_radius=10, command=self.gen_labels)
+        reason_for_labels_button = ctk.CTkButton(master=self, text="Reason for Labels", corner_radius=10, command=self.foo)
         merge_threshold_button = ctk.CTkButton(master=self, text="Change Merge Threshold", corner_radius=10, command=self.foo)
         regen_labels_button = ctk.CTkButton(master=self, text="Regenerate Labels", corner_radius=10, command=self.foo)
         merge_similar_button = ctk.CTkButton(master=self, text="Merge Similar Labels", corner_radius=10, command=self.foo)
         
         file_button.place(relx=0.5,rely=0.2,anchor=tk.CENTER)
         generate_labels_button.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
-        merge_threshold_button.place(relx=0.5,rely=0.6,anchor=tk.CENTER)
-        regen_labels_button.place(relx=0.5,rely=0.7,anchor=tk.CENTER)
-        merge_similar_button.place(relx=0.5,rely=0.8,anchor=tk.CENTER)
+        reason_for_labels_button.place(relx=0.5,rely=0.6,anchor=tk.CENTER)
+        merge_threshold_button.place(relx=0.5,rely=0.7,anchor=tk.CENTER)
+        regen_labels_button.place(relx=0.5,rely=0.8,anchor=tk.CENTER)
+        merge_similar_button.place(relx=0.5,rely=0.9,anchor=tk.CENTER)
 
     def foo(self):
         print("bar")
@@ -40,6 +50,9 @@ class App(ctk.CTk):
     def set_file(self):
         self.filename = self.textbox.get('1.0', 'end-1c')
         print('File: "' + self.filename + '"' + ' submitted')
+        
+    def gen_labels(self):
+        label_datapoints(DATASET_PATH + self.filename)
 
 if __name__ == "__main__":
     app = App()
