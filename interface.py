@@ -18,11 +18,11 @@ class App(ctk.CTk):
         
         self.geometry('%dx%d+%d+%d' % (width, height, x, y))
         
-        textbox = ctk.CTkTextbox(master=self,width=200,height=30)
-        textbox.place(relx=0.5,rely=0.1,anchor=tk.CENTER)
-        filename = ''
+        self.textbox = ctk.CTkTextbox(master=self,width=200,height=30)
+        self.textbox.place(relx=0.5,rely=0.1,anchor=tk.CENTER)
+        self.filename = ''
         
-        file_button = ctk.CTkButton(master=self, text="Submit File", corner_radius=10, command=lambda : print(textbox.get('1.0', tk.END)))
+        file_button = ctk.CTkButton(master=self, text="Submit File", corner_radius=10, command=self.set_file)
         generate_labels_button = ctk.CTkButton(master=self, text="Generate Labels", corner_radius=10, command=self.foo)
         merge_threshold_button = ctk.CTkButton(master=self, text="Change Merge Threshold", corner_radius=10, command=self.foo)
         regen_labels_button = ctk.CTkButton(master=self, text="Regenerate Labels", corner_radius=10, command=self.foo)
@@ -36,6 +36,10 @@ class App(ctk.CTk):
 
     def foo(self):
         print("bar")
+        
+    def set_file(self):
+        self.filename = self.textbox.get('1.0', 'end-1c')
+        print('File: "' + self.filename + '"' + ' submitted')
 
 if __name__ == "__main__":
     app = App()
