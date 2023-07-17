@@ -277,6 +277,28 @@ def generate_reason(all_data, data_index, label):
 
     print("Data: " + data)
     print("GPT-4 Response: " + response)
+    
+    
+def change_merge_threshold(merge_threshold):
+    print("Your label merge threshold is currently:", merge_threshold)
+    print("\nNote: The higher the threshold is, the more unlikely groups will get merged, and the more groups the end result will have. Our suggested threshold is 0.91.\n")
+    new_threshold = 0
+    user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
+    while (not new_threshold) and user_input != "":
+        try:
+            new_threshold = float(user_input)
+            if new_threshold <= 0 or new_threshold >= 1:
+                print("Your input is outside of the valid threshold range. it should be a decimal between 0 and 1(exclusive).\n")
+                new_threshold = 0
+                user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
+            else:
+                merge_threshold = new_threshold
+        except:
+            print("Your input is not valid. Please try again.\n")
+            user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
+
+    print("Your label merge threshold is now", merge_threshold)
+    return merge_threshold
 
 
 # A simple menu system that takes in an integer from the user to select a feature
@@ -312,24 +334,7 @@ def menu():
             case '2':
                 reason_for_label()
             case '3':
-                print("Your label merge threshold is currently:", merge_threshold)
-                print("\nNote: The higher the threshold is, the more unlikely groups will get merged, and the more groups the end result will have. Our suggested threshold is 0.91.\n")
-                new_threshold = 0
-                user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
-                while (not new_threshold) and user_input != "":
-                    try:
-                        new_threshold = float(user_input)
-                        if new_threshold <= 0 or new_threshold >= 1:
-                            print("Your input is outside of the valid threshold range. it should be a decimal between 0 and 1(exclusive).\n")
-                            new_threshold = 0
-                            user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
-                        else:
-                            merge_threshold = new_threshold
-                    except:
-                        print("Your input is not valid. Please try again.\n")
-                        user_input = input("Enter a new threshold, which is a decimal between 0 and 1(exclusive). Press enter to continue: ")
-
-                print("Your label merge threshold is now", merge_threshold)
+                merge_threshold=change_merge_threshold(merge_threshold)
 
 
             case '5':
