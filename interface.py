@@ -49,6 +49,8 @@ class App(ctk.CTk):
         merge_similar_button.place(relx=0.5,rely=0.8,anchor=tk.CENTER)
         regen_labels_button.place(relx=0.5,rely=0.9,anchor=tk.CENTER)
 
+        
+
 
     def foo(self):
         print("bar")
