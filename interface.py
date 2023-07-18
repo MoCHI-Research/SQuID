@@ -8,8 +8,10 @@ from menu import change_merge_threshold
 DATASET_PATH = "datasets/"
 
 ctk.set_appearance_mode("System")
-    
+
+"""Class for the app's interface"""    
 class App(ctk.CTk):
+    """Constructor for the App class."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.title("SQUID Prototype")   
@@ -32,13 +34,13 @@ class App(ctk.CTk):
         self.filename = ''
         self.merge_threshold = 0.91
         
+        #Buttons for interaction
         file_button = ctk.CTkButton(master=self, text="Submit File", corner_radius=10, command=self.set_file)
         generate_labels_button = ctk.CTkButton(master=self, text="Generate Labels", corner_radius=10, command=self.gen_labels)
         reason_for_labels_button = ctk.CTkButton(master=self, text="Reason for Labels", corner_radius=10, command=self.reason_labels)
         merge_threshold_button = ctk.CTkButton(master=self, text="Change Merge Threshold", corner_radius=10, command=self.change_thresh)
         merge_similar_button = ctk.CTkButton(master=self, text="Merge Similar Labels", corner_radius=10, command=self.merge)
         regen_labels_button = ctk.CTkButton(master=self, text="Regenerate Labels", corner_radius=10, command=self.gen_labels)
-        
         
         file_button.place(relx=0.5,rely=0.2,anchor=tk.CENTER)
         generate_labels_button.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
