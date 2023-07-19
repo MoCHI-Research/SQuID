@@ -3,7 +3,24 @@ from tkinter import font as tkfont
 import os
 import menu
 
+"""
+Main program that runs everything
+Parameters:
+    tk.Tk: creates a subclass of the Tk module that we modify to our needs with classes
+Returns:
+    None
+"""
 class SampleApp(tk.Tk):
+
+    """
+    Main function
+    Parameters:
+        self: instance of the class to access attributes and methods
+        *args: positional arguments
+        **kwargs: keyword arguments 
+    Returns:
+        None
+    """
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         self.geometry("1000x1000")
@@ -24,6 +41,15 @@ class SampleApp(tk.Tk):
 
         self.show_frame("StartPage")
 
+    """
+    Brings the selected frame to the forefront and runs the tailored update function
+    Parameters:
+        self: this is always passed to each function
+        page_name: the name of the frame we want to bring forward
+        *args: anything this is being passed to the update function
+    Returns:
+        None
+    """
     def show_frame(self, page_name, *args):
         frame = self.frames[page_name]
         frame.tkraise()
@@ -35,7 +61,24 @@ class SampleApp(tk.Tk):
             frame.update_data_w_label(*args)
 
 
+"""
+Main start page with all features
+Parameters:
+    tk.Frame: creates subclass of a Frame to use frame methods
+Returns:
+    None
+"""
 class StartPage(tk.Frame):
+
+    """
+    main function
+    Parameters:
+        self: instance of the class itself to call created methods
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    Returns:
+        None
+    """
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -46,7 +89,24 @@ class StartPage(tk.Frame):
         button1.pack()
 
 
+"""
+Prompts user for the label
+Parameters:
+    tk.Frame: creates subclass of a Frame to use frame methods
+Returns:
+    None
+"""
 class ReasonForLabel(tk.Frame):
+
+    """
+    main function
+    Parameters:
+        self: instance of the class itself to call created methods
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    Returns:
+        None
+    """
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -60,13 +120,37 @@ class ReasonForLabel(tk.Frame):
         label_button = tk.Button(self, text="Submit Label", command=self.label_submission)
         label_button.pack()
 
+    """
+    Grabs label entry after button press, retrieves all data w/ the label, and brings DataWithLabel frame to forefront
+    Parameters:
+        self: instance of ReasonForLabel class to access attributes and methods
+    Returns:
+        None
+    """
     def label_submission(self):
         entered_label = self.label_entry.get()
         all_data = menu.retrieve_data_with_label(entered_label)
         self.controller.show_frame("DataWithLabel", all_data, entered_label)
 
 
+"""
+Prints out all data with the label the user entered in ReasonForLabel frame
+Parameters:
+    tk.Frame: creates subclass of a Frame to use frame methods
+Returns:
+    None
+"""
 class DataWithLabel(tk.Frame):
+
+    """
+    main function
+    Parameters:
+        self: instance of the class itself to call created methods
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    Returns:
+        None
+    """
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -86,10 +170,25 @@ class DataWithLabel(tk.Frame):
         data_num_button = tk.Button(self, text="Submit Data Number", command=self.submit_data_number)
         data_num_button.pack()
 
+    """
+    Grabs the selected data number and brings GeneeratedGPTReason frame to forefront
+    Parameters:
+        self: instance of DataWithLabel class to access atrributes and methods
+    Returns:
+        None
+    """
     def submit_data_number(self):
         data_number = int(self.data_num.get())
         self.controller.show_frame("GenerateGPTReason", self.all_data, self.entered_label, data_number)
 
+    """
+    Prints out all data with entered label
+    Parameters:
+        self: instance of DataWithLabel class to access attributes and methods
+        data: an array of tuples that has the following layout [(Label, DataEntry), ..., (Label, DataEntry)]
+    Returns:
+        None
+    """
     def update_data_w_label(self, data, label):
         self.all_data = data
         self.entered_label = label
@@ -100,14 +199,37 @@ class DataWithLabel(tk.Frame):
             label.pack()
             self.labels.append(label)
             count += 1
-
+    """
+    Clears the screen of temporary messages (such as data)
+    Parameters:
+        self: instance of DataWithLabel class to access attributes and methods
+    Returns:
+        None
+    """
     def clear_screen(self):
         for label in self.labels:
             label.destroy()
         self.labels = []
 
 
+"""
+Generates the reason for giving the data the label it was given and displays it.
+Parameters:
+    tk.Frame: creates subclass of a Frame to use frame methods
+Returns:
+    None
+"""
 class GenerateGPTReason(tk.Frame):
+
+    """
+    main function
+    Parameters:
+        self: instance of the class itself to call created methods
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    Returns:
+        None
+    """
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -123,6 +245,16 @@ class GenerateGPTReason(tk.Frame):
         start_page_button = tk.Button(self, text="Start Page", command=lambda: self.controller.show_frame("StartPage"))
         start_page_button.pack()
 
+    """
+    Prints out the gpt response for providing the data with given label
+    Parameters:
+        self: instance of GeneeratedGPTReason class to access attribues and methods
+        all_data: an array of tuples that has the following layout [(Label, DataEntry), ..., (Label, DataEntry)]
+        label: the label in question
+        data_index: the index of the data with the label. ex: all_data[data_index - 1][1]
+    Returns:
+        None
+    """
     def update_gpt_reason(self, all_data, label, data_index):
         self.clear_screen()
         gpt_response = menu.generate_reason(all_data, data_index, label)
@@ -133,13 +265,36 @@ class GenerateGPTReason(tk.Frame):
             display_gpt_response.pack()
             self.responses.append(display_gpt_response)
 
+    """
+    Clears the frame of temporary printed information
+    Paramters:
+        self: instance of the GeneratedGPTReason class to access attributes and methods
+    Returns:
+        None
+    """
     def clear_screen(self):
         for response in self.responses:
             response.destroy()
         self.responses = []
 
-
+"""
+Template to make a new frame
+Parameters:
+    tk.Frame: creates subclass of a Frame to use frame methods
+Returns:
+    None
+"""
 class PageTwo(tk.Frame):
+
+    """
+    main function
+    Parameters:
+        self: instance of the class itself to call created methods
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    Returns:
+        None
+    """
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
