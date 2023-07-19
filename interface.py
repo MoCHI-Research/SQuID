@@ -235,10 +235,6 @@ class FileSelectionFrame(WorkFrame):
 
     """
     Grabs filepath of selected file and sets as an attribute
-    Parameters:
-        self: instance of the class itself to call created methods
-    Returns:
-        None
     """
     def select_file(self):
         file_path = filedialog.askopenfilename()
