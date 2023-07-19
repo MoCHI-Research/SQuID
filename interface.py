@@ -163,7 +163,7 @@ class DataWithLabel(WorkFrame):
 
     """
     Prints out all data with entered label
-    Parameters:
+    Parameters: 
         data: an array of tuples that has the following layout [(Label, DataEntry), ..., (Label, DataEntry)]
     """
     def update_status(self, data, label):
