@@ -230,14 +230,45 @@ def file_input():
     return file_out
 
 # # A function that prints a reason for labeling a data the
-def reason_for_label(filename = "output.csv"):
+# def reason_for_label(filename = "output.csv"):
+#     # Check if file exists
+#     if not os.path.isfile(filename):
+#         print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
+#     else:
+#         # Prompt user for label
+#         label_to_search = input("Type the label that you are looking for: ")
+#
+#         # Open the file and search
+#         all_data_with_label = []
+#         label_and_data = ()
+#         with open(filename, 'r') as file:
+#              csv_reader = csv.reader(file)
+#              for row in csv_reader:
+#                  if len(row) > 0:
+#                      if row[0] == label_to_search:
+#                         label_and_data = (row[0], row[1])
+#                         all_data_with_label.append(label_and_data)
+#
+#         # Asks which data with the label they would like a reason for (if label exists) and generates reason
+#         print("")
+#         if len(all_data_with_label) > 0:
+#             print("Which data from the label \"" + label_to_search + "\" would you like to have a reason for: ")
+#             count = 1
+#             for pairs in all_data_with_label:
+#                 print("[" + str(count) + "] " + pairs[1])
+#                 count += 1
+#
+#             print("")
+#             data_num = input("Data Number: ")
+#             generate_reason(all_data_with_label, data_num, label_to_search)
+#         else:
+#             print("There is no such label in the file.")
+#         print("")
+def retrieve_data_with_label(label_to_search, filename = "output.csv"):
     # Check if file exists
     if not os.path.isfile(filename):
         print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
     else:
-        # Prompt user for label
-        label_to_search = input("Type the label that you are looking for: ")
-
         # Open the file and search
         all_data_with_label = []
         label_and_data = ()
@@ -249,23 +280,12 @@ def reason_for_label(filename = "output.csv"):
                         label_and_data = (row[0], row[1])
                         all_data_with_label.append(label_and_data)
 
-        # Asks which data with the label they would like a reason for (if label exists) and generates reason
-        print("")
-        if len(all_data_with_label) > 0:
-            print("Which data from the label \"" + label_to_search + "\" would you like to have a reason for: ")
-            count = 1
-            for pairs in all_data_with_label:
-                print("[" + str(count) + "] " + pairs[1])
-                count += 1
-
-            print("")
-            data_num = input("Data Number: ")
-            generate_reason(all_data_with_label, data_num, label_to_search)
-        else:
-            print("There is no such label in the file.")
-        print("")
+    return all_data_with_label
 
 def generate_reason(all_data, data_index, label):
+    print("Data: " + str(all_data[int(data_index) - 1][1]))
+    print("Label: " + label)
+
     data = all_data[int(data_index) - 1][1]
     user_input_string = "Provide a reason for giving the label " + label + " to the the following data: " + data
     response = None
@@ -275,10 +295,9 @@ def generate_reason(all_data, data_index, label):
     while response == None:
         response = openai_sys_chatcompletion(gpt_template, user_input_string)
 
-    print("Data: " + data)
-    print("GPT-4 Response: " + response)
-    
-    
+    return response
+
+
 def change_merge_threshold(merge_threshold):
     print("Your label merge threshold is currently:", merge_threshold)
     print("\nNote: The higher the threshold is, the more unlikely groups will get merged, and the more groups the end result will have. Our suggested threshold is 0.91.\n")
@@ -319,18 +338,18 @@ def menu():
                 # Start the loading thread for the time elapsed
                 loading_thread = threading.Thread(target=show_time_elapsed)
                 loading_thread.start()
-                
+
                 try:
                     label_datapoints(DATASET_PATH + file)
                 except PermissionError:
                     print("Failed to access the output file. Please close it if it is open. Going back to the main menu...\n")
                 except FileNotFoundError:
                     print("Failed to find the file. Please check your file name and make sure it is in the dataset directory. Going back to the main menu...\n")
-                
+
                 stop_thread = True
                 loading_thread.join()
                 print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
-                
+
             case '2':
                 reason_for_label()
             case '3':
