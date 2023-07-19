@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import font as tkfont
 import os
 import menu
+from tkinter import filedialog
 
 """
 Main program that runs everything
@@ -17,7 +18,7 @@ class SampleApp(tk.Tk):
     Parameters:
         self: instance of the class to access attributes and methods
         *args: positional arguments
-        **kwargs: keyword arguments 
+        **kwargs: keyword arguments
     Returns:
         None
     """
@@ -33,7 +34,7 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (StartPage, ReasonForLabel, DataWithLabel, GenerateGPTReason, PageTwo):
+        for F in (StartPage, ReasonForLabel, DataWithLabel, GenerateGPTReason, FileSelectionFrame, PageTwo):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -85,8 +86,12 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="SQUiD Interface", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        button1 = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("ReasonForLabel"))
-        button1.pack()
+        reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("ReasonForLabel"))
+        fileselection_button = tk.Button(self, text="File Selection", command=lambda: controller.show_frame("FileSelectionFrame"))
+
+
+        reasonforlabel_button.pack()
+        fileselection_button.pack()
 
 
 """
@@ -276,6 +281,48 @@ class GenerateGPTReason(tk.Frame):
         for response in self.responses:
             response.destroy()
         self.responses = []
+
+
+"""
+Frame to prompt to select a file directly from your directory/finder
+Parameters:
+    tk.Frame: creates Frame subclass
+Returns:
+    None
+"""
+class FileSelectionFrame(tk.Frame):
+
+    """
+    main function
+    Parameters:
+        self: instance of the class itself to call created methods
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    Returns:
+        None
+    """
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        self.file_path = tk.StringVar()  # Variable to store the selected file path
+
+        select_button = tk.Button(self, text="Select File", command=self.select_file)
+        select_button.pack(pady=10)
+
+        selected_file_label = tk.Label(self, textvariable=self.file_path, wraplength=400)
+        selected_file_label.pack()
+
+    """
+    Grabs filepath of selected file and sets as an attribute
+    Parameters:
+        self: instance of the class itself to call created methods
+    Returns:
+        None
+    """
+    def select_file(self):
+        file_path = filedialog.askopenfilename()
+        self.file_path.set(file_path)
 
 """
 Template to make a new frame
