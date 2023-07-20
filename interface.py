@@ -169,6 +169,9 @@ class ReasonForLabel(WorkFrame):
         label_button = tk.Button(self, text="Submit Label", command=self.label_submission)
         label_button.pack()
 
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button.pack()
+
     """
     Grabs label entry after button press, retrieves all data w/ the label, and brings DataWithLabel frame to forefront
     """
@@ -202,6 +205,9 @@ class DataWithLabel(WorkFrame):
 
         data_num_button = tk.Button(self, text="Submit Data Number", command = self.submit_data_number)
         data_num_button.pack()
+
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button.pack()
 
     """
     Grabs the selected data number and brings GeneeratedGPTReason frame to forefront
