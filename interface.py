@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import font as tkfont
 import os
-import menu
+from menu import *
 from tkinter import filedialog
 from merge_labels import merge_labels
 
@@ -26,6 +26,8 @@ class SampleApp(tk.Tk):
         self.geometry("1000x1000")
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
+        self.text_font = tkfont.Font(family = 'Times', size = 14)
+        self.message_font = tkfont.Font(family = 'Helvetica', size = 18)
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -38,7 +40,6 @@ class SampleApp(tk.Tk):
                   ReasonForLabel, DataWithLabel, GenerateGPTReason,
                   ChangeMergeThreshold,
                   MergeGroups, FinishedMerging,
-                  # FileSelectionFrame,
                   PageTwo):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
@@ -60,6 +61,21 @@ class SampleApp(tk.Tk):
         frame = self.frames[page_name]
         frame.tkraise()
         frame.update_status(*args)
+
+    """
+    Pop up a message box from a frame
+    Parameters:
+        current_frame(tk.Frame): the current frame which the message box is popped from
+        message(string): the message that appears in the message box
+        box_size(string): string that specifies size of the message box
+    """
+    def popup_message(self, current_frame, message, box_size = "200x100"):
+        top_box = tk.Toplevel(current_frame)
+        top_box.title("Message")
+        top_box.geometry(box_size)
+
+        message_label = tk.Label(top_box, text = message, font = self.message_font)
+        message_label.place(relx = 0.5, rely = 0.5, anchor = "center")
 
 """
 Virtual class for creating frames. Do not create object using this class.
@@ -88,6 +104,7 @@ class WorkFrame(tk.Frame):
     """
     def update_status(self, *args):
         return
+
 
 """
 Main start page with all features
@@ -154,7 +171,7 @@ class ReasonForLabel(WorkFrame):
     """
     def label_submission(self):
         entered_label = self.label_entry.get()
-        all_data = menu.retrieve_data_with_label(entered_label)
+        all_data = retrieve_data_with_label(entered_label)
         self.controller.show_frame("DataWithLabel", all_data, entered_label)
 
 
@@ -238,7 +255,7 @@ class GenerateGPTReason(WorkFrame):
     """
     def update_status(self, all_data, label, data_index):
         self.clear_screen()
-        gpt_response = menu.generate_reason(all_data, data_index, label)
+        gpt_response = generate_reason(all_data, data_index, label)
 
         for i in range(0, len(gpt_response), 100):
             chunk = gpt_response[i:i+100]
@@ -246,25 +263,25 @@ class GenerateGPTReason(WorkFrame):
             display_gpt_response.pack()
             self.labels.append(display_gpt_response)
 
-# """
-# Frame to prompt to select a file directly from your directory/finder
-# Parent class:
-#     WorkFrame: a sub class of tk.Frame
-# """
+"""
+Frame to prompt to select a file directly from your directory/finder
+Parent class:
+    WorkFrame: a sub class of tk.Frame
+"""
 # class FileSelectionFrame(WorkFrame):
-#
+
 #     """Constructor of the class"""
 #     def __init__(self, parent, controller):
 #         super().__init__(parent, controller)
-#
+
 #         self.file_path = tk.StringVar()  # Variable to store the selected file path
-#
+
 #         select_button = tk.Button(self, text="Select File", command=self.select_file)
 #         select_button.pack(pady=10)
-#
+
 #         selected_file_label = tk.Label(self, textvariable=self.file_path, wraplength=400)
 #         selected_file_label.pack()
-#
+
 #     """
 #     Grabs filepath of selected file and sets as an attribute
 #     """
@@ -272,13 +289,13 @@ class GenerateGPTReason(WorkFrame):
 #         file_path = filedialog.askopenfilename()
 #         self.file_path.set(file_path)
 
-    """
-    Gets the file path selected by user from earlier
-    Returns(string):
-        the file path selected by user
-    """
-    def get_file(self):
-        return self.file_path.get()
+#     """
+#     Gets the file path selected by user from earlier
+#     Returns(string):
+#         the file path selected by user
+#     """
+#     def get_file(self):
+#         return self.file_path.get()
 
 """
 Frame to change the merge threshold
@@ -343,15 +360,49 @@ class FinishedMerging(WorkFrame):
         button.pack()
 """
 Frame to begin creating an affinity diagram
-Superclass:
+Superclass: 
+    WorkFrame: a subclass of tk.Frame
 """
 class CreateAffinityDiagram(WorkFrame):
     """Constructor of the class"""
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
 
-        label = tk.Label(self, text = "Creating an Affinity Diagram", font = controller.title_font)
+        title_label = tk.Label(self, text = "Creating an Affinity Diagram", font = controller.title_font)
+        title_label.pack()
 
+        hint_label = tk.Label(self, text = "Please select a csv file:", font = controller.text_font)
+        hint_label.pack()
+
+        select_file_button = tk.Button(self, text = "Select a File", command = self.select_file_to_group)
+        select_file_button.pack()
+
+        self.file_status_box = tk.Label(self, text = "No file uploaded yet", font = controller.text_font)
+        self.file_status_box.pack()
+
+        diagram_button = tk.Button(self, text = "Create affinity diagram", command = lambda: label_datapoints(self.file_path))
+        diagram_button.pack()
+
+        startpage_button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
+        startpage_button.pack()
+
+
+    
+    """
+    Select a file to make affinity diagram from
+    """
+    def select_file_to_group(self):
+        file_path = filedialog.askopenfilename()
+        if file_path:
+            self.file_path = file_path
+        if self.file_path:
+            self.file_status_box.config(text = "File uploaded: " + self.file_path)
+        else:
+            self.file_status_box.config(text = "No file uploaded yet")
+
+        
+
+        
 
 """
 Template to make a new frame
@@ -371,6 +422,9 @@ class PageTwo(WorkFrame):
         label.pack(side="top", fill="x", pady=10)
 
         button = tk.Button(self, text="Go to the start page", command = lambda: controller.show_frame("StartPage"))
+        button.pack()
+
+        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
         button.pack()
 
 
