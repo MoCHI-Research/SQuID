@@ -3,6 +3,7 @@ from tkinter import font as tkfont
 import os
 import menu
 from tkinter import filedialog
+from merge_labels import merge_labels
 
 """
 Main program that runs everything
@@ -36,8 +37,9 @@ class SampleApp(tk.Tk):
                   CreateAffinityDiagram,
                   ReasonForLabel, DataWithLabel, GenerateGPTReason,
                   ChangeMergeThreshold,
-                  MergeGroups,
-                  FileSelectionFrame, PageTwo):
+                  MergeGroups, FinishedMerging,
+                  # FileSelectionFrame,
+                  PageTwo):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -70,6 +72,8 @@ class WorkFrame(tk.Frame):
         self.controller = controller
 
         self.labels = []            #Keeps track of labels that might be cleared
+        self.merge_threshold = 0.91
+        self.file_path = ""
 
     """
     Clears certain text labels that exist on the frame
@@ -111,7 +115,6 @@ class WorkFrame(tk.Frame):
     def update_status(self, *args):
         return
 
-    
 """
 Main start page with all features
 Superclass:
@@ -269,6 +272,7 @@ class GenerateGPTReason(WorkFrame):
             display_gpt_response.pack()
             self.labels.append(display_gpt_response)
 
+<<<<<<< HEAD
 """
 Frame to prompt to select a file directly from your directory/finder
 Superclass:
@@ -294,6 +298,33 @@ class FileSelectionFrame(WorkFrame):
     def select_file(self):
         file_path = filedialog.askopenfilename()
         self.file_path.set(file_path)
+=======
+# """
+# Frame to prompt to select a file directly from your directory/finder
+# Parent class:
+#     WorkFrame: a sub class of tk.Frame
+# """
+# class FileSelectionFrame(WorkFrame):
+#
+#     """Constructor of the class"""
+#     def __init__(self, parent, controller):
+#         super().__init__(parent, controller)
+#
+#         self.file_path = tk.StringVar()  # Variable to store the selected file path
+#
+#         select_button = tk.Button(self, text="Select File", command=self.select_file)
+#         select_button.pack(pady=10)
+#
+#         selected_file_label = tk.Label(self, textvariable=self.file_path, wraplength=400)
+#         selected_file_label.pack()
+#
+#     """
+#     Grabs filepath of selected file and sets as an attribute
+#     """
+#     def select_file(self):
+#         file_path = filedialog.askopenfilename()
+#         self.file_path.set(file_path)
+>>>>>>> a8e700533ae901b5c7477dd0fd048eb8d43a49ff
 
     """
     Gets the file path selected by user from earlier
@@ -304,8 +335,13 @@ class FileSelectionFrame(WorkFrame):
         return self.file_path.get()
 
 """
+<<<<<<< HEAD
 Frame to change the merge threshold 
 Superclass:
+=======
+Frame to change the merge threshold
+Parent class:
+>>>>>>> a8e700533ae901b5c7477dd0fd048eb8d43a49ff
     WorkFrame: a sub class of tk.Frame
 """
 class ChangeMergeThreshold(WorkFrame):
@@ -329,10 +365,40 @@ class MergeGroups(WorkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
 
-        label = tk.Label(self, text="Merging Groups", font=controller.title_font)
+        label = tk.Label(self, text="Select a File to Merge Groups From", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
+        select_button = tk.Button(self, text="Select File", command=self.select_file_to_merge)
+        select_button.pack(pady=10)
+
+    """
+    Allows user to select file from directory
+    """
+    def select_file_to_merge(self):
+        file_path = filedialog.askopenfilename()
+        self.file_path = file_path
+        finished_merging = merge_labels(merge_threshold = self.merge_threshold, original_file = self.file_path)
+        if finished_merging:
+            self.controller.show_frame("FinishedMerging")
+
+"""
+Template to make a new frame
+Superclass:
+    WorkFrame: a subclass of tk.Frame
+"""
+class FinishedMerging(WorkFrame):
+    """
+    Parameters:
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    """
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
+
+        label = tk.Label(self, text="Finished Merging Groups", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
         button.pack()
 """
 Frame to begin creating an affinity diagram
