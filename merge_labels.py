@@ -49,17 +49,17 @@ def csv_to_dict(filename = "output.csv"):
             else:
                 result_dict[label] = [row[1]]
         f.close()
-    
+
     return result_dict
 
 """
 Get the embeddings of a list of texts; save them in a csv file
 Parametgers:
     text_list(string): the list of strings to get embeddings of
-    model_name(string): the model used to get embeddings   
-    output_file(string): name of the file to write embedding result to 
+    model_name(string): the model used to get embeddings
+    output_file(string): name of the file to write embedding result to
 Returns(pandas.DataFrame):
-    the dataframe that saves all embeddings 
+    the dataframe that saves all embeddings
 """
 def get_label_embeddings(text_list, model_name = "text-embedding-ada-002", output_file = INTERMEDIATE_PATH + "embeddings.csv"):
     embedding_frame = pandas.DataFrame(columns=["text"])
@@ -76,7 +76,7 @@ Provided a dataframe containing sentences and their embeddings, find the similar
 save them in a dataframe and save to a csv file
 Parameters:
     embedding_frame(pandas.DataFrame): the dataframe that saves sentences and their embeddings
-    output_file(string): name of the file to write similarity result to 
+    output_file(string): name of the file to write similarity result to
 Returns(pandas.DataFrame):
     the dataframe that saves all pairs and their corresponding similarities
 """
@@ -106,15 +106,15 @@ Returns(list of float):
 """
 def convert_text_to_list(list_text):
     list_text = list_text[1:-1]
-    
+
     embeddings = list_text.split(', ')
     for i in range(len(embeddings)):
         embeddings[i] = float(embeddings[i])
-    
+
     return embeddings
 
 """
-Read similarity of each pair from a csv file and make a Graph that contains all pairs with similarity above 
+Read similarity of each pair from a csv file and make a Graph that contains all pairs with similarity above
 a threshold
 Parameters:
     similarity_file(string): name of the file that saves similarities
@@ -199,7 +199,7 @@ def read_generate_similarity(input_filename = INTERMEDIATE_PATH + "embeddings.cs
     embedding_frame = pandas.read_csv(input_filename)
     for _, current_row in embedding_frame.iterrows():
         current_row['embedding'] = convert_text_to_list(current_row['embedding'])
-    
+
     return get_similarity(embedding_frame, output_file = output_filename)
 
 """
@@ -224,7 +224,7 @@ Given a data frame that contains grouped labels, return a dictionary that inform
 Parameters:
     label_frame(pandas.DataFrame): the dataframe that contains grouped labels
 Returns(dict):
-    a dictionary. Each key is a label that best represents a group of labels, and the group of labels are the values, 
+    a dictionary. Each key is a label that best represents a group of labels, and the group of labels are the values,
     which are lists, following each key
 """
 def find_to_merge_dict(label_frame):
@@ -235,7 +235,7 @@ def find_to_merge_dict(label_frame):
             if current_label is None:
                 break
             similar_labels.append(current_label)
-        
+
         best_label = get_best_label(similar_labels)
         to_merge_dict[best_label] = similar_labels
 
@@ -252,9 +252,12 @@ Parameters:
     new_embedding(bool): True if new embeddings need to be created; False if using existing embeddings
     new_embedding(bool): True if new similarity needs to be created; False if using exsiting similarities
 """
-def merge_labels(merge_threshold = 0.91, original_file = "output.csv", output_file = "labels_merged.csv", new_embedding = True, new_similarity = True):
+def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "labels_merged.csv", new_embedding = True, new_similarity = True):
     group_dict = csv_to_dict(original_file)
     label_list = [label for label in group_dict]
+
+    if original_file == None:
+        return
 
     if new_similarity:
         if new_embedding:
@@ -275,8 +278,11 @@ def merge_labels(merge_threshold = 0.91, original_file = "output.csv", output_fi
         for label in group_dict:
             for sent in group_dict[label]:
                 writer.writerow([label, sent])
-    
+
     file.close()
+    print("Merging finished")
+    done = True
+    return done
 
 
 """
