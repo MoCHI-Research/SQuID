@@ -90,32 +90,6 @@ class WorkFrame(tk.Frame):
         return
 
 """
-Virtual class for creating frames. Do not create object using this class.
-Superclass: tk.Frame
-"""
-class WorkFrame(tk.Frame):
-    """Constructor for WorkFrame class"""
-    def __init__(self, parent, controller):
-        super().__init__(parent)
-        self.controller = controller
-
-        self.labels = []            #Keeps track of labels that might be cleared
-
-    """
-    Clears certain text labels that exist on the frame
-    """
-    def clear_screen(self):
-        for label in self.labels:
-            label.destroy()
-        self.labels = []
-
-    """
-    Virtual method for updating status of the frame
-    """
-    def update_status(self, *args):
-        return
-
-"""
 Main start page with all features
 Superclass:
     WorkFrame: a subclass of tk.Frame
@@ -272,33 +246,6 @@ class GenerateGPTReason(WorkFrame):
             display_gpt_response.pack()
             self.labels.append(display_gpt_response)
 
-<<<<<<< HEAD
-"""
-Frame to prompt to select a file directly from your directory/finder
-Superclass:
-    WorkFrame: a sub class of tk.Frame
-"""
-class FileSelectionFrame(WorkFrame):
-
-    """Constructor of the class"""
-    def __init__(self, parent, controller):
-        super().__init__(parent, controller)
-
-        self.file_path = tk.StringVar()  # Variable to store the selected file path
-
-        select_button = tk.Button(self, text="Select File", command=self.select_file)
-        select_button.pack(pady=10)
-
-        selected_file_label = tk.Label(self, textvariable=self.file_path, wraplength=400)
-        selected_file_label.pack()
-
-    """
-    Grabs filepath of selected file and sets as an attribute
-    """
-    def select_file(self):
-        file_path = filedialog.askopenfilename()
-        self.file_path.set(file_path)
-=======
 # """
 # Frame to prompt to select a file directly from your directory/finder
 # Parent class:
@@ -324,7 +271,6 @@ class FileSelectionFrame(WorkFrame):
 #     def select_file(self):
 #         file_path = filedialog.askopenfilename()
 #         self.file_path.set(file_path)
->>>>>>> a8e700533ae901b5c7477dd0fd048eb8d43a49ff
 
     """
     Gets the file path selected by user from earlier
@@ -335,13 +281,8 @@ class FileSelectionFrame(WorkFrame):
         return self.file_path.get()
 
 """
-<<<<<<< HEAD
-Frame to change the merge threshold 
-Superclass:
-=======
 Frame to change the merge threshold
 Parent class:
->>>>>>> a8e700533ae901b5c7477dd0fd048eb8d43a49ff
     WorkFrame: a sub class of tk.Frame
 """
 class ChangeMergeThreshold(WorkFrame):
