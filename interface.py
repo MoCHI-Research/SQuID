@@ -90,32 +90,6 @@ class WorkFrame(tk.Frame):
         return
 
 """
-Virtual class for creating frames. Do not create object using this class.
-Superclass: tk.Frame
-"""
-class WorkFrame(tk.Frame):
-    """Constructor for WorkFrame class"""
-    def __init__(self, parent, controller):
-        super().__init__(parent)
-        self.controller = controller
-
-        self.labels = []            #Keeps track of labels that might be cleared
-
-    """
-    Clears certain text labels that exist on the frame
-    """
-    def clear_screen(self):
-        for label in self.labels:
-            label.destroy()
-        self.labels = []
-
-    """
-    Virtual method for updating status of the frame
-    """
-    def update_status(self, *args):
-        return
-
-"""
 Main start page with all features
 Superclass:
     WorkFrame: a subclass of tk.Frame
