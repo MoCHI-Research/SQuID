@@ -34,7 +34,13 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (StartPage, ReasonForLabel, DataWithLabel, GenerateGPTReason, FileSelectionFrame, PageTwo):
+        for F in (StartPage,
+                  CreateAffinityDiagram,
+                  ReasonForLabel, DataWithLabel, GenerateGPTReason,
+                  ChangeMergeThreshold,
+                  MergeGroups,
+                  FileSelectionFrame,
+                  PageTwo):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -86,12 +92,45 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="SQUiD Interface", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
+        creatediagram_button = tk.Button(self, text="Create an Affinity Diagram", command=lambda: controller.show_frame("CreateAffinityDiagram"))
         reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("ReasonForLabel"))
-        fileselection_button = tk.Button(self, text="File Selection", command=lambda: controller.show_frame("FileSelectionFrame"))
+        changemergethreshold_button = tk.Button(self, text="Change Merge Threshold", command=lambda: controller.show_frame("ChangeMergeThreshold"))
+        regenlabels_button = tk.Button(self, text="Regenerate All Group Labels", command=lambda: controller.show_frame("CreateAffinityDiagram"))
+        mergegroups_button = tk.Button(self, text="Merge Groups That Are Identical or Similar", command=lambda: controller.show_frame("MergeGroups"))
 
-
+        creatediagram_button.pack()
         reasonforlabel_button.pack()
-        fileselection_button.pack()
+        changemergethreshold_button.pack()
+        regenlabels_button.pack()
+        mergegroups_button.pack()
+
+"""
+Template to make a new frame
+Parameters:
+    tk.Frame: creates subclass of a Frame to use frame methods
+Returns:
+    None
+"""
+class CreateAffinityDiagram(tk.Frame):
+
+    """
+    main function
+    Parameters:
+        self: instance of the class itself to call created methods
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    Returns:
+        None
+    """
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        label = tk.Label(self, text="Creating an Affinity Diagram", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Go to the start page", command=lambda: controller.show_frame("StartPage"))
+        button.pack()
 
 
 """
@@ -325,13 +364,13 @@ class FileSelectionFrame(tk.Frame):
         self.file_path.set(file_path)
 
 """
-Template to make a new frame
+Changes the merge threshold
 Parameters:
     tk.Frame: creates subclass of a Frame to use frame methods
 Returns:
     None
 """
-class PageTwo(tk.Frame):
+class ChangeMergeThreshold(tk.Frame):
 
     """
     main function
@@ -346,10 +385,39 @@ class PageTwo(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
 
-        label = tk.Label(self, text="This is page 2", font=controller.title_font)
+        label = tk.Label(self, text="Changing Merge Threshold", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        button = tk.Button(self, text="Go to the start page", command=lambda: controller.show_frame("StartPage"))
+        button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
+        button.pack()
+
+
+"""
+Template to make a new frame
+Parameters:
+    tk.Frame: creates subclass of a Frame to use frame methods
+Returns:
+    None
+"""
+class MergeGroups(tk.Frame):
+
+    """
+    main function
+    Parameters:
+        self: instance of the class itself to call created methods
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    Returns:
+        None
+    """
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        label = tk.Label(self, text="Merging Groups", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
         button.pack()
 
 
