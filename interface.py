@@ -39,7 +39,7 @@ class SampleApp(tk.Tk):
         self.frames = {}
         for F in (StartPage,
                   CreateAffinityDiagram,
-                  ReasonForLabel, DataWithLabel, GenerateGPTReason,
+                  ReasonForLabel, NotAValidLabel, DataWithLabel, GenerateGPTReason,
                   ChangeMergeThreshold,
                   MergeGroups, FinishedMerging,
                   PageTwo):
@@ -174,7 +174,25 @@ class ReasonForLabel(WorkFrame):
     def label_submission(self):
         entered_label = self.label_entry.get()
         all_data = retrieve_data_with_label(entered_label)
-        self.controller.show_frame("DataWithLabel", all_data, entered_label)
+        if len(all_data) > 0:
+            self.controller.show_frame("DataWithLabel", all_data, entered_label)
+        else:
+            self.controller.show_frame("NotAValidLabel")
+
+class NotAValidLabel(WorkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
+
+        notvalid_label = tk.Label(self, text="Label is Not Valid", font=controller.title_font)
+        notvalid_label.pack(side="top", fill="x", pady=10)
+
+        message_label = tk.Label(self, text="The label you entered is not a valid label. Please go back and try again.")
+        message_label.pack()
+
+        start_page_button = tk.Button(self, text="Re-Enter a Label", command = lambda: self.controller.show_frame("ReasonForLabel"))
+        start_page_button.pack()
+        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button.pack()
 
 
 
@@ -371,7 +389,7 @@ class FinishedMerging(WorkFrame):
         button.pack()
 """
 Frame to begin creating an affinity diagram
-Superclass: 
+Superclass:
     WorkFrame: a subclass of tk.Frame
 """
 class CreateAffinityDiagram(WorkFrame):
@@ -398,7 +416,7 @@ class CreateAffinityDiagram(WorkFrame):
         startpage_button.pack()
 
 
-    
+
     """
     Select a file to make affinity diagram from
     """
@@ -411,9 +429,9 @@ class CreateAffinityDiagram(WorkFrame):
         else:
             self.file_status_box.config(text = "No file uploaded yet")
 
-        
 
-        
+
+
 
 """
 Template to make a new frame
