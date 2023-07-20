@@ -4,6 +4,8 @@ import os
 from menu import *
 from tkinter import filedialog
 from merge_labels import merge_labels
+from tkinter import Scrollbar, Canvas
+
 
 """
 Main program that runs everything
@@ -37,7 +39,7 @@ class SampleApp(tk.Tk):
         self.frames = {}
         for F in (StartPage,
                   CreateAffinityDiagram,
-                  ReasonForLabel, DataWithLabel, GenerateGPTReason,
+                  ReasonForLabel, NotAValidLabel, DataWithLabel, GenerateGPTReason,
                   ChangeMergeThreshold,
                   MergeGroups, FinishedMerging,
                   PageTwo):
@@ -172,7 +174,26 @@ class ReasonForLabel(WorkFrame):
     def label_submission(self):
         entered_label = self.label_entry.get()
         all_data = retrieve_data_with_label(entered_label)
-        self.controller.show_frame("DataWithLabel", all_data, entered_label)
+        print("Length: " + str(len(all_data)))
+        if len(all_data) > 0:
+            self.controller.show_frame("DataWithLabel", all_data, entered_label)
+        else:
+            self.controller.show_frame("NotAValidLabel")
+
+class NotAValidLabel(WorkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
+
+        notvalid_label = tk.Label(self, text="Label is Not Valid", font=controller.title_font)
+        notvalid_label.pack(side="top", fill="x", pady=10)
+
+        message_label = tk.Label(self, text="The label you entered is not a valid label. Please go back and try again.")
+        message_label.pack()
+
+        start_page_button = tk.Button(self, text="Re-Enter a Label", command = lambda: self.controller.show_frame("ReasonForLabel"))
+        start_page_button.pack()
+        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button.pack()
 
 
 
@@ -182,7 +203,6 @@ Superclass:
     WorkFrame: a subclass of tk.Frame
 """
 class DataWithLabel(WorkFrame):
-    """Constructor of the class"""
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
         self.labels_frame = None
@@ -191,40 +211,50 @@ class DataWithLabel(WorkFrame):
         label = tk.Label(self, text="Data:", font=controller.title_font)
         label.pack(pady=10)
 
-        self.labels_frame = tk.Frame(self)
-        self.labels_frame.pack()
-
         self.data_num = tk.Entry(self)
         self.data_num.pack()
 
-        data_num_button = tk.Button(self, text="Submit Data Number", command = self.submit_data_number)
+        data_num_button = tk.Button(self, text="Submit Data Number", command=self.submit_data_number)
         data_num_button.pack()
 
-        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command=lambda: self.controller.show_frame("StartPage"))
         start_page_button.pack()
 
-    """
-    Grabs the selected data number and brings GeneeratedGPTReason frame to forefront
-    """
+        # Scroll wheel implemented
+        self.canvas = Canvas(self, width=400, height=400)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self.labels_frame = tk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window=self.labels_frame, anchor=tk.NW)
+
+        scrollbar = Scrollbar(self, orient=tk.VERTICAL, command=self.canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.canvas.bind("<MouseWheel>", self.on_mousewheel)
+
     def submit_data_number(self):
         data_number = int(self.data_num.get())
         self.controller.show_frame("GenerateGPTReason", self.all_data, self.entered_label, data_number)
 
-    """
-    Prints out all data with entered label
-    Parameters:
-        data: an array of tuples that has the following layout [(Label, DataEntry), ..., (Label, DataEntry)]
-    """
     def update_status(self, data, label):
         self.all_data = data
         self.entered_label = label
         self.clear_screen()
         count = 1
         for element in data:
-            label = tk.Label(self.labels_frame, text=str(count) + ": " + element[1], font=('Arial', 14))
-            label.pack()
+            label = tk.Label(self.labels_frame, text=str(count) + ": " + element[1], font=('Arial', 14), anchor='w', wraplength=952, justify='left')
+            label.pack(fill='both')
             self.labels.append(label)
             count += 1
+
+        self.canvas.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox(tk.ALL))
+
+    def on_mousewheel(self, event):
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+
 
 """
 Generates the reason for giving the data the label it was given and displays it.
@@ -256,12 +286,9 @@ class GenerateGPTReason(WorkFrame):
     def update_status(self, all_data, label, data_index):
         self.clear_screen()
         gpt_response = generate_reason(all_data, data_index, label)
-
-        for i in range(0, len(gpt_response), 100):
-            chunk = gpt_response[i:i+100]
-            display_gpt_response = tk.Label(self.this_frame, text=chunk, font=('Arial', 14))
-            display_gpt_response.pack()
-            self.labels.append(display_gpt_response)
+        display_gpt_response = tk.Label(self.this_frame, text=gpt_response, font=('Arial', 14), wraplength=600)
+        display_gpt_response.pack(anchor='center')
+        self.labels.append(display_gpt_response)
 
 """
 Frame to prompt to select a file directly from your directory/finder
@@ -362,7 +389,7 @@ class FinishedMerging(WorkFrame):
 
 """
 Frame to begin creating an affinity diagram
-Superclass: 
+Superclass:
     WorkFrame: a subclass of tk.Frame
 """
 class CreateAffinityDiagram(WorkFrame):
@@ -417,7 +444,8 @@ class CreateAffinityDiagram(WorkFrame):
             old_file.close()
             new_file.close()
 
-        
+
+
 
 """
 Template to make a new frame
