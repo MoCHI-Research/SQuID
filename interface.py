@@ -358,6 +358,8 @@ class FinishedMerging(WorkFrame):
 
         button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
         button.pack()
+
+
 """
 Frame to begin creating an affinity diagram
 Superclass: 
@@ -383,11 +385,13 @@ class CreateAffinityDiagram(WorkFrame):
         diagram_button = tk.Button(self, text = "Create affinity diagram", command = lambda: label_datapoints(self.file_path))
         diagram_button.pack()
 
+        save_button = tk.Button(self, text = "Save result as", command = self.save_result)
+        save_button.pack()
+
         startpage_button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
         startpage_button.pack()
 
 
-    
     """
     Select a file to make affinity diagram from
     """
@@ -400,7 +404,18 @@ class CreateAffinityDiagram(WorkFrame):
         else:
             self.file_status_box.config(text = "No file uploaded yet")
 
-        
+    """
+    Save the result to a user-specified place
+    Parameters:
+        original_path: the path by which one grabs the original file to save to their specified place
+    """
+    def save_result(self, original_path = "output.csv"):
+        file_path = filedialog.asksaveasfilename(initialfile = "output.csv")
+        with open(original_path, 'r') as old_file, open(file_path, 'w') as new_file:
+            new_file.write(old_file.read())
+
+            old_file.close()
+            new_file.close()
 
         
 
