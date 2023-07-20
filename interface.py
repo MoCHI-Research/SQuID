@@ -32,7 +32,12 @@ class SampleApp(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (StartPage, ReasonForLabel, DataWithLabel, GenerateGPTReason, FileSelectionFrame, PageTwo):
+        for F in (StartPage,
+                  CreateAffinityDiagram,
+                  ReasonForLabel, DataWithLabel, GenerateGPTReason,
+                  ChangeMergeThreshold,
+                  MergeGroups,
+                  FileSelectionFrame, PageTwo):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -80,6 +85,32 @@ class WorkFrame(tk.Frame):
     def update_status(self, *args):
         return
 
+"""
+Virtual class for creating frames. Do not create object using this class.
+Superclass: tk.Frame
+"""
+class WorkFrame(tk.Frame):
+    """Constructor for WorkFrame class"""
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+
+        self.labels = []            #Keeps track of labels that might be cleared
+
+    """
+    Clears certain text labels that exist on the frame
+    """
+    def clear_screen(self):
+        for label in self.labels:
+            label.destroy()
+        self.labels = []
+
+    """
+    Virtual method for updating status of the frame
+    """
+    def update_status(self, *args):
+        return
+
     
 """
 Main start page with all features
@@ -94,12 +125,30 @@ class StartPage(WorkFrame):
         label = tk.Label(self, text="SQuID Interface", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command = lambda: self.controller.show_frame("ReasonForLabel"))
-        fileselection_button = tk.Button(self, text="File Selection", command = lambda: self.controller.show_frame("FileSelectionFrame"))
+        creatediagram_button = tk.Button(self, text="Create an Affinity Diagram", command=lambda: controller.show_frame("CreateAffinityDiagram"))
+        reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("ReasonForLabel"))
+        changemergethreshold_button = tk.Button(self, text="Change Merge Threshold", command=lambda: controller.show_frame("ChangeMergeThreshold"))
+        regenlabels_button = tk.Button(self, text="Regenerate All Group Labels", command=lambda: controller.show_frame("CreateAffinityDiagram"))
+        mergegroups_button = tk.Button(self, text="Merge Groups That Are Identical or Similar", command=lambda: controller.show_frame("MergeGroups"))
 
+        creatediagram_button.pack()
         reasonforlabel_button.pack()
-        fileselection_button.pack()
-        
+        changemergethreshold_button.pack()
+        regenlabels_button.pack()
+        mergegroups_button.pack()
+
+
+class CreateAffinityDiagram(WorkFrame):
+    """Constructor of the class"""
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
+
+        label = tk.Label(self, text="Creating an Affinity Diagram", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Go to the start page", command=lambda: controller.show_frame("StartPage"))
+        button.pack()
+
 
 """
 Prompts user for the label
@@ -163,7 +212,7 @@ class DataWithLabel(WorkFrame):
 
     """
     Prints out all data with entered label
-    Parameters: 
+    Parameters:
         data: an array of tuples that has the following layout [(Label, DataEntry), ..., (Label, DataEntry)]
     """
     def update_status(self, data, label):
@@ -239,6 +288,41 @@ class FileSelectionFrame(WorkFrame):
     def select_file(self):
         file_path = filedialog.askopenfilename()
         self.file_path.set(file_path)
+
+
+"""
+Frame to change the merge threshold 
+Parent class:
+    WorkFrame: a sub class of tk.Frame
+"""
+class ChangeMergeThreshold(WorkFrame):
+    """Constructor of the class"""
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
+
+        label = tk.Label(self, text="Changing Merge Threshold", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
+        button.pack()
+
+"""
+Frame to begin merging groups that are similar
+Parent class:
+    WorkFrame: a sub class of tk.Frame
+"""
+class MergeGroups(WorkFrame):
+    """Constructor of the class"""
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        label = tk.Label(self, text="Merging Groups", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
+        button.pack()
+
 
 
 """
