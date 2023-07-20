@@ -4,6 +4,8 @@ import os
 import menu
 from tkinter import filedialog
 from merge_labels import merge_labels
+from tkinter import Scrollbar, Canvas
+
 
 """
 Main program that runs everything
@@ -165,7 +167,6 @@ Superclass:
     WorkFrame: a subclass of tk.Frame
 """
 class DataWithLabel(WorkFrame):
-    """Constructor of the class"""
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
         self.labels_frame = None
@@ -174,40 +175,50 @@ class DataWithLabel(WorkFrame):
         label = tk.Label(self, text="Data:", font=controller.title_font)
         label.pack(pady=10)
 
-        self.labels_frame = tk.Frame(self)
-        self.labels_frame.pack()
-
         self.data_num = tk.Entry(self)
         self.data_num.pack()
 
-        data_num_button = tk.Button(self, text="Submit Data Number", command = self.submit_data_number)
+        data_num_button = tk.Button(self, text="Submit Data Number", command=self.submit_data_number)
         data_num_button.pack()
 
-        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command=lambda: self.controller.show_frame("StartPage"))
         start_page_button.pack()
 
-    """
-    Grabs the selected data number and brings GeneeratedGPTReason frame to forefront
-    """
+        # Scroll wheel implemented
+        self.canvas = Canvas(self, width=400, height=400)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self.labels_frame = tk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window=self.labels_frame, anchor=tk.NW)
+
+        scrollbar = Scrollbar(self, orient=tk.VERTICAL, command=self.canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.canvas.bind("<MouseWheel>", self.on_mousewheel)
+
     def submit_data_number(self):
         data_number = int(self.data_num.get())
         self.controller.show_frame("GenerateGPTReason", self.all_data, self.entered_label, data_number)
 
-    """
-    Prints out all data with entered label
-    Parameters:
-        data: an array of tuples that has the following layout [(Label, DataEntry), ..., (Label, DataEntry)]
-    """
     def update_status(self, data, label):
         self.all_data = data
         self.entered_label = label
         self.clear_screen()
         count = 1
         for element in data:
-            label = tk.Label(self.labels_frame, text=str(count) + ": " + element[1], font=('Arial', 14))
-            label.pack()
+            label = tk.Label(self.labels_frame, text=str(count) + ": " + element[1], font=('Arial', 14), anchor='w', wraplength=952, justify='left')
+            label.pack(fill='both')
             self.labels.append(label)
             count += 1
+
+        self.canvas.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox(tk.ALL))
+
+    def on_mousewheel(self, event):
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+
 
 """
 Generates the reason for giving the data the label it was given and displays it.
