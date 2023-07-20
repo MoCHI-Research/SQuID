@@ -271,7 +271,7 @@ class GenerateGPTReason(WorkFrame):
 
 """
 Frame to prompt to select a file directly from your directory/finder
-Parent class:
+Superclass:
     WorkFrame: a sub class of tk.Frame
 """
 class FileSelectionFrame(WorkFrame):
@@ -295,10 +295,17 @@ class FileSelectionFrame(WorkFrame):
         file_path = filedialog.askopenfilename()
         self.file_path.set(file_path)
 
+    """
+    Gets the file path selected by user from earlier
+    Returns(string):
+        the file path selected by user
+    """
+    def get_file(self):
+        return self.file_path.get()
 
 """
 Frame to change the merge threshold 
-Parent class:
+Superclass:
     WorkFrame: a sub class of tk.Frame
 """
 class ChangeMergeThreshold(WorkFrame):
@@ -314,21 +321,29 @@ class ChangeMergeThreshold(WorkFrame):
 
 """
 Frame to begin merging groups that are similar
-Parent class:
+Superclass:
     WorkFrame: a sub class of tk.Frame
 """
 class MergeGroups(WorkFrame):
     """Constructor of the class"""
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
+        super().__init__(parent, controller)
 
         label = tk.Label(self, text="Merging Groups", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
         button.pack()
+"""
+Frame to begin creating an affinity diagram
+Superclass:
+"""
+class CreateAffinityDiagram(WorkFrame):
+    """Constructor of the class"""
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
 
+        label = tk.Label(self, text = "Creating an Affinity Diagram", font = controller.title_font)
 
 
 """
