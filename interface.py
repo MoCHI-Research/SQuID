@@ -174,6 +174,7 @@ class ReasonForLabel(WorkFrame):
     def label_submission(self):
         entered_label = self.label_entry.get()
         all_data = retrieve_data_with_label(entered_label)
+        print("Length: " + str(len(all_data)))
         if len(all_data) > 0:
             self.controller.show_frame("DataWithLabel", all_data, entered_label)
         else:
@@ -285,12 +286,9 @@ class GenerateGPTReason(WorkFrame):
     def update_status(self, all_data, label, data_index):
         self.clear_screen()
         gpt_response = generate_reason(all_data, data_index, label)
-
-        for i in range(0, len(gpt_response), 100):
-            chunk = gpt_response[i:i+100]
-            display_gpt_response = tk.Label(self.this_frame, text=chunk, font=('Arial', 14))
-            display_gpt_response.pack()
-            self.labels.append(display_gpt_response)
+        display_gpt_response = tk.Label(self.this_frame, text=gpt_response, font=('Arial', 14), wraplength=600)
+        display_gpt_response.pack(anchor='center')
+        self.labels.append(display_gpt_response)
 
 """
 Frame to prompt to select a file directly from your directory/finder
