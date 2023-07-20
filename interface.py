@@ -89,7 +89,31 @@ class WorkFrame(tk.Frame):
     def update_status(self, *args):
         return
 
+"""
+Virtual class for creating frames. Do not create object using this class.
+Superclass: tk.Frame
+"""
+class WorkFrame(tk.Frame):
+    """Constructor for WorkFrame class"""
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
 
+        self.labels = []            #Keeps track of labels that might be cleared
+
+    """
+    Clears certain text labels that exist on the frame
+    """
+    def clear_screen(self):
+        for label in self.labels:
+            label.destroy()
+        self.labels = []
+
+    """
+    Virtual method for updating status of the frame
+    """
+    def update_status(self, *args):
+        return
 
 """
 Main start page with all features
@@ -148,6 +172,9 @@ class ReasonForLabel(WorkFrame):
         label_button = tk.Button(self, text="Submit Label", command=self.label_submission)
         label_button.pack()
 
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button.pack()
+
     """
     Grabs label entry after button press, retrieves all data w/ the label, and brings DataWithLabel frame to forefront
     """
@@ -181,6 +208,9 @@ class DataWithLabel(WorkFrame):
 
         data_num_button = tk.Button(self, text="Submit Data Number", command = self.submit_data_number)
         data_num_button.pack()
+
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button.pack()
 
     """
     Grabs the selected data number and brings GeneeratedGPTReason frame to forefront
@@ -267,6 +297,7 @@ class GenerateGPTReason(WorkFrame):
 #     def select_file(self):
 #         file_path = filedialog.askopenfilename()
 #         self.file_path.set(file_path)
+
 
 """
 Frame to change the merge threshold

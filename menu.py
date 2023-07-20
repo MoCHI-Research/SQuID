@@ -318,7 +318,7 @@ def menu():
                 print(f"Final time elapsed: {final_time_elapsed:.1f} seconds")
 
             case '2':
-                reason_for_label()
+                pass
             case '3':
                 merge_threshold=change_merge_threshold(merge_threshold)
 
