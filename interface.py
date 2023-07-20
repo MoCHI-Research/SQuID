@@ -6,10 +6,8 @@ from tkinter import filedialog
 
 """
 Main program that runs everything
-Parameters:
+Superclass:
     tk.Tk: creates a subclass of the Tk module that we modify to our needs with classes
-Returns:
-    None
 """
 class SampleApp(tk.Tk):
 
@@ -23,7 +21,7 @@ class SampleApp(tk.Tk):
         None
     """
     def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.geometry("1000x1000")
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
@@ -39,8 +37,7 @@ class SampleApp(tk.Tk):
                   ReasonForLabel, DataWithLabel, GenerateGPTReason,
                   ChangeMergeThreshold,
                   MergeGroups,
-                  FileSelectionFrame,
-                  PageTwo):
+                  FileSelectionFrame, PageTwo):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -60,36 +57,46 @@ class SampleApp(tk.Tk):
     def show_frame(self, page_name, *args):
         frame = self.frames[page_name]
         frame.tkraise()
-        if hasattr(frame, 'update_data'):
-            frame.update_data(*args)
-        if page_name == "GenerateGPTReason":
-            frame.update_gpt_reason(*args)
-        if page_name == "DataWithLabel":
-            frame.update_data_w_label(*args)
+        frame.update_status(*args)
+
+"""
+Virtual class for creating frames. Do not create object using this class.
+Superclass: tk.Frame
+"""
+class WorkFrame(tk.Frame):
+    """Constructor for WorkFrame class"""
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+
+        self.labels = []            #Keeps track of labels that might be cleared
+
+    """
+    Clears certain text labels that exist on the frame
+    """
+    def clear_screen(self):
+        for label in self.labels:
+            label.destroy()
+        self.labels = []
+
+    """
+    Virtual method for updating status of the frame
+    """
+    def update_status(self, *args):
+        return
 
 
 """
 Main start page with all features
-Parameters:
-    tk.Frame: creates subclass of a Frame to use frame methods
-Returns:
-    None
+Superclass:
+    WorkFrame: a subclass of tk.Frame
 """
-class StartPage(tk.Frame):
-
-    """
-    main function
-    Parameters:
-        self: instance of the class itself to call created methods
-        parent: widget/frame that contains the current frame
-        controller: instance of the class that allows for library methods to be called
-    Returns:
-        None
-    """
+class StartPage(WorkFrame):
+    """Constructor of the class"""
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-        label = tk.Label(self, text="SQUiD Interface", font=controller.title_font)
+        super().__init__(parent, controller)
+
+        label = tk.Label(self, text="SQuID Interface", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
         creatediagram_button = tk.Button(self, text="Create an Affinity Diagram", command=lambda: controller.show_frame("CreateAffinityDiagram"))
@@ -104,27 +111,11 @@ class StartPage(tk.Frame):
         regenlabels_button.pack()
         mergegroups_button.pack()
 
-"""
-Template to make a new frame
-Parameters:
-    tk.Frame: creates subclass of a Frame to use frame methods
-Returns:
-    None
-"""
-class CreateAffinityDiagram(tk.Frame):
 
-    """
-    main function
-    Parameters:
-        self: instance of the class itself to call created methods
-        parent: widget/frame that contains the current frame
-        controller: instance of the class that allows for library methods to be called
-    Returns:
-        None
-    """
+class CreateAffinityDiagram(WorkFrame):
+    """Constructor of the class"""
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
+        super().__init__(parent, controller)
 
         label = tk.Label(self, text="Creating an Affinity Diagram", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -135,25 +126,13 @@ class CreateAffinityDiagram(tk.Frame):
 
 """
 Prompts user for the label
-Parameters:
-    tk.Frame: creates subclass of a Frame to use frame methods
-Returns:
-    None
+Superclass:
+    WorkFrame: a subclass of tk.Frame
 """
-class ReasonForLabel(tk.Frame):
-
-    """
-    main function
-    Parameters:
-        self: instance of the class itself to call created methods
-        parent: widget/frame that contains the current frame
-        controller: instance of the class that allows for library methods to be called
-    Returns:
-        None
-    """
+class ReasonForLabel(WorkFrame):
+    """Constructor of the class"""
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
+        super().__init__(parent, controller)
 
         label = tk.Label(self, text="Which label are we curious about?", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
@@ -166,10 +145,6 @@ class ReasonForLabel(tk.Frame):
 
     """
     Grabs label entry after button press, retrieves all data w/ the label, and brings DataWithLabel frame to forefront
-    Parameters:
-        self: instance of ReasonForLabel class to access attributes and methods
-    Returns:
-        None
     """
     def label_submission(self):
         entered_label = self.label_entry.get()
@@ -177,30 +152,18 @@ class ReasonForLabel(tk.Frame):
         self.controller.show_frame("DataWithLabel", all_data, entered_label)
 
 
+
 """
 Prints out all data with the label the user entered in ReasonForLabel frame
-Parameters:
-    tk.Frame: creates subclass of a Frame to use frame methods
-Returns:
-    None
+Superclass:
+    WorkFrame: a subclass of tk.Frame
 """
-class DataWithLabel(tk.Frame):
-
-    """
-    main function
-    Parameters:
-        self: instance of the class itself to call created methods
-        parent: widget/frame that contains the current frame
-        controller: instance of the class that allows for library methods to be called
-    Returns:
-        None
-    """
+class DataWithLabel(WorkFrame):
+    """Constructor of the class"""
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
+        super().__init__(parent, controller)
         self.labels_frame = None
         self.data_num = None
-        self.labels = []  # List to store the created labels
 
         label = tk.Label(self, text="Data:", font=controller.title_font)
         label.pack(pady=10)
@@ -211,15 +174,11 @@ class DataWithLabel(tk.Frame):
         self.data_num = tk.Entry(self)
         self.data_num.pack()
 
-        data_num_button = tk.Button(self, text="Submit Data Number", command=self.submit_data_number)
+        data_num_button = tk.Button(self, text="Submit Data Number", command = self.submit_data_number)
         data_num_button.pack()
 
     """
     Grabs the selected data number and brings GeneeratedGPTReason frame to forefront
-    Parameters:
-        self: instance of DataWithLabel class to access atrributes and methods
-    Returns:
-        None
     """
     def submit_data_number(self):
         data_number = int(self.data_num.get())
@@ -228,12 +187,9 @@ class DataWithLabel(tk.Frame):
     """
     Prints out all data with entered label
     Parameters:
-        self: instance of DataWithLabel class to access attributes and methods
         data: an array of tuples that has the following layout [(Label, DataEntry), ..., (Label, DataEntry)]
-    Returns:
-        None
     """
-    def update_data_w_label(self, data, label):
+    def update_status(self, data, label):
         self.all_data = data
         self.entered_label = label
         self.clear_screen()
@@ -243,42 +199,17 @@ class DataWithLabel(tk.Frame):
             label.pack()
             self.labels.append(label)
             count += 1
-    """
-    Clears the screen of temporary messages (such as data)
-    Parameters:
-        self: instance of DataWithLabel class to access attributes and methods
-    Returns:
-        None
-    """
-    def clear_screen(self):
-        for label in self.labels:
-            label.destroy()
-        self.labels = []
-
 
 """
 Generates the reason for giving the data the label it was given and displays it.
-Parameters:
-    tk.Frame: creates subclass of a Frame to use frame methods
-Returns:
-    None
+Superclass:
+    WorkFrame: a subclass of tk.Frame
 """
-class GenerateGPTReason(tk.Frame):
-
-    """
-    main function
-    Parameters:
-        self: instance of the class itself to call created methods
-        parent: widget/frame that contains the current frame
-        controller: instance of the class that allows for library methods to be called
-    Returns:
-        None
-    """
+class GenerateGPTReason(WorkFrame):
+    """Constructor of the class"""
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
+        super().__init__(parent, controller)
         self.this_frame = None
-        self.responses = []
 
         heading = tk.Label(self, text="GPT Response/Reason: ", font=controller.title_font)
         heading.pack()
@@ -286,20 +217,17 @@ class GenerateGPTReason(tk.Frame):
         self.this_frame = tk.Frame(self)
         self.this_frame.pack()
 
-        start_page_button = tk.Button(self, text="Start Page", command=lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"))
         start_page_button.pack()
 
     """
     Prints out the gpt response for providing the data with given label
     Parameters:
-        self: instance of GeneeratedGPTReason class to access attribues and methods
         all_data: an array of tuples that has the following layout [(Label, DataEntry), ..., (Label, DataEntry)]
         label: the label in question
         data_index: the index of the data with the label. ex: all_data[data_index - 1][1]
-    Returns:
-        None
     """
-    def update_gpt_reason(self, all_data, label, data_index):
+    def update_status(self, all_data, label, data_index):
         self.clear_screen()
         gpt_response = menu.generate_reason(all_data, data_index, label)
 
@@ -307,42 +235,18 @@ class GenerateGPTReason(tk.Frame):
             chunk = gpt_response[i:i+100]
             display_gpt_response = tk.Label(self.this_frame, text=chunk, font=('Arial', 14))
             display_gpt_response.pack()
-            self.responses.append(display_gpt_response)
-
-    """
-    Clears the frame of temporary printed information
-    Paramters:
-        self: instance of the GeneratedGPTReason class to access attributes and methods
-    Returns:
-        None
-    """
-    def clear_screen(self):
-        for response in self.responses:
-            response.destroy()
-        self.responses = []
-
+            self.labels.append(display_gpt_response)
 
 """
 Frame to prompt to select a file directly from your directory/finder
-Parameters:
-    tk.Frame: creates Frame subclass
-Returns:
-    None
+Parent class:
+    WorkFrame: a sub class of tk.Frame
 """
-class FileSelectionFrame(tk.Frame):
+class FileSelectionFrame(WorkFrame):
 
-    """
-    main function
-    Parameters:
-        self: instance of the class itself to call created methods
-        parent: widget/frame that contains the current frame
-        controller: instance of the class that allows for library methods to be called
-    Returns:
-        None
-    """
+    """Constructor of the class"""
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
+        super().__init__(parent, controller)
 
         self.file_path = tk.StringVar()  # Variable to store the selected file path
 
@@ -354,33 +258,18 @@ class FileSelectionFrame(tk.Frame):
 
     """
     Grabs filepath of selected file and sets as an attribute
-    Parameters:
-        self: instance of the class itself to call created methods
-    Returns:
-        None
     """
     def select_file(self):
         file_path = filedialog.askopenfilename()
         self.file_path.set(file_path)
 
 """
-Changes the merge threshold
-Parameters:
-    tk.Frame: creates subclass of a Frame to use frame methods
-Returns:
-    None
+Frame to change the merge threshold 
+Parent class:
+    WorkFrame: a sub class of tk.Frame
 """
-class ChangeMergeThreshold(tk.Frame):
-
-    """
-    main function
-    Parameters:
-        self: instance of the class itself to call created methods
-        parent: widget/frame that contains the current frame
-        controller: instance of the class that allows for library methods to be called
-    Returns:
-        None
-    """
+class ChangeMergeThreshold(WorkFrame):
+    """Constructor of the class"""
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -391,25 +280,13 @@ class ChangeMergeThreshold(tk.Frame):
         button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
         button.pack()
 
-
 """
-Template to make a new frame
-Parameters:
-    tk.Frame: creates subclass of a Frame to use frame methods
-Returns:
-    None
+Frame to begin merging groups that are similar
+Parent class:
+    WorkFrame: a sub class of tk.Frame
 """
-class MergeGroups(tk.Frame):
-
-    """
-    main function
-    Parameters:
-        self: instance of the class itself to call created methods
-        parent: widget/frame that contains the current frame
-        controller: instance of the class that allows for library methods to be called
-    Returns:
-        None
-    """
+class MergeGroups(WorkFrame):
+    """Constructor of the class"""
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
@@ -419,6 +296,30 @@ class MergeGroups(tk.Frame):
 
         button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
         button.pack()
+
+
+
+"""
+Template to make a new frame
+Superclass:
+    WorkFrame: a subclass of tk.Frame
+"""
+class PageTwo(WorkFrame):
+    """
+    Parameters:
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    """
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
+
+        label = tk.Label(self, text="This is page 2", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="Go to the start page", command = lambda: controller.show_frame("StartPage"))
+        button.pack()
+
+
 
 
 if __name__ == "__main__":
