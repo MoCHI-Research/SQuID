@@ -40,7 +40,7 @@ class SampleApp(tk.Tk):
         self.frames = {}
         for F in (StartPage,
                   CreateAffinityDiagram,
-                  ReasonForLabel, NotAValidLabel, DataWithLabel, GenerateGPTReason,
+                  ReasonForLabel, NotAValidLabel, DataWithLabel, GenerateGPTReason, NotAnIntegerError, IntegerOutsideRangeError,
                   ChangeMergeThreshold,
                   MergeGroups, FinishedMerging,
                   PageTwo):
@@ -93,6 +93,7 @@ class WorkFrame(tk.Frame):
         self.labels = []            #Keeps track of labels that might be cleared
         self.merge_threshold = 0.91
         self.file_path = ""
+        self.reason_status = "Please input an appropriate integer"
 
     """
     Clears certain text labels that exist on the frame
@@ -212,6 +213,9 @@ class DataWithLabel(WorkFrame):
         label = tk.Label(self, text="Data:", font=controller.title_font)
         label.pack(pady=10)
 
+        status_label = tk.Label(self, text=self.reason_status, font=("Arial", 14, "bold italic"))
+        status_label.pack()
+
         self.data_num = tk.Entry(self)
         self.data_num.pack()
 
@@ -235,8 +239,14 @@ class DataWithLabel(WorkFrame):
         self.canvas.bind("<MouseWheel>", self.on_mousewheel)
 
     def submit_data_number(self):
-        data_number = int(self.data_num.get())
-        self.controller.show_frame("GenerateGPTReason", self.all_data, self.entered_label, data_number)
+        data_number = self.data_num.get()
+        if data_number.isdigit():
+            if int(data_number) > len(self.all_data) or int(data_number) < 1:
+                self.controller.show_frame("IntegerOutsideRangeError")
+            else:
+                self.controller.show_frame("GenerateGPTReason", self.all_data, self.entered_label, data_number)
+        else:
+            self.controller.show_frame("NotAnIntegerError", data_number)
 
     def update_status(self, data, label):
         self.all_data = data
@@ -255,7 +265,54 @@ class DataWithLabel(WorkFrame):
     def on_mousewheel(self, event):
         self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
+"""
+Template to make a new frame
+Superclass:
+    WorkFrame: a subclass of tk.Frame
+"""
+class NotAnIntegerError(WorkFrame):
+    """
+    Parameters:
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    """
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
 
+
+        errortitle_label = tk.Label(self, text="Error", font=controller.title_font)
+        errortitle_label.pack()
+
+        error_label = tk.Label(self, text="The entry you entered was not an integer. Please go back and enter an appropriate integer.", font=controller.text_font)
+        error_label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="ReEnter an Integer", command = lambda: controller.show_frame("DataWithLabel"))
+        button.pack()
+
+        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
+        button.pack()
+
+class IntegerOutsideRangeError(WorkFrame):
+    """
+    Parameters:
+        parent: widget/frame that contains the current frame
+        controller: instance of the class that allows for library methods to be called
+    """
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
+
+
+        errortitle_label = tk.Label(self, text="Error", font=controller.title_font)
+        errortitle_label.pack()
+
+        error_label = tk.Label(self, text="The integer you entered was not an available data number. Please go back and enter an appropriate integer.", font=controller.text_font)
+        error_label.pack(side="top", fill="x", pady=10)
+
+        button = tk.Button(self, text="ReEnter an Integer", command = lambda: controller.show_frame("DataWithLabel"))
+        button.pack()
+
+        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
+        button.pack()
 
 """
 Generates the reason for giving the data the label it was given and displays it.
@@ -290,40 +347,6 @@ class GenerateGPTReason(WorkFrame):
         display_gpt_response = tk.Label(self.this_frame, text=gpt_response, font=('Arial', 14), wraplength=600)
         display_gpt_response.pack(anchor='center')
         self.labels.append(display_gpt_response)
-
-"""
-Frame to prompt to select a file directly from your directory/finder
-Parent class:
-    WorkFrame: a sub class of tk.Frame
-"""
-# class FileSelectionFrame(WorkFrame):
-
-#     """Constructor of the class"""
-#     def __init__(self, parent, controller):
-#         super().__init__(parent, controller)
-
-#         self.file_path = tk.StringVar()  # Variable to store the selected file path
-
-#         select_button = tk.Button(self, text="Select File", command=self.select_file)
-#         select_button.pack(pady=10)
-
-#         selected_file_label = tk.Label(self, textvariable=self.file_path, wraplength=400)
-#         selected_file_label.pack()
-
-#     """
-#     Grabs filepath of selected file and sets as an attribute
-#     """
-#     def select_file(self):
-#         file_path = filedialog.askopenfilename()
-#         self.file_path.set(file_path)
-
-#     """
-#     Gets the file path selected by user from earlier
-#     Returns(string):
-#         the file path selected by user
-#     """
-#     def get_file(self):
-#         return self.file_path.get()
 
 """
 Frame to change the merge threshold
@@ -368,7 +391,7 @@ class MergeGroups(WorkFrame):
             self.controller.show_frame("FinishedMerging")
 
 """
-Template to make a new frame
+Lets user know that merging was finished
 Superclass:
     WorkFrame: a subclass of tk.Frame
 """
@@ -418,7 +441,6 @@ class CreateAffinityDiagram(WorkFrame):
 
         startpage_button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
         startpage_button.pack()
-
 
     """
     Select a file to make affinity diagram from
