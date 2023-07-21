@@ -32,6 +32,8 @@ class SampleApp(tk.Tk):
         self.text_font = tkfont.Font(family = 'Times', size = 14)
         self.message_font = tkfont.Font(family = 'Helvetica', size = 18)
 
+        self.merge_threshold = 0.91
+
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -91,7 +93,6 @@ class WorkFrame(tk.Frame):
         self.controller = controller
 
         self.labels = []            #Keeps track of labels that might be cleared
-        self.merge_threshold = 0.91
         self.file_path = ""
         self.reason_status = "Please input an appropriate integer"
 
@@ -357,39 +358,38 @@ class ChangeMergeThreshold(WorkFrame):
     """Constructor of the class"""
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
-        
+
         self.current_value = tk.DoubleVar()
 
-        self.label = tk.Label(self, text="Changing Merge Threshold", font=controller.title_font)
-        self.label.pack(side="top", fill="x", pady=10)
-        
-        self.current_threshold = tk.Label(self, text="Current Threshold: " + str(self.merge_threshold))
-        self.current_threshold.pack()
-        
-        self.restraints_label = tk.Label(self, text="Slide the label to change the merge threshold, then press the 'Change threshold' button")
-        self.restraints_label.pack()
-        
+        heading_label = tk.Label(self, text="Changing Merge Threshold", font=controller.title_font)
+        heading_label.pack(side="top", fill="x", pady=10)
+
+        self.currentthreshold_label = tk.Label(self, text="Current Threshold: " + str(self.controller.merge_threshold))
+        self.currentthreshold_label.pack()
+
+        prompt_label = tk.Label(self, text="Slide the label to change the merge threshold, then press the 'Change threshold' button")
+        prompt_label.pack()
+
         self.slider = tk.Scale(self, from_=1, to=99, orient="horizontal", variable=self.current_value)
         self.slider.pack()
-        
-        self.update_button = tk.Button(self, text="Change Threshold",command=self.update_threshold)
-        self.update_button.pack()
-        
-        self.startpage_button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
-        self.startpage_button.pack()
-        
+
+        update_button = tk.Button(self, text="Change Threshold",command=self.update_threshold)
+        update_button.pack()
+
+        startpage_button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
+        startpage_button.pack()
+
     """Updates the merge_threshold variable"""
     def update_threshold(self):
-        self.merge_threshold = self.slider.get() / 100
-        self.current_threshold = tk.Label(self, text=str(self.merge_threshold))
-        self.update_page()
-        
+        self.controller.merge_threshold = self.slider.get() / 100
+        # self.current_threshold = tk.Label(self, text=str(self.merge_threshold))
+        self.controller.show_frame("ChangeMergeThreshold")
+
     """Supposed to update the threshold visual to allow users see what the current threshold is, not working"""
-    def update_page(self):
-        self.current_threshold.destroy()
-        # self.current_threshold.pack_forget()
-        
-        
+    def update_status(self):
+        self.currentthreshold_label.config(text="Current Threshold: " + str(self.controller.merge_threshold))
+
+
 
 """
 Frame to begin merging groups that are similar
@@ -406,7 +406,7 @@ class MergeGroups(WorkFrame):
 
         select_button = tk.Button(self, text="Select File", command=self.select_file_to_merge)
         select_button.pack(pady=10)
-        
+
         start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"))
         start_page_button.pack()
 
