@@ -378,15 +378,14 @@ class ChangeMergeThreshold(WorkFrame):
         self.button = tk.Button(self, text="Go back to start page", command=lambda: controller.show_frame("StartPage"))
         self.button.pack()
         
-        
+    """Updates the merge_threshold variable"""
     def update_threshold(self):
         self.merge_threshold = self.slider.get() / 100
         self.current_threshold = tk.Label(self, text=str(self.merge_threshold))
         self.update_page()
         
+    """Supposed to update the threshold visual to allow users see what the current threshold is, not working"""
     def update_page(self):
-        
-        
         self.current_threshold.destroy()
         # self.current_threshold.pack_forget()
         
