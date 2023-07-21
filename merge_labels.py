@@ -257,7 +257,7 @@ def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "la
     label_list = [label for label in group_dict]
 
     if original_file == None:
-        return
+        return False
 
     if new_similarity:
         if new_embedding:

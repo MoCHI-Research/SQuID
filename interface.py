@@ -416,7 +416,7 @@ class MergeGroups(WorkFrame):
     def select_file_to_merge(self):
         file_path = filedialog.askopenfilename()
         self.file_path = file_path
-        finished_merging = merge_labels(merge_threshold = self.merge_threshold, original_file = self.file_path)
+        finished_merging = merge_labels(merge_threshold = self.controller.merge_threshold, original_file = self.file_path)
         if finished_merging:
             self.controller.show_frame("FinishedMerging")
 
