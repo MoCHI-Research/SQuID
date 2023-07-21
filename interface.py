@@ -382,7 +382,6 @@ class ChangeMergeThreshold(WorkFrame):
     """Updates the merge_threshold variable"""
     def update_threshold(self):
         self.controller.merge_threshold = self.slider.get() / 100
-        # self.current_threshold = tk.Label(self, text=str(self.merge_threshold))
         self.controller.show_frame("ChangeMergeThreshold")
 
     """Supposed to update the threshold visual to allow users see what the current threshold is, not working"""
