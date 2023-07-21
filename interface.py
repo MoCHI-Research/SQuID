@@ -26,6 +26,7 @@ class SampleApp(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.geometry("1000x1000")
+        self.title("SQuID")
 
         self.title_font = tkfont.Font(family='Helvetica', size=18, weight="bold", slant="italic")
         self.text_font = tkfont.Font(family = 'Times', size = 14)
