@@ -282,12 +282,40 @@ class ChangeMergeThreshold(WorkFrame):
     """Constructor of the class"""
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
+        
+        self.current_value = tk.DoubleVar()
 
-        label = tk.Label(self, text="Changing Merge Threshold", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-
-        button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        self.label = tk.Label(self, text="Changing Merge Threshold", font=controller.title_font)
+        self.label.pack(side="top", fill="x", pady=10)
+        
+        self.current_threshold = tk.Label(self, text="Current Threshold: " + str(self.merge_threshold))
+        self.current_threshold.pack()
+        
+        self.restraints_label = tk.Label(self, text="Slide the label to change the merge threshold, then press the 'Change threshold' button")
+        self.restraints_label.pack()
+        
+        self.slider = tk.Scale(self, from_=1, to=99, orient="horizontal", variable=self.current_value)
+        self.slider.pack()
+        
+        self.update_button = tk.Button(self, text="Change threshold",command=self.update_threshold)
+        self.update_button.pack()
+        
+        self.button = tk.Button(self, text="Go back to start page", command=lambda: controller.show_frame("StartPage"))
+        self.button.pack()
+        
+        
+    def update_threshold(self):
+        self.merge_threshold = self.slider.get() / 100
+        self.current_threshold = tk.Label(self, text=str(self.merge_threshold))
+        self.update_page()
+        
+    def update_page(self):
+        
+        
+        self.current_threshold.destroy()
+        # self.current_threshold.pack_forget()
+        
+        
 
 """
 Frame to begin merging groups that are similar
