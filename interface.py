@@ -372,11 +372,11 @@ class ChangeMergeThreshold(WorkFrame):
         self.slider = tk.Scale(self, from_=1, to=99, orient="horizontal", variable=self.current_value)
         self.slider.pack()
         
-        self.update_button = tk.Button(self, text="Change threshold",command=self.update_threshold)
+        self.update_button = tk.Button(self, text="Change Threshold",command=self.update_threshold)
         self.update_button.pack()
         
-        self.button = tk.Button(self, text="Go back to start page", command=lambda: controller.show_frame("StartPage"))
-        self.button.pack()
+        self.startpage_button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
+        self.startpage_button.pack()
         
     """Updates the merge_threshold variable"""
     def update_threshold(self):
@@ -406,6 +406,9 @@ class MergeGroups(WorkFrame):
 
         select_button = tk.Button(self, text="Select File", command=self.select_file_to_merge)
         select_button.pack(pady=10)
+        
+        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button.pack()
 
     """
     Allows user to select file from directory
