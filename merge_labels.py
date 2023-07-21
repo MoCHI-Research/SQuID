@@ -281,8 +281,7 @@ def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "la
 
     file.close()
     print("Merging finished")
-    done = True
-    return done
+    return True
 
 
 """

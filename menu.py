@@ -248,7 +248,7 @@ def retrieve_data_with_label(label_to_search, filename = "output.csv"):
 
     return all_data_with_label
 
-# # Generates a reason through GPT for labeling the data with label 
+# # Generates a reason through GPT for labeling the data with label
 def generate_reason(all_data, data_index, label):
     print("Data: " + str(all_data[int(data_index) - 1][1]))
     print("Label: " + label)
