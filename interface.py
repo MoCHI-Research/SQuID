@@ -291,40 +291,6 @@ class GenerateGPTReason(WorkFrame):
         self.labels.append(display_gpt_response)
 
 """
-Frame to prompt to select a file directly from your directory/finder
-Parent class:
-    WorkFrame: a sub class of tk.Frame
-"""
-# class FileSelectionFrame(WorkFrame):
-
-#     """Constructor of the class"""
-#     def __init__(self, parent, controller):
-#         super().__init__(parent, controller)
-
-#         self.file_path = tk.StringVar()  # Variable to store the selected file path
-
-#         select_button = tk.Button(self, text="Select File", command=self.select_file)
-#         select_button.pack(pady=10)
-
-#         selected_file_label = tk.Label(self, textvariable=self.file_path, wraplength=400)
-#         selected_file_label.pack()
-
-#     """
-#     Grabs filepath of selected file and sets as an attribute
-#     """
-#     def select_file(self):
-#         file_path = filedialog.askopenfilename()
-#         self.file_path.set(file_path)
-
-#     """
-#     Gets the file path selected by user from earlier
-#     Returns(string):
-#         the file path selected by user
-#     """
-#     def get_file(self):
-#         return self.file_path.get()
-
-"""
 Frame to change the merge threshold
 Parent class:
     WorkFrame: a sub class of tk.Frame
@@ -367,7 +333,7 @@ class MergeGroups(WorkFrame):
             self.controller.show_frame("FinishedMerging")
 
 """
-Template to make a new frame
+Lets user know that merging was finished
 Superclass:
     WorkFrame: a subclass of tk.Frame
 """
@@ -385,6 +351,8 @@ class FinishedMerging(WorkFrame):
 
         button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
         button.pack()
+
+
 """
 Frame to begin creating an affinity diagram
 Superclass:
@@ -412,8 +380,6 @@ class CreateAffinityDiagram(WorkFrame):
 
         startpage_button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
         startpage_button.pack()
-
-
 
     """
     Select a file to make affinity diagram from
