@@ -364,7 +364,7 @@ class ChangeMergeThreshold(WorkFrame):
         heading_label = tk.Label(self, text="Changing Merge Threshold", font=controller.title_font)
         heading_label.pack(side="top", fill="x", pady=10)
 
-        self.currentthreshold_label = tk.Label(self, text="Current Threshold: " + str(self.controller.merge_threshold))
+        self.currentthreshold_label = tk.Label(self, text="Current Threshold: " + str(self.controller.merge_threshold*100) + "%")
         self.currentthreshold_label.pack()
 
         prompt_label = tk.Label(self, text="Slide the label to change the merge threshold, then press the 'Change threshold' button")
