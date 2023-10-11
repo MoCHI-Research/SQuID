@@ -462,7 +462,7 @@ class CreateAffinityDiagram(WorkFrame):
         self.file_status_box = tk.Label(self, text = "No file uploaded yet", font = controller.text_font)
         self.file_status_box.pack()
 
-        diagram_button = tk.Button(self, text = "Create affinity diagram", command = lambda: label_datapoints(self.file_path))
+        diagram_button = tk.Button(self, text = "Create affinity diagram", command = lambda: initialize_affinity_diagram(self.file_path))
         diagram_button.pack()
 
         save_button = tk.Button(self, text = "Save result as", command = self.save_result)

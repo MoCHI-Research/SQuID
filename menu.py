@@ -8,6 +8,7 @@ import re
 import math
 import threading
 
+
 # GLOBAL VARIABLES
 SIZE_OF_BATCHES = 75
 DATASET_PATH = "datasets/"
@@ -15,6 +16,28 @@ DATASET_PATH = "datasets/"
 # A flag to tell the thread to stop
 stop_thread = False
 final_time_elapsed = 0
+
+"""
+Shifts the given file to the right once
+"""
+def shift_csv_to_right(file):
+    # Shifting every column to the right by one:
+    # Read the data from the CSV file
+    data = []
+    with open(file, 'r', newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            data.append(row)
+
+    # Shifts all columns to the right by one column
+    for row in data:
+        row.insert(0, "")  # Insert an empty string in the first column
+        
+    # Write the modified data back to the same CSV file
+    with open(file, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerows(data)
+        f.close()
 
 
 """
@@ -97,6 +120,8 @@ def convert_num_to_csv(gpt_response, data_list):
 
     lines = gpt_response.split('\n')
 
+    file_exists = os.path.exists(output_filename)
+
     for line in lines:
         line = line.strip()
         if line.startswith('Group'):
@@ -120,18 +145,25 @@ def convert_num_to_csv(gpt_response, data_list):
     for current_index in range(len(response_include)):
         if not response_include[current_index]:
             not_grouped_data.append(data_list[current_index])
-    csv_data.append(('Not Grouped', not_grouped_data))
+    
+    if len(not_grouped_data) > 0:
+        csv_data.append(('Not Grouped', not_grouped_data))
 
-    file_exists = os.path.exists(output_filename)
      # Write to CSV
     with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
         writer = csv.writer(file)
         if not file_exists:  # Write the header only if the file didn't exist
             writer.writerow(['Group', 'Items'])
-        for data in csv_data:
-            group = data[0]
-            for item in data[1]:
-                writer.writerow([group, item])
+            for data in csv_data:
+                group = data[0]
+                for item in data[1]:
+                    writer.writerow([group, item])
+        else:
+            for data in csv_data:
+                group = data[0]
+                for item in data[1]:
+                    writer.writerow([group, item])
+        file.close()
 
 
 
@@ -169,10 +201,49 @@ def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_
     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
     time.sleep(1)
     #convert_gpt_to_csv(response)
+    print("PARSED LIST: ", parsed_list_of_data)
     convert_num_to_csv(response, parsed_list_of_data)
     print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
 
     return completed_gpt_requests
+
+"""Creates a one-layer deep affinity diagram"""
+def run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size):
+    start = 0
+    end = batch_size
+
+    while completed_gpt_requests < num_of_gpt_requests:
+        completed_gpt_requests = ask_and_compile_gpt(list_of_data[start:end], completed_gpt_requests, num_of_gpt_requests, gpt_template)
+        start = end
+        end += batch_size
+        if end > len(list_of_data):
+            end = len(list_of_data)
+
+def datapoint_hierarchy(file = 'output.csv'):
+    """
+    1. Take in the output.csv file
+    2. Check the 0th col, put each unique label into a list 
+        if elem not in list:
+            put_in_list
+    3. Run GPT on it
+    """
+
+    # First, grab all unique label names
+    unique_labels = []
+    with open(file, newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row[0] not in unique_labels and row[0] != 'Group' and row[0] != '':
+                unique_labels.append(row[0])
+
+    if len(unique_labels) > 1:
+        # Shift the CSV file over by two cells
+        shift_csv_to_right(file)
+        shift_csv_to_right(file)
+        start_affinity_diagram(file, unique_labels)
+    else:
+        print(unique_labels[0])
+
 
 """
 Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
@@ -181,25 +252,20 @@ Parameters:
 Returns:
     None
 """
-def label_datapoints(file):
-
-    if os.path.exists('output.csv'):
-        os.remove('output.csv')
-        print("'output.csv' deleted successfully.")
+def start_affinity_diagram(file, list_of_data = []):
 
     print("Generating GPT response . . .\n")
-    list_of_data = []
     batch_size = SIZE_OF_BATCHES
+    gpt_template = 'group_data_in_numbers'
 
     #gpt_template = 'group_data'
     #gpt_template = 'group_data_no_example'
-    gpt_template = 'group_data_in_numbers'
-    with open(file, newline='') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if row:
-                list_of_data.append(row[0])
-
+    if len(list_of_data) == 0:
+        with open(file, newline='') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if row:
+                    list_of_data.append(row[0])
     # Initial check to see if batch is bigger than the dataset
     if batch_size > len(list_of_data):
         batch_size = len(list_of_data)
@@ -210,18 +276,23 @@ def label_datapoints(file):
 
     print(f'Batches to complete: {num_of_gpt_requests}')
 
-    # x and y are the indices indicating the batches of data to parse through
-    x = 0
-    y = batch_size
+    # Calls GPT for one run of batches over a list of datapoints
+    run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size)
 
-    while completed_gpt_requests < num_of_gpt_requests:
-        completed_gpt_requests = ask_and_compile_gpt(list_of_data[x:y], completed_gpt_requests, num_of_gpt_requests, gpt_template)
-        x = y
-        y += batch_size
-        if y > len(list_of_data):
-            y = len(list_of_data)
-
+    #default file_name is output.csv
+    datapoint_hierarchy()
     print("Job's done.")
+
+"""
+Initializes the affinity diagramming process by first removing then
+creating an output.csv file
+"""
+def initialize_affinity_diagram(file):
+    if os.path.exists('output.csv'):
+        os.remove('output.csv')
+        print("'output.csv' deleted successfully.")
+    start_affinity_diagram(file)
+
 
 
 # # A function that accepts file inputs and returns the inputted file
@@ -307,7 +378,7 @@ def menu():
                 loading_thread.start()
 
                 try:
-                    label_datapoints(DATASET_PATH + file)
+                    initialize_affinity_diagram(file)(DATASET_PATH + file)
                 except PermissionError:
                     print("Failed to access the output file. Please close it if it is open. Going back to the main menu...\n")
                 except FileNotFoundError:
