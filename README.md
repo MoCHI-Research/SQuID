@@ -6,7 +6,7 @@ This system aims to help with qualitative data analysis, or more specifically, m
 
 The basic idea of SQuID is to give the LLM a batch of data within its token limit at a time, asking the model to group and label the data. After all individual data points in a dataset are labeled, the system uses the Girvan-Newman algorithm to find similar labels, and merges the groups with similar labels. This would resolve the token-limit issue as well as avoid having an unnecessary large number of groups, which is not helpful in an affinity diagram.
 
-# Dependancies
+# Dependencies
 SQuID is written mainly in Python and requires the following Python libraries. Built-in Python packages are not in this list.
 
 - openai
