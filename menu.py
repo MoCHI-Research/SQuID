@@ -39,7 +39,6 @@ def shift_csv_to_right(file):
         writer.writerows(data)
         f.close()
 
-
 """
 Show the total elapsed time of the program
 Parameters:
@@ -110,7 +109,7 @@ Parameters:
 Returns:
     output.csv: the CSV file that contains the converted responses
 """
-def convert_num_to_csv(gpt_response, data_list):
+def convert_num_to_csv(gpt_response, data_list, prev_data):
     output_filename = 'output.csv'
     group_name = ''
     group_data = []
@@ -149,21 +148,52 @@ def convert_num_to_csv(gpt_response, data_list):
     if len(not_grouped_data) > 0:
         csv_data.append(('Not Grouped', not_grouped_data))
 
-     # Write to CSV
-    with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
-        writer = csv.writer(file)
-        if not file_exists:  # Write the header only if the file didn't exist
+    # If the file exists, then that means we're dealing with levels higher than 1
+    # So then, start saving all the previous data into a list, and within that list,
+    # Create a new one that appends the information from the previous data
+    # With the new label associated with that row
+    # Else, if the file doesn't exist, then that means it's a new file
+    # Create the normal file stuff
+
+    # I understand that this loop will absolutely destroy the runtime, however
+    # This isn't where the lag I mentioned in the Discord appears. The lag appears
+    # during the first pass, before the hierarchy is created. This code
+    # should only run when hierarchy == True
+    if file_exists and len(prev_data) > 0:
+        # This is where the appending prev_data to the csv list will happen
+        for data in csv_data:
+            for i in range(len(data[1])):
+                for p_data in prev_data:
+                    if data[1][i] == p_data[0]:
+                        prev_data[prev_data.index(p_data)].insert(0,data[0])
+        
+        print("PREV_DATA:")
+        print()
+        for p in prev_data:
+            print(p)
+        # Writes to the output file with the new column 
+        with open(output_filename, 'w', newline='') as file:
+            writer=csv.writer(file)
+            for data in prev_data:
+                writer.writerow(data)
+            file.close()
+    else:
+    # If the output_file exists, then append the information. If it doesn't exist, then write the initial data_labels
+    # This is probably where you're seeing the error of having weird chunks of data scattered everywhere. It's due to the append
+    # and this is the bug where I stopped at.
+    # What should happen is that during the first pass, if the file doesn't exist, then we write at the top
+    # 'Group' and 'Items': Group --> the group label; Items --> the datapoints
+    # And it should give the normal first pass group labelling
+    # However, it doesn't and it chunks it weirdly. 
+    # Possible solution: Create a first pass function to run the first pass on, then use the above code to create the hierarchy (future passes)
+        with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
+            writer = csv.writer(file)
             writer.writerow(['Group', 'Items'])
             for data in csv_data:
                 group = data[0]
                 for item in data[1]:
                     writer.writerow([group, item])
-        else:
-            for data in csv_data:
-                group = data[0]
-                for item in data[1]:
-                    writer.writerow([group, item])
-        file.close()
+            file.close()
 
 
 
@@ -177,15 +207,12 @@ Parameters:
 Returns:
     completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional
 """
-def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template):
+def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data):
 
     data_num = len(parsed_list_of_data)
 
     response = None
     user_input_string = ''
-
-    #for data in parsed_list_of_data:
-        #user_input_string += data
 
     for i in range(data_num):
         current_data = str(i) + ". " + parsed_list_of_data[i] + "\n"
@@ -193,33 +220,40 @@ def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_
 
     while response == None:
         response = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
-        #response = openai_sys_chatcompletion(gpt_template, user_input_string)
-
-    print(response)
+    print("Response:",response)
 
     completed_gpt_requests += 1
     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
-    time.sleep(1)
-    #convert_gpt_to_csv(response)
-    print("PARSED LIST: ", parsed_list_of_data)
-    convert_num_to_csv(response, parsed_list_of_data)
+    convert_num_to_csv(response, parsed_list_of_data, prev_data)
     print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
 
     return completed_gpt_requests
 
 """Creates a one-layer deep affinity diagram"""
-def run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size):
+def run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy):
     start = 0
     end = batch_size
+    prev_data = []
+    output_filename = 'output.csv'
+    
+    # If the output_file exists and if we are creating the hierarchy (hierarchy == True), we will save the previous data into prev_data
+    # so that we can write the new labels into the associated row it belongs to
+    if os.path.exists(output_filename) and hierarchy:
+        with open(output_filename, 'r', newline='') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                prev_data.append(row)
 
     while completed_gpt_requests < num_of_gpt_requests:
-        completed_gpt_requests = ask_and_compile_gpt(list_of_data[start:end], completed_gpt_requests, num_of_gpt_requests, gpt_template)
+        completed_gpt_requests = ask_and_compile_gpt(list_of_data[start:end], completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data)
         start = end
         end += batch_size
         if end > len(list_of_data):
             end = len(list_of_data)
 
-def datapoint_hierarchy(file = 'output.csv'):
+
+
+def datapoint_hierarchy(first_pass_completed):
     """
     1. Take in the output.csv file
     2. Check the 0th col, put each unique label into a list 
@@ -227,23 +261,36 @@ def datapoint_hierarchy(file = 'output.csv'):
             put_in_list
     3. Run GPT on it
     """
+    file = 'output.csv'
 
     # First, grab all unique label names
     unique_labels = []
     with open(file, newline='') as f:
         reader = csv.reader(f)
+        # --------------------------- COME UP WITH SOME CLAUSE TO STOP THE GENERATION AFTER DUPLICATES APPEAR
+        # Checks if the first element of a col is already in unique_labels
+        # If it isn't, add it
         for row in reader:
             if row[0] not in unique_labels and row[0] != 'Group' and row[0] != '':
                 unique_labels.append(row[0])
 
-    if len(unique_labels) > 1:
-        # Shift the CSV file over by two cells
-        shift_csv_to_right(file)
-        shift_csv_to_right(file)
-        start_affinity_diagram(file, unique_labels)
-    else:
-        print(unique_labels[0])
+    print(unique_labels)
 
+    # Checks if the first pass has been completed or not
+    # If it hasn't, then that means unique_labels will not contain any duplicate information (not guaranteed, assumption)
+    if first_pass_completed == False:
+        start_affinity_diagram(file, unique_labels, True, True)
+    # Then, if unique_labels > 1 and first_pass_completed == True, 
+    # We check every label that was previously assigned. 
+    # If there exists a duplicate label in unique_labels that appears as an already assigned label (excluding 'Not Grouped')
+    # Then we return. Else, run the next hierarchy level
+    elif len(unique_labels) > 1:
+        with open(file, newline='') as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if row[1] in unique_labels and row[1] != 'Not Grouped':
+                    return
+        start_affinity_diagram(file, unique_labels, True, True)
 
 """
 Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
@@ -252,14 +299,15 @@ Parameters:
 Returns:
     None
 """
-def start_affinity_diagram(file, list_of_data = []):
+def start_affinity_diagram(file, list_of_data = [], hierarchy = False, first_pass_completed = False):
 
     print("Generating GPT response . . .\n")
     batch_size = SIZE_OF_BATCHES
     gpt_template = 'group_data_in_numbers'
 
-    #gpt_template = 'group_data'
-    #gpt_template = 'group_data_no_example'
+    # Checks if the length of the list_of_data (unique_datapoints) is 0
+    # If it is, then that means we're dealing with the first pass
+    # If it isn't, then we're not and we don't need to construct list_of_data
     if len(list_of_data) == 0:
         with open(file, newline='') as f:
             reader = csv.reader(f)
@@ -277,10 +325,11 @@ def start_affinity_diagram(file, list_of_data = []):
     print(f'Batches to complete: {num_of_gpt_requests}')
 
     # Calls GPT for one run of batches over a list of datapoints
-    run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size)
+    run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy)
 
-    #default file_name is output.csv
-    datapoint_hierarchy()
+    # default file_name is output.csv
+    # Starts creating the hierarchy of labels 
+    datapoint_hierarchy(first_pass_completed)
     print("Job's done.")
 
 """
