@@ -299,8 +299,9 @@ Parameters:
 Returns:
     None
 """
-def start_affinity_diagram(file, list_of_data = [], hierarchy = False, first_pass_completed = False):
-
+def start_affinity_diagram(file, list_of_data = None, hierarchy = False, first_pass_completed = False):
+    if list_of_data == None:
+        list_of_data = []
     print("Generating GPT response . . .\n")
     batch_size = SIZE_OF_BATCHES
     gpt_template = 'group_data_in_numbers'
