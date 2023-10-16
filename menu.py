@@ -340,7 +340,7 @@ def initialize_affinity_diagram(file):
     if os.path.exists('output.csv'):
         os.remove('output.csv')
         print("'output.csv' deleted successfully.")
-    start_affinity_diagram(file)
+    start_affinity_diagram(file, list_of_data = [])
 
 
 
