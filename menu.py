@@ -236,6 +236,7 @@ def datapoint_hierarchy(file = 'output.csv'):
             if row[0] not in unique_labels and row[0] != 'Group' and row[0] != '':
                 unique_labels.append(row[0])
 
+
     if len(unique_labels) > 1:
         # Shift the CSV file over by two cells
         shift_csv_to_right(file)
@@ -252,7 +253,9 @@ Parameters:
 Returns:
     None
 """
-def start_affinity_diagram(file, list_of_data = []):
+def start_affinity_diagram(file, list_of_data = None):
+    if list_of_data is None:
+        list_of_data = []
 
     print("Generating GPT response . . .\n")
     batch_size = SIZE_OF_BATCHES
@@ -279,6 +282,8 @@ def start_affinity_diagram(file, list_of_data = []):
     # Calls GPT for one run of batches over a list of datapoints
     run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size)
 
+    
+
     #default file_name is output.csv
     datapoint_hierarchy()
     print("Job's done.")
@@ -291,7 +296,7 @@ def initialize_affinity_diagram(file):
     if os.path.exists('output.csv'):
         os.remove('output.csv')
         print("'output.csv' deleted successfully.")
-    start_affinity_diagram(file)
+    start_affinity_diagram(file, list_of_data = [])
 
 
 

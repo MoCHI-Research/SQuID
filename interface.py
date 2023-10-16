@@ -137,18 +137,6 @@ class StartPage(WorkFrame):
         mergegroups_button.pack()
 
 
-class CreateAffinityDiagram(WorkFrame):
-    """Constructor of the class"""
-    def __init__(self, parent, controller):
-        super().__init__(parent, controller)
-
-        label = tk.Label(self, text="Creating an Affinity Diagram", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-
-        button = tk.Button(self, text="Go to the start page", command=lambda: controller.show_frame("StartPage"))
-        button.pack()
-
-
 """
 Prompts user for the label
 Superclass:
