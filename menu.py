@@ -166,7 +166,6 @@ def convert_num_to_csv(gpt_response, data_list, prev_data):
                 for j in range(len(prev_data)):
                     if data[1][i] == prev_data[j][0]:
                         prev_data[j].insert(0,data[0])
-                        print("heyheyhey")
         
         print("PREV_DATA:")
         print()
