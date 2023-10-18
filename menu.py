@@ -94,8 +94,8 @@ def convert_gpt_to_csv(input_string):
     # Write to CSV
     with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
         writer = csv.writer(file)
-        if not file_exists:  # Write the header only if the file didn't exist
-            writer.writerow(['Group', 'Items'])
+        #if not file_exists:  # Write the header only if the file didn't exist
+        #    writer.writerow(['Group', 'Items'])
         for data in csv_data:
             group = data[0]
             for item in data[1]:
@@ -163,9 +163,10 @@ def convert_num_to_csv(gpt_response, data_list, prev_data):
         # This is where the appending prev_data to the csv list will happen
         for data in csv_data:
             for i in range(len(data[1])):
-                for p_data in prev_data:
-                    if data[1][i] == p_data[0]:
-                        prev_data[prev_data.index(p_data)].insert(0,data[0])
+                for j in range(len(prev_data)):
+                    if data[1][i] == prev_data[j][0]:
+                        prev_data[j].insert(0,data[0])
+                        print("heyheyhey")
         
         print("PREV_DATA:")
         print()
@@ -188,7 +189,7 @@ def convert_num_to_csv(gpt_response, data_list, prev_data):
     # Possible solution: Create a first pass function to run the first pass on, then use the above code to create the hierarchy (future passes)
         with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Group', 'Items'])
+            #writer.writerow(['Group', 'Items'])
             for data in csv_data:
                 group = data[0]
                 for item in data[1]:
