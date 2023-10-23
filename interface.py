@@ -413,11 +413,14 @@ class ChangeMergeThreshold(WorkFrame):
         self.currentthreshold_label = tk.Label(self, text="Current Threshold: " + str(self.controller.merge_threshold*100) + "%")
         self.currentthreshold_label.pack()
 
-        prompt_label = tk.Label(self, text="Slide the label to change the merge threshold, then press the 'Change threshold' button")
+        prompt_label = tk.Label(self, text="Input a valid decimal value between 0 and 1, then press the 'Change threshold' button")
         prompt_label.pack()
 
-        self.slider = tk.Scale(self, from_=1, to=99, orient="horizontal", variable=self.current_value)
-        self.slider.pack()
+        self.threshold_entry = tk.Entry(self)
+        self.threshold_entry.pack()
+
+        self.status = tk.Label(self, text="")
+        self.status.pack()
 
         update_button = tk.Button(self, text="Change Threshold",command=self.update_threshold)
         update_button.pack()
@@ -427,8 +430,14 @@ class ChangeMergeThreshold(WorkFrame):
 
     """Updates the merge_threshold variable"""
     def update_threshold(self):
-        self.controller.merge_threshold = self.slider.get() / 100
-        self.controller.show_frame("ChangeMergeThreshold")
+        entered_threshold = float(self.threshold_entry.get())
+        if 0 <= entered_threshold <= 1:
+            self.controller.merge_threshold = entered_threshold
+            self.controller.show_frame("ChangeMergeThreshold")
+            self.status.configure(text = "")
+        else:
+            self.status.configure(text = "Please input a valid integer between 0 and 1.", fg="#eb2610")
+            self.controller.show_frame("ChangeMergeThreshold")
 
     """Supposed to update the threshold visual to allow users see what the current threshold is, not working"""
     def update_status(self):
