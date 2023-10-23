@@ -109,7 +109,7 @@ Parameters:
 Returns:
     output.csv: the CSV file that contains the converted responses
 """
-def convert_num_to_csv(gpt_response, data_list, prev_data):
+def convert_num_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
     output_filename = 'output.csv'
     group_name = ''
     group_data = []
@@ -133,14 +133,14 @@ def convert_num_to_csv(gpt_response, data_list, prev_data):
 
             for sent_index in sentence_indices:
                 current_index = int(sent_index)
-                if current_index < len(data_list):
+                #If a data (secondary label) is "Not Grouped," do not put it in any of the groups
+                if current_index < len(data_list) and not data_list[current_index] == "Not Grouped":
                     group_data.append(data_list[current_index])
                     response_include[current_index] = True
 
     if group_name and group_data:  # Add the last group
         csv_data.append((group_name, group_data))
 
-    not_grouped_data = []
     for current_index in range(len(response_include)):
         if not response_include[current_index]:
             not_grouped_data.append(data_list[current_index])
@@ -207,7 +207,15 @@ Parameters:
 Returns:
     completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional
 """
-def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data):
+def ask_and_compile_gpt(list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data):
+    parsed_list_of_data = []
+    not_grouped = []
+
+    for data in list_of_data:
+        if data == "Not Grouped":
+            not_grouped.append(data)
+        else:
+            parsed_list_of_data.append(data)
 
     data_num = len(parsed_list_of_data)
 
@@ -224,8 +232,9 @@ def ask_and_compile_gpt(parsed_list_of_data, completed_gpt_requests, num_of_gpt_
 
     completed_gpt_requests += 1
     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
-    convert_num_to_csv(response, parsed_list_of_data, prev_data)
+    convert_num_to_csv(response, parsed_list_of_data, prev_data, not_grouped)
     print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
+
 
     return completed_gpt_requests
 
@@ -253,7 +262,7 @@ def run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gp
 
 
 
-def datapoint_hierarchy(first_pass_completed):
+def datapoint_hierarchy(first_pass_completed, merge_threshold):
     """
     1. Take in the output.csv file
     2. Check the 0th col, put each unique label into a list
@@ -274,12 +283,12 @@ def datapoint_hierarchy(first_pass_completed):
             if row[0] not in unique_labels and row[0] != 'Group' and row[0] != '':
                 unique_labels.append(row[0])
 
-    print(unique_labels)
+    #print(unique_labels)
 
     # Checks if the first pass has been completed or not
     # If it hasn't, then that means unique_labels will not contain any duplicate information (not guaranteed, assumption)
     if first_pass_completed == False:
-        start_affinity_diagram(file, unique_labels, True, True)
+        start_affinity_diagram(file, merge_threshold, unique_labels, True, True)
     # Then, if unique_labels > 1 and first_pass_completed == True,
     # We check every label that was previously assigned.
     # If there exists a duplicate label in unique_labels that appears as an already assigned label (excluding 'Not Grouped')
@@ -290,7 +299,7 @@ def datapoint_hierarchy(first_pass_completed):
             for row in reader:
                 if row[1] in unique_labels and row[1] != 'Not Grouped':
                     return
-        start_affinity_diagram(file, unique_labels, True, True)
+        start_affinity_diagram(file, merge_threshold, unique_labels, True, True)
 
 """
 Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
@@ -299,7 +308,7 @@ Parameters:
 Returns:
     None
 """
-def start_affinity_diagram(file, list_of_data = None, hierarchy = False, first_pass_completed = False):
+def start_affinity_diagram(file, merge_threshold, list_of_data = None, hierarchy = False, first_pass_completed = False):
     if list_of_data == None:
         list_of_data = []
     print("Generating GPT response . . .\n")
@@ -327,21 +336,22 @@ def start_affinity_diagram(file, list_of_data = None, hierarchy = False, first_p
 
     # Calls GPT for one run of batches over a list of datapoints
     run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy)
+    merge_labels(merge_threshold, original_file = "output.csv", output_file = "output.csv")
 
     # default file_name is output.csv
     # Starts creating the hierarchy of labels
-    datapoint_hierarchy(first_pass_completed)
+    datapoint_hierarchy(first_pass_completed, merge_threshold)
     print("Job's done.")
 
 """
 Initializes the affinity diagramming process by first removing then
 creating an output.csv file
 """
-def initialize_affinity_diagram(file):
+def initialize_affinity_diagram(file, merge_threshold):
     if os.path.exists('output.csv'):
         os.remove('output.csv')
         print("'output.csv' deleted successfully.")
-    start_affinity_diagram(file, list_of_data = [])
+    start_affinity_diagram(file, merge_threshold, list_of_data = [])
 
 
 

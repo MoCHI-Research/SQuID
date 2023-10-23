@@ -127,14 +127,14 @@ class StartPage(WorkFrame):
         creatediagram_button = tk.Button(self, text="Create an Affinity Diagram", command=lambda: controller.show_frame("CreateAffinityDiagram"))
         reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("WhichPass"))
         changemergethreshold_button = tk.Button(self, text="Change Merge Threshold", command=lambda: controller.show_frame("ChangeMergeThreshold"))
-        regenlabels_button = tk.Button(self, text="Regenerate All Group Labels", command=lambda: controller.show_frame("CreateAffinityDiagram"))
-        mergegroups_button = tk.Button(self, text="Merge Groups That Are Identical or Similar", command=lambda: controller.show_frame("MergeGroups"))
+        #regenlabels_button = tk.Button(self, text="Regenerate All Group Labels", command=lambda: controller.show_frame("CreateAffinityDiagram"))
+        #mergegroups_button = tk.Button(self, text="Merge Groups That Are Identical or Similar", command=lambda: controller.show_frame("MergeGroups"))
 
         creatediagram_button.pack()
         reasonforlabel_button.pack()
         changemergethreshold_button.pack()
-        regenlabels_button.pack()
-        mergegroups_button.pack()
+        #regenlabels_button.pack()
+        #mergegroups_button.pack()
 
 
 """
@@ -508,7 +508,7 @@ class CreateAffinityDiagram(WorkFrame):
         self.file_status_box = tk.Label(self, text = "No file uploaded yet", font = controller.text_font)
         self.file_status_box.pack()
 
-        diagram_button = tk.Button(self, text = "Create affinity diagram", command = lambda: initialize_affinity_diagram(self.file_path))
+        diagram_button = tk.Button(self, text = "Create affinity diagram", command = lambda: initialize_affinity_diagram(self.file_path, self.controller.merge_threshold))
         diagram_button.pack()
 
         save_button = tk.Button(self, text = "Save result as", command = self.save_result)
