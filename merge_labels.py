@@ -41,13 +41,13 @@ def csv_to_dict(filename = "output.csv"):
 
     with open(filename, newline='') as f:
         reader = csv.reader(f)
-        next(reader)
+        #next(reader)
         for row in reader:
             label = row[0]
             if label in result_dict:
-                result_dict[label].append(row[1])
+                result_dict[label].append(row[1:])
             else:
-                result_dict[label] = [row[1]]
+                result_dict[label] = [row[1:]]
         f.close()
 
     return result_dict
@@ -270,14 +270,14 @@ def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "la
 
     merge_dict_labels(group_dict, to_merge_dict)
 
-    file_exists = os.path.exists(output_file)
+    #file_exists = os.path.exists(output_file)
     with open(output_file, 'w', newline='') as file:
         writer = csv.writer(file)
-        if not file_exists:  # Write the header only if the file didn't exist
-            writer.writerow(['Group', 'Items'])
+        #if not file_exists:  # Write the header only if the file didn't exist
+        #    writer.writerow(['Group', 'Items'])
         for label in group_dict:
-            for sent in group_dict[label]:
-                writer.writerow([label, sent])
+            for sub_levels in group_dict[label]:
+                writer.writerow([label] + sub_levels)
 
     file.close()
     print("Merging finished")
