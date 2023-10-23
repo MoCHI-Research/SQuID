@@ -32,7 +32,7 @@ def shift_csv_to_right(file):
     # Shifts all columns to the right by one column
     for row in data:
         row.insert(0, "")  # Insert an empty string in the first column
-        
+
     # Write the modified data back to the same CSV file
     with open(file, 'w', newline='') as f:
         writer = csv.writer(f)
@@ -144,7 +144,7 @@ def convert_num_to_csv(gpt_response, data_list, prev_data):
     for current_index in range(len(response_include)):
         if not response_include[current_index]:
             not_grouped_data.append(data_list[current_index])
-    
+
     if len(not_grouped_data) > 0:
         csv_data.append(('Not Grouped', not_grouped_data))
 
@@ -166,12 +166,12 @@ def convert_num_to_csv(gpt_response, data_list, prev_data):
                 for j in range(len(prev_data)):
                     if data[1][i] == prev_data[j][0]:
                         prev_data[j].insert(0,data[0])
-        
+
         print("PREV_DATA:")
         print()
         for p in prev_data:
             print(p)
-        # Writes to the output file with the new column 
+        # Writes to the output file with the new column
         with open(output_filename, 'w', newline='') as file:
             writer=csv.writer(file)
             for data in prev_data:
@@ -184,7 +184,7 @@ def convert_num_to_csv(gpt_response, data_list, prev_data):
     # What should happen is that during the first pass, if the file doesn't exist, then we write at the top
     # 'Group' and 'Items': Group --> the group label; Items --> the datapoints
     # And it should give the normal first pass group labelling
-    # However, it doesn't and it chunks it weirdly. 
+    # However, it doesn't and it chunks it weirdly.
     # Possible solution: Create a first pass function to run the first pass on, then use the above code to create the hierarchy (future passes)
         with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
             writer = csv.writer(file)
@@ -235,7 +235,7 @@ def run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gp
     end = batch_size
     prev_data = []
     output_filename = 'output.csv'
-    
+
     # If the output_file exists and if we are creating the hierarchy (hierarchy == True), we will save the previous data into prev_data
     # so that we can write the new labels into the associated row it belongs to
     if os.path.exists(output_filename) and hierarchy:
@@ -256,7 +256,7 @@ def run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gp
 def datapoint_hierarchy(first_pass_completed):
     """
     1. Take in the output.csv file
-    2. Check the 0th col, put each unique label into a list 
+    2. Check the 0th col, put each unique label into a list
         if elem not in list:
             put_in_list
     3. Run GPT on it
@@ -280,8 +280,8 @@ def datapoint_hierarchy(first_pass_completed):
     # If it hasn't, then that means unique_labels will not contain any duplicate information (not guaranteed, assumption)
     if first_pass_completed == False:
         start_affinity_diagram(file, unique_labels, True, True)
-    # Then, if unique_labels > 1 and first_pass_completed == True, 
-    # We check every label that was previously assigned. 
+    # Then, if unique_labels > 1 and first_pass_completed == True,
+    # We check every label that was previously assigned.
     # If there exists a duplicate label in unique_labels that appears as an already assigned label (excluding 'Not Grouped')
     # Then we return. Else, run the next hierarchy level
     elif len(unique_labels) > 1:
@@ -329,7 +329,7 @@ def start_affinity_diagram(file, list_of_data = None, hierarchy = False, first_p
     run_gpt_for_affinity_diagram(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy)
 
     # default file_name is output.csv
-    # Starts creating the hierarchy of labels 
+    # Starts creating the hierarchy of labels
     datapoint_hierarchy(first_pass_completed)
     print("Job's done.")
 
@@ -351,28 +351,61 @@ def file_input():
     return file_out
 
 # # Retrieves all data with the label_to_search
-def retrieve_data_with_label(label_to_search, filename = "output.csv"):
-    # Check if file exists
+def retrieve_data_with_label(label_to_search, column_num, filename = "output.csv"):
     if not os.path.isfile(filename):
         print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
     else:
         # Open the file and search
         all_data_with_label = []
-        label_and_data = ()
         with open(filename, 'r') as file:
-             csv_reader = csv.reader(file)
-             for row in csv_reader:
-                 if len(row) > 0:
-                     if row[0] == label_to_search:
-                        label_and_data = (row[0], row[1])
-                        all_data_with_label.append(label_and_data)
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                # print("Label in our column: " + row[column_num])
+                # print("Label we're looking for: " + label_to_search)
+                # print("Column number: " + str(column_num))
+                if row[column_num] == label_to_search:
+                    data = row[column_num + 1]
+                    label_and_data = (label_to_search, data)
+                    all_data_with_label.append(label_and_data)
 
     return all_data_with_label
+
+# # Returns how many passes there are by counting number of columns in output.csv
+def num_columns(filename = "output.csv"):
+    if not os.path.isfile(filename):
+        print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
+    else:
+        with open(filename, 'r', newline='') as file:
+            csv_reader = csv.reader(file)
+            first_row = next(csv_reader)
+            column_count = len(first_row)
+    column_count -= 1
+    return column_count
+
+# # Returns all unique labels from a given column number
+def column_labels(column_num, filename = "output.csv"):
+    unique_entries = set()
+
+    with open(filename, 'r', newline='') as file:
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            if len(row) > column_num:
+                entry = row[column_num]
+                unique_entries.add(entry)
+
+    print(f'Unique entries in column {column_num}:')
+    for entry in unique_entries:
+        print(entry)
+
+    unique_entries = list(unique_entries)
+
+    return unique_entries
+
 
 # # Generates a reason through GPT for labeling the data with label
 def generate_reason(all_data, data_index, label):
     print("Data: " + str(all_data[int(data_index) - 1][1]))
-    print("Label: " + label)
+    print("Label: " + str(label))
 
     data = all_data[int(data_index) - 1][1]
     user_input_string = "Provide a reason for giving the label " + label + " to the the following data: " + data

@@ -42,7 +42,7 @@ class SampleApp(tk.Tk):
         self.frames = {}
         for F in (StartPage,
                   CreateAffinityDiagram,
-                  ReasonForLabel, NotAValidLabel, DataWithLabel, GenerateGPTReason, NotAnIntegerError, IntegerOutsideRangeError,
+                  ReasonForLabel, WhichPass, NotAValidLabel, DataWithLabel, GenerateGPTReason, NotAnIntegerError, IntegerOutsideRangeError,
                   ChangeMergeThreshold,
                   MergeGroups, FinishedMerging,
                   PageTwo):
@@ -125,7 +125,7 @@ class StartPage(WorkFrame):
         label.pack(side="top", fill="x", pady=10)
 
         creatediagram_button = tk.Button(self, text="Create an Affinity Diagram", command=lambda: controller.show_frame("CreateAffinityDiagram"))
-        reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("ReasonForLabel"))
+        reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("WhichPass"))
         changemergethreshold_button = tk.Button(self, text="Change Merge Threshold", command=lambda: controller.show_frame("ChangeMergeThreshold"))
         regenlabels_button = tk.Button(self, text="Regenerate All Group Labels", command=lambda: controller.show_frame("CreateAffinityDiagram"))
         mergegroups_button = tk.Button(self, text="Merge Groups That Are Identical or Similar", command=lambda: controller.show_frame("MergeGroups"))
@@ -147,8 +147,10 @@ class ReasonForLabel(WorkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
 
-        label = tk.Label(self, text="Which label are we curious about?", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        self.pass_entry = None
+
+        self.label = tk.Label(self, text="", font=controller.title_font)
+        self.label.pack(side="top", fill="x", pady=10)
 
         self.label_entry = tk.Entry(self)
         self.label_entry.pack()
@@ -159,17 +161,73 @@ class ReasonForLabel(WorkFrame):
         start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
         start_page_button.pack()
 
+        # Scroll wheel implemented
+        self.canvas = Canvas(self, width=400, height=400)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        self.labels_frame = tk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window=self.labels_frame, anchor=tk.NW)
+
+        scrollbar = Scrollbar(self, orient=tk.VERTICAL, command=self.canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.canvas.configure(yscrollcommand=scrollbar.set)
+
+        self.canvas.bind("<MouseWheel>", self.on_mousewheel)
+
     """
     Grabs label entry after button press, retrieves all data w/ the label, and brings DataWithLabel frame to forefront
     """
     def label_submission(self):
-        entered_label = self.label_entry.get()
-        all_data = retrieve_data_with_label(entered_label)
-        print("Length: " + str(len(all_data)))
-        if len(all_data) > 0:
-            self.controller.show_frame("DataWithLabel", all_data, entered_label)
-        else:
-            self.controller.show_frame("NotAValidLabel")
+        entered_label = int(self.label_entry.get())
+        selected_label = self.all_unique_labels[entered_label - 1]
+        if 0 < entered_label <= len(self.all_unique_labels):
+            all_data = retrieve_data_with_label(self.all_unique_labels[entered_label - 1], self.adjusted_index)
+            if len(all_data) > 0:
+                self.controller.show_frame("DataWithLabel", all_data, selected_label)
+            else:
+                self.controller.show_frame("NotAValidLabel")
+
+    def update_status(self, pass_entry):
+        self.pass_entry = int(pass_entry)
+        self.label.configure(text="Which label are we curious about from pass " + pass_entry + "? Please input the corresponding integer.")
+
+        self.adjusted_index = num_columns() - self.pass_entry
+        self.all_unique_labels = column_labels(self.adjusted_index)
+
+        count = 1
+        for unique_label in self.all_unique_labels:
+            label = tk.Label(self.labels_frame, text=str(count) + ": " + unique_label, font=('Arial', 14), anchor='w', wraplength=952, justify='left')
+            label.pack(fill='both')
+            self.labels.append(label)
+            count += 1
+
+        self.canvas.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox(tk.ALL))
+
+    def on_mousewheel(self, event):
+        self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+class WhichPass(WorkFrame):
+    """Constructor of the class"""
+    def __init__(self, parent, controller):
+        super().__init__(parent, controller)
+
+        num_passes = num_columns()
+        label = tk.Label(self, text="There are " + str(num_passes) + " passes. Which pass do you want to look at?", font=controller.title_font)
+        label.pack(side="top", fill="x", pady=10)
+
+        self.pass_entry = tk.Entry(self)
+        self.pass_entry.pack()
+
+        pass_button = tk.Button(self, text="Submit Pass", command=self.pass_submission)
+        pass_button.pack()
+
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button.pack()
+
+    def pass_submission(self):
+        entered_pass = self.pass_entry.get()
+        self.controller.show_frame("ReasonForLabel", entered_pass)
 
 class NotAValidLabel(WorkFrame):
     def __init__(self, parent, controller):
