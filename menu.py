@@ -389,8 +389,8 @@ def num_columns(filename = "output.csv"):
             csv_reader = csv.reader(file)
             first_row = next(csv_reader)
             column_count = len(first_row)
-    column_count -= 1
-    return column_count
+            column_count -= 1
+            return column_count
 
 # # Returns all unique labels from a given column number
 def column_labels(column_num, filename = "output.csv"):
@@ -402,10 +402,6 @@ def column_labels(column_num, filename = "output.csv"):
             if len(row) > column_num:
                 entry = row[column_num]
                 unique_entries.add(entry)
-
-    print(f'Unique entries in column {column_num}:')
-    for entry in unique_entries:
-        print(entry)
 
     unique_entries = list(unique_entries)
 
