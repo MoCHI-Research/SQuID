@@ -124,11 +124,12 @@ class StartPage(WorkFrame):
         label = tk.Label(self, text="SQuID Interface", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        creatediagram_button = tk.Button(self, text="Create an Affinity Diagram", command=lambda: controller.show_frame("CreateAffinityDiagram"))
-        reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("WhichPass"))
-        changemergethreshold_button = tk.Button(self, text="Change Merge Threshold", command=lambda: controller.show_frame("ChangeMergeThreshold"))
+        creatediagram_button = tk.Button(self, text="Create an Affinity Diagram", command=lambda: controller.show_frame("CreateAffinityDiagram"), width = 20)
+        reasonforlabel_button = tk.Button(self, text="Generate a Reason for a Label", command=lambda: controller.show_frame("WhichPass"), width = 20)
+        changemergethreshold_button = tk.Button(self, text="Change Merge Threshold", command=lambda: controller.show_frame("ChangeMergeThreshold"), width = 20)
         #regenlabels_button = tk.Button(self, text="Regenerate All Group Labels", command=lambda: controller.show_frame("CreateAffinityDiagram"))
         #mergegroups_button = tk.Button(self, text="Merge Groups That Are Identical or Similar", command=lambda: controller.show_frame("MergeGroups"))
+
 
         creatediagram_button.pack()
         reasonforlabel_button.pack()
@@ -155,10 +156,10 @@ class ReasonForLabel(WorkFrame):
         self.label_entry = tk.Entry(self)
         self.label_entry.pack()
 
-        label_button = tk.Button(self, text="Submit Label", command=self.label_submission)
+        label_button = tk.Button(self, text="Submit Label", command=self.label_submission, width = 20)
         label_button.pack()
 
-        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"), width = 20)
         start_page_button.pack()
 
         # Scroll wheel implemented
@@ -219,10 +220,10 @@ class WhichPass(WorkFrame):
         self.pass_entry = tk.Entry(self)
         self.pass_entry.pack()
 
-        pass_button = tk.Button(self, text="Submit Pass", command=self.pass_submission)
+        pass_button = tk.Button(self, text="Submit Pass", command=self.pass_submission, width = 20)
         pass_button.pack()
 
-        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"), width = 20)
         start_page_button.pack()
 
     def pass_submission(self):
@@ -239,9 +240,9 @@ class NotAValidLabel(WorkFrame):
         message_label = tk.Label(self, text="The label you entered is not a valid label. Please go back and try again.")
         message_label.pack()
 
-        start_page_button = tk.Button(self, text="Re-Enter a Label", command = lambda: self.controller.show_frame("ReasonForLabel"))
+        start_page_button = tk.Button(self, text="Re-Enter a Label", command = lambda: self.controller.show_frame("ReasonForLabel"), width = 20)
         start_page_button.pack()
-        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"), width = 20)
         start_page_button.pack()
 
 
@@ -266,10 +267,10 @@ class DataWithLabel(WorkFrame):
         self.data_num = tk.Entry(self)
         self.data_num.pack()
 
-        data_num_button = tk.Button(self, text="Submit Data Number", command=self.submit_data_number)
+        data_num_button = tk.Button(self, text="Submit Data Number", command=self.submit_data_number, width = 20)
         data_num_button.pack()
 
-        start_page_button = tk.Button(self, text="Go Back to Start Page", command=lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Go Back to Start Page", command=lambda: self.controller.show_frame("StartPage"), width = 20)
         start_page_button.pack()
 
         # Scroll wheel implemented
@@ -333,10 +334,10 @@ class NotAnIntegerError(WorkFrame):
         error_label = tk.Label(self, text="The entry you entered was not an integer. Please go back and enter an appropriate integer.", font=controller.text_font)
         error_label.pack(side="top", fill="x", pady=10)
 
-        button = tk.Button(self, text="ReEnter an Integer", command = lambda: controller.show_frame("DataWithLabel"))
+        button = tk.Button(self, text="ReEnter an Integer", command = lambda: controller.show_frame("DataWithLabel"), width = 20)
         button.pack()
 
-        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
+        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"), width = 20)
         button.pack()
 
 class IntegerOutsideRangeError(WorkFrame):
@@ -355,10 +356,10 @@ class IntegerOutsideRangeError(WorkFrame):
         error_label = tk.Label(self, text="The integer you entered was not an available data number. Please go back and enter an appropriate integer.", font=controller.text_font)
         error_label.pack(side="top", fill="x", pady=10)
 
-        button = tk.Button(self, text="ReEnter an Integer", command = lambda: controller.show_frame("DataWithLabel"))
+        button = tk.Button(self, text="ReEnter an Integer", command = lambda: controller.show_frame("DataWithLabel"), width = 20)
         button.pack()
 
-        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
+        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"), width = 20)
         button.pack()
 
 """
@@ -378,7 +379,7 @@ class GenerateGPTReason(WorkFrame):
         self.this_frame = tk.Frame(self)
         self.this_frame.pack()
 
-        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"), width = 20)
         start_page_button.pack()
 
     """
@@ -416,16 +417,22 @@ class ChangeMergeThreshold(WorkFrame):
         prompt_label = tk.Label(self, text="Input a valid decimal value between 0 and 1, then press the 'Change threshold' button")
         prompt_label.pack()
 
+        value_explanation = tk.Label(self, text="A value closer to 0 will be more willing to merge groups. A value closer to 1 will be less likely to merge groups.")
+        value_explanation.pack()
+
+        reccomendation = tk.Label(self, text="We reccomend entering a value between 0.85 and 0.95 for best results.")
+        reccomendation.pack()
+
         self.threshold_entry = tk.Entry(self)
         self.threshold_entry.pack()
 
         self.status = tk.Label(self, text="")
         self.status.pack()
 
-        update_button = tk.Button(self, text="Change Threshold",command=self.update_threshold)
+        update_button = tk.Button(self, text="Change Threshold",command=self.update_threshold, width = 20)
         update_button.pack()
 
-        startpage_button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"))
+        startpage_button = tk.Button(self, text="Start Page", command=lambda: controller.show_frame("StartPage"), width = 20)
         startpage_button.pack()
 
     """Updates the merge_threshold variable"""
@@ -458,10 +465,10 @@ class MergeGroups(WorkFrame):
         label = tk.Label(self, text="Select a File to Merge Groups From", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        select_button = tk.Button(self, text="Select File", command=self.select_file_to_merge)
+        select_button = tk.Button(self, text="Select File", command=self.select_file_to_merge, width = 20)
         select_button.pack(pady=10)
 
-        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"))
+        start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"), width = 20)
         start_page_button.pack()
 
     """
@@ -491,7 +498,7 @@ class FinishedMerging(WorkFrame):
         label = tk.Label(self, text="Finished Merging Groups", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
+        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"), width = 20)
         button.pack()
 
 
@@ -511,19 +518,19 @@ class CreateAffinityDiagram(WorkFrame):
         hint_label = tk.Label(self, text = "Please select a csv file:", font = controller.text_font)
         hint_label.pack()
 
-        select_file_button = tk.Button(self, text = "Select a File", command = self.select_file_to_group)
+        select_file_button = tk.Button(self, text = "Select a File", command = self.select_file_to_group, width = 20)
         select_file_button.pack()
 
         self.file_status_box = tk.Label(self, text = "No file uploaded yet", font = controller.text_font)
         self.file_status_box.pack()
 
-        diagram_button = tk.Button(self, text = "Create affinity diagram", command = lambda: initialize_affinity_diagram(self.file_path, self.controller.merge_threshold))
+        diagram_button = tk.Button(self, text = "Create affinity diagram", command = lambda: initialize_affinity_diagram(self.file_path, self.controller.merge_threshold), width = 20)
         diagram_button.pack()
 
-        save_button = tk.Button(self, text = "Save result as", command = self.save_result)
+        save_button = tk.Button(self, text = "Save result as", command = self.save_result, width = 20)
         save_button.pack()
 
-        startpage_button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
+        startpage_button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"), width = 20)
         startpage_button.pack()
 
     """
@@ -571,10 +578,10 @@ class PageTwo(WorkFrame):
         label = tk.Label(self, text="This is page 2", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)
 
-        button = tk.Button(self, text="Go to the start page", command = lambda: controller.show_frame("StartPage"))
+        button = tk.Button(self, text="Go to the start page", command = lambda: controller.show_frame("StartPage"), width = 20)
         button.pack()
 
-        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"))
+        button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"), width = 20)
         button.pack()
 
 
