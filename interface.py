@@ -64,8 +64,9 @@ class SampleApp(tk.Tk):
     """
     def show_frame(self, page_name, *args):
         frame = self.frames[page_name]
-        frame.tkraise()
         frame.update_status(*args)
+        frame.tkraise()
+        
 
     """
     Pop up a message box from a frame
@@ -213,18 +214,22 @@ class WhichPass(WorkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent, controller)
 
-        num_passes = num_columns()
-        label = tk.Label(self, text="There are " + str(num_passes) + " passes. Which pass do you want to look at?", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        
+        self.label = tk.Label(self, text="There is currently no affinity diagram. Please first create an affinity diagram.", font = self.controller.title_font)
+        self.label.pack(side="top", fill="x", pady=10)
 
         self.pass_entry = tk.Entry(self)
         self.pass_entry.pack()
 
-        pass_button = tk.Button(self, text="Submit Pass", command=self.pass_submission, width = 20)
-        pass_button.pack()
+        self.pass_button = tk.Button(self, text="Submit Pass", command=self.pass_submission, width = 20)
+        self.pass_button.pack()
 
-        start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"), width = 20)
-        start_page_button.pack()
+        self.start_page_button = tk.Button(self, text="Go Back to Start Page", command = lambda: self.controller.show_frame("StartPage"), width = 20)
+        self.start_page_button.pack()
+
+    def update_status(self):
+        num_passes = num_columns()
+        self.label.configure(text = "There are currently " + str(num_passes) + " passes. Which pass do you want to look at?")
 
     def pass_submission(self):
         entered_pass = self.pass_entry.get()
@@ -420,8 +425,8 @@ class ChangeMergeThreshold(WorkFrame):
         value_explanation = tk.Label(self, text="A value closer to 0 will be more willing to merge groups. A value closer to 1 will be less likely to merge groups.")
         value_explanation.pack()
 
-        reccomendation = tk.Label(self, text="We reccomend entering a value between 0.85 and 0.95 for best results.")
-        reccomendation.pack()
+        recommendation = tk.Label(self, text="We recommend a value of 0.91 for best results; any threshold between 0.85 and 0.95 can generate reasonable results.")
+        recommendation.pack()
 
         self.threshold_entry = tk.Entry(self)
         self.threshold_entry.pack()

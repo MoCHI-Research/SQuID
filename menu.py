@@ -283,7 +283,10 @@ def datapoint_hierarchy(first_pass_completed, merge_threshold):
             if row[0] not in unique_labels and row[0] != 'Group' and row[0] != '':
                 unique_labels.append(row[0])
 
-    #print(unique_labels)
+    #print("Labels:", unique_labels)
+    valid_label_num = len(unique_labels)
+    if "Not Grouped" in unique_labels:
+        valid_label_num -= 1
 
     # Checks if the first pass has been completed or not
     # If it hasn't, then that means unique_labels will not contain any duplicate information (not guaranteed, assumption)
@@ -293,7 +296,7 @@ def datapoint_hierarchy(first_pass_completed, merge_threshold):
     # We check every label that was previously assigned.
     # If there exists a duplicate label in unique_labels that appears as an already assigned label (excluding 'Not Grouped')
     # Then we return. Else, run the next hierarchy level
-    elif len(unique_labels) > 1:
+    elif valid_label_num > 1:
         with open(file, newline='') as f:
             reader = csv.reader(f)
             for row in reader:
@@ -341,7 +344,7 @@ def start_affinity_diagram(file, merge_threshold, list_of_data = None, hierarchy
     # default file_name is output.csv
     # Starts creating the hierarchy of labels
     datapoint_hierarchy(first_pass_completed, merge_threshold)
-    print("Job's done.")
+    
 
 """
 Initializes the affinity diagramming process by first removing then
@@ -352,6 +355,22 @@ def initialize_affinity_diagram(file, merge_threshold):
         os.remove('output.csv')
         print("'output.csv' deleted successfully.")
     start_affinity_diagram(file, merge_threshold, list_of_data = [])
+    
+    #Add header to the file
+    with open('output.csv',newline='') as f:
+        r = csv.reader(f)
+        data = [line for line in r]
+    if data: 
+        with open('output.csv','w',newline='') as f:
+            w = csv.writer(f)
+            header = []
+            for i in range(len(data[0]) - 1, 0, -1):
+                header.append("Pass" + str(i))
+            header.append("Data Item")
+            w.writerow(header)
+            w.writerows(data)
+
+        print("Job's done.")
 
 
 
