@@ -417,6 +417,7 @@ def column_labels(column_num, filename = "output.csv"):
 
     with open(filename, 'r', newline='') as file:
         csv_reader = csv.reader(file)
+        next(csv_reader)
         for row in csv_reader:
             if len(row) > column_num:
                 entry = row[column_num]
