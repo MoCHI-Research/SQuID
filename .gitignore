@@ -3,3 +3,5 @@
 /labels_merged.csv
 /__pycache__
 /.DS_Store
+intermediate/embeddings.csv
+intermediate/similarity.csv

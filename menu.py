@@ -60,48 +60,6 @@ def show_time_elapsed():
             final_time_elapsed = elapsed_time
 
 """
-Convert the gpt responses into a CSV file
-Parameters:
-    input_string(string): The GPT response that will be converted into a CSV file
-Returns:
-    output.csv: the CSV file that contains the converted responses
-"""
-def convert_gpt_to_csv(input_string):
-    output_filename = 'output.csv'
-
-    lines = input_string.split('\n')
-
-    group_name = ''
-    group_data = []
-    csv_data = []
-
-    # Parse the lines
-    for line in lines:
-        line = line.strip()
-        if line.startswith('Group'):
-            if group_name:
-                csv_data.append((group_name, group_data))
-            group_name = line.split(':', 1)[1].strip()
-            group_data = []
-        elif line.startswith('-'):
-            group_data.append(line[2:])  # Skip the leading "- "
-
-    if group_name and group_data:  # Add the last group
-        csv_data.append((group_name, group_data))
-
-    file_exists = os.path.exists(output_filename)
-
-    # Write to CSV
-    with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
-        writer = csv.writer(file)
-        #if not file_exists:  # Write the header only if the file didn't exist
-        #    writer.writerow(['Group', 'Items'])
-        for data in csv_data:
-            group = data[0]
-            for item in data[1]:
-                writer.writerow([group, item])
-
-"""
 Convert the gpt responses, with numbers representing data points, into a CSV file
 Parameters:
     gpt_response(string): The GPT response that includes data points as numbers
@@ -159,6 +117,9 @@ def convert_num_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
     # This isn't where the lag I mentioned in the Discord appears. The lag appears
     # during the first pass, before the hierarchy is created. This code
     # should only run when hierarchy == True
+    # print("CSV_DATA: ", csv_data[0],"\n")
+    # print("PRE-PREV_DATA: ", prev_data,"\n")
+    # print("----------------------------------------------------------------------------\n")
     if file_exists and len(prev_data) > 0:
         # This is where the appending prev_data to the csv list will happen
         for data in csv_data:
@@ -167,10 +128,17 @@ def convert_num_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
                     if data[1][i] == prev_data[j][0]:
                         prev_data[j].insert(0,data[0])
 
-        print("PREV_DATA:")
-        print()
-        for p in prev_data:
-            print(p)
+    # Testing for dictionary use
+    # if file_exists and len(prev_data) > 0:
+    #     prev_data_dict = {item[0]: item for item in prev_data}
+    #     for data in csv_data:
+    #         for i in range(len(data[1])):
+    #             if data[1][i] in prev_data_dict:
+    #                 prev_data_dict[data[1][i]].insert(0, data[0])
+    #     print("PREV-DICT: ", prev_data_dict,"\n")
+    #     prev_data = list(prev_data_dict.values())
+
+        # print("PREV_DATA:", prev_data)
         # Writes to the output file with the new column
         with open(output_filename, 'w', newline='') as file:
             writer=csv.writer(file)
@@ -195,10 +163,8 @@ def convert_num_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
                     writer.writerow([group, item])
             file.close()
 
-
-
 """
-Asks GPT for a response for the data batches then calls 'convert_gpt_to_csv' to compile the responses into a CSV file
+Asks GPT for a response for the data batches then calls 'convert_num_to_csv' to compile the responses into a CSV file
 Parameters:
     list_of_data(list): the list of each data point
     completed_gpt_requests(int): the number of batches completed
@@ -370,7 +336,7 @@ def initialize_affinity_diagram(file, merge_threshold):
             w.writerow(header)
             w.writerows(data)
 
-        print("Job's done.")
+    print("Job's done.")
 
 
 
