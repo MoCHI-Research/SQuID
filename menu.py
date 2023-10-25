@@ -365,7 +365,7 @@ def initialize_affinity_diagram(file, merge_threshold):
             w = csv.writer(f)
             header = []
             for i in range(len(data[0]) - 1, 0, -1):
-                header.append("Pass" + str(i))
+                header.append("Pass " + str(i))
             header.append("Data Item")
             w.writerow(header)
             w.writerows(data)

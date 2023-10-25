@@ -190,6 +190,8 @@ class ReasonForLabel(WorkFrame):
                 self.controller.show_frame("NotAValidLabel")
 
     def update_status(self, pass_entry):
+        self.clear_screen()
+
         self.pass_entry = int(pass_entry)
         self.label.configure(text="Which label are we curious about from pass " + pass_entry + "? Please input the corresponding integer.")
 
@@ -306,6 +308,7 @@ class DataWithLabel(WorkFrame):
         self.entered_label = label
         self.clear_screen()
         count = 1
+
         for element in data:
             label = tk.Label(self.labels_frame, text=str(count) + ": " + element[1], font=('Arial', 14), anchor='w', wraplength=952, justify='left')
             label.pack(fill='both')
@@ -381,8 +384,8 @@ class GenerateGPTReason(WorkFrame):
         heading = tk.Label(self, text="GPT Response/Reason: ", font=controller.title_font)
         heading.pack()
 
-        self.this_frame = tk.Frame(self)
-        self.this_frame.pack()
+        #self.this_frame = tk.Frame(self)
+        #self.this_frame.pack()
 
         start_page_button = tk.Button(self, text="Start Page", command = lambda: self.controller.show_frame("StartPage"), width = 20)
         start_page_button.pack()
@@ -397,7 +400,7 @@ class GenerateGPTReason(WorkFrame):
     def update_status(self, all_data, label, data_index):
         self.clear_screen()
         gpt_response = generate_reason(all_data, data_index, label)
-        display_gpt_response = tk.Label(self.this_frame, text=gpt_response, font=('Arial', 14), wraplength=600)
+        display_gpt_response = tk.Label(self, text=gpt_response, font=('Arial', 14), wraplength=600)
         display_gpt_response.pack(anchor='center')
         self.labels.append(display_gpt_response)
 
