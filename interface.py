@@ -593,8 +593,6 @@ class PageTwo(WorkFrame):
         button.pack()
 
 
-
-
-if __name__ == "__main__":
+def start_interface():
     app = SampleApp()
     app.mainloop()
