@@ -591,8 +591,3 @@ class PageTwo(WorkFrame):
 
         button = tk.Button(self, text="Start Page", command = lambda: controller.show_frame("StartPage"), width = 20)
         button.pack()
-
-
-def start_interface():
-    app = SampleApp()
-    app.mainloop()

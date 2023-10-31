@@ -7,7 +7,6 @@ import time
 import re
 import math
 import threading
-from interface import start_interface
 
 
 # GLOBAL VARIABLES
@@ -370,10 +369,3 @@ def change_merge_threshold(merge_threshold):
 
     print("Your label merge threshold is now", merge_threshold)
     return merge_threshold
-
-
-def main():
-    start_interface()
-
-if __name__ == "__main__":
-    main()
