@@ -41,7 +41,7 @@ def csv_to_dict(filename = "output.csv"):
 
     with open(filename, newline='') as f:
         reader = csv.reader(f)
-        next(reader)
+        #next(reader)
         for row in reader:
             label = row[0]
             if label in result_dict:
