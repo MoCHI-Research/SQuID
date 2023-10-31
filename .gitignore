@@ -5,3 +5,4 @@
 /.DS_Store
 intermediate/embeddings.csv
 intermediate/similarity.csv
+/setup.py
