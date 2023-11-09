@@ -1,10 +1,14 @@
 import openai
 import os
+import sys
 from dotenv import load_dotenv
 import json
 from time import sleep
 
-GPT_TEMPLATES = json.load(open('prompts.json'))
+os.environ["OPENAI_API_KEY"] = "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"
+
+JSON_FILE = open(os.path.join(os.path.dirname(sys.argv[0]), 'prompts.json'))
+GPT_TEMPLATES = json.load(JSON_FILE)
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_API_KEY')
 

@@ -1,5 +1,7 @@
 import tiktoken
 import csv
+import sys
+import os
 
 """
 Given a sentence or phrase, return the number of tokens in it
@@ -24,6 +26,8 @@ Returns(list of ints):
     A list that contains the numbers of tokens in each data point in the given data set
 """
 def count_data_tokens(dataset_filename, model_to_use = "gpt-3.5-turbo-16k"):
+    dataset_filename = os.path.join(os.path.dirname(sys.argv[0]), dataset_filename)
+
     count_list = []
     encoding = tiktoken.encoding_for_model(model_to_use)
 

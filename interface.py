@@ -559,6 +559,7 @@ class CreateAffinityDiagram(WorkFrame):
         original_path: the path by which one grabs the original file to save to their specified place
     """
     def save_result(self, original_path = "output.csv"):
+        original_path = os.path.join(os.path.dirname(sys.argv[0]), original_path)
         file_path = filedialog.asksaveasfilename(initialfile = "output.csv")
         with open(original_path, 'r') as old_file, open(file_path, 'w') as new_file:
             new_file.write(old_file.read())

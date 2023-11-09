@@ -3,6 +3,7 @@ import os
 import networkx
 import pandas
 import csv
+import sys
 from dotenv import load_dotenv
 from openai.embeddings_utils import get_embedding, cosine_similarity
 from gptconnection import openai_sys_chatcompletion
@@ -38,6 +39,7 @@ Returns(dict):
 """
 def csv_to_dict(filename = "output.csv"):
     result_dict = {}
+    filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
 
     with open(filename, newline='') as f:
         reader = csv.reader(f)
@@ -62,6 +64,8 @@ Returns(pandas.DataFrame):
     the dataframe that saves all embeddings
 """
 def get_label_embeddings(text_list, model_name = "text-embedding-ada-002", output_file = INTERMEDIATE_PATH + "embeddings.csv"):
+    output_file = os.path.join(os.path.dirname(sys.argv[0]), output_file)
+
     embedding_frame = pandas.DataFrame(columns=["text"])
     embedding_frame["text"] = text_list
 
@@ -82,6 +86,7 @@ Returns(pandas.DataFrame):
 """
 def get_similarity(embedding_frame, output_file = INTERMEDIATE_PATH + "similarity.csv"):
     pairs = []
+    output_file = os.path.join(os.path.dirname(sys.argv[0]), output_file)
 
     for i, row1 in embedding_frame.iterrows():
         for j, row2 in embedding_frame.iterrows():
@@ -124,6 +129,7 @@ Returns(networkx.Graph):
 """
 def graph_similarity(similarity_file = INTERMEDIATE_PATH + "similarity.csv", similarity_threshold = 0.91):
     result_graph = networkx.Graph()
+    similarity_file = os.path.join(os.path.dirname(sys.argv[0]), similarity_file)
 
     with open(similarity_file) as csvfile:
         readcsv = csv.reader(csvfile, delimiter=',')
@@ -150,6 +156,7 @@ Returns(pandas.DataFrame):
     the data frame that contains all groups
 """
 def group_labels(current_graph, output_file = INTERMEDIATE_PATH + "grouped_labels.csv", iteration_num = 2):
+    output_file = os.path.join(os.path.dirname(sys.argv[0]), output_file)
 
     communities_generator = networkx.algorithms.community.girvan_newman(current_graph)
     current_communities = []
@@ -196,6 +203,9 @@ Returns(pandas.DataFrame):
     the dataframe that contains similarities of all pairs
 """
 def read_generate_similarity(input_filename = INTERMEDIATE_PATH + "embeddings.csv", output_filename = INTERMEDIATE_PATH + "similarity.csv"):
+    input_file = os.path.join(os.path.dirname(sys.argv[0]), input_file)
+    output_file = os.path.join(os.path.dirname(sys.argv[0]), output_file)
+    
     embedding_frame = pandas.read_csv(input_filename)
     for _, current_row in embedding_frame.iterrows():
         current_row['embedding'] = convert_text_to_list(current_row['embedding'])
@@ -253,8 +263,11 @@ Parameters:
     new_embedding(bool): True if new similarity needs to be created; False if using exsiting similarities
 """
 def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "labels_merged.csv", new_embedding = True, new_similarity = True):
+
     group_dict = csv_to_dict(original_file)
     label_list = [label for label in group_dict]
+
+    output_file = os.path.join(os.path.dirname(sys.argv[0]), output_file)
 
     if original_file == None:
         return False

@@ -6,6 +6,7 @@ import os
 import time
 import re
 import math
+import sys
 import threading
 
 
@@ -55,7 +56,7 @@ def convert_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
     Returns:
         output.csv: the CSV file that contains the converted responses
     """
-    output_filename = 'output.csv'
+    output_filename = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
     group_name = ''
     group_data = []
     csv_data = []
@@ -159,7 +160,7 @@ def initialize_gpt_responses(num_of_gpt_requests, list_of_data, completed_gpt_re
     start = 0
     end = batch_size
     prev_data = []
-    output_filename = 'output.csv'
+    output_filename = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
 
     # If the output_file exists and if we are creating the hierarchy (hierarchy == True), we will save the previous data into prev_data
     # so that we can write the new labels into the associated row it belongs to
@@ -184,7 +185,7 @@ def unique_labels(first_pass_completed, merge_threshold):
             put_in_list
     3. Run GPT on it
     """
-    file = 'output.csv'
+    file = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
 
     # First, grab all unique label names
     # Then check if the first element of a col is already in unique_labels
@@ -224,6 +225,7 @@ def affinity_diagram(file, merge_threshold, list_of_data = None, hierarchy = Fal
     Returns:
         None
     """
+
     if list_of_data == None:
         list_of_data = []
     print("Generating GPT response . . .\n")
@@ -261,17 +263,20 @@ def initialize_affinity_diagram(file, merge_threshold):
     Initializes the affinity diagramming process by first removing then
     creating an output.csv file
     """ 
-    if os.path.exists('output.csv'):
-        os.remove('output.csv')
+
+    output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
+
+    if os.path.exists(output_file):
+        os.remove(output_file)
         print("'output.csv' deleted successfully.")
     affinity_diagram(file, merge_threshold, list_of_data = [])
     
     #Add header to the file
-    with open('output.csv',newline='') as f:
+    with open(output_file,newline='') as f:
         r = csv.reader(f)
         data = [line for line in r]
     if data: 
-        with open('output.csv','w',newline='') as f:
+        with open(output_file, 'w', newline='') as f:
             w = csv.writer(f)
             header = []
             for i in range(len(data[0]) - 1, 0, -1):
@@ -288,6 +293,7 @@ def initialize_affinity_diagram(file, merge_threshold):
 
 # # Retrieves all data with the label_to_search
 def retrieve_data_with_label(label_to_search, column_num, filename = "output.csv"):
+    filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
     if not os.path.isfile(filename):
         print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
     else:
@@ -305,6 +311,7 @@ def retrieve_data_with_label(label_to_search, column_num, filename = "output.csv
 
 # # Returns how many passes there are by counting number of columns in output.csv
 def num_columns(filename = "output.csv"):
+    filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
     if not os.path.isfile(filename):
         print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
     else:
@@ -318,6 +325,7 @@ def num_columns(filename = "output.csv"):
 # # Returns all unique labels from a given column number
 def column_labels(column_num, filename = "output.csv"):
     unique_entries = set()
+    filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
 
     with open(filename, 'r', newline='') as file:
         csv_reader = csv.reader(file)
