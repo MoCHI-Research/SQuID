@@ -4,7 +4,7 @@ import sys
 import subprocess
 
 def main():
-    package_list = ["pandas", "matplotlib", "plotly", "python-dotenv", "customtkinter", "scikit-learn", "networkx", "openai"]
+    package_list = ["pandas", "matplotlib", "plotly", "python-dotenv", "customtkinter", "scikit-learn", "networkx", "openai==0.28.1"]
     for package_name in package_list:
         subprocess.check_call([sys.executable, '-m', 'pip', 'install', package_name])
 
