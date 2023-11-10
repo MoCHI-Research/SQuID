@@ -7,9 +7,16 @@ This system aims to help with qualitative data analysis, or more specifically, m
 The basic idea of SQuID is to give the LLM a batch of data within its token limit at a time, asking the model to group and label the data. After all individual data points in a dataset are labeled, the system uses the Girvan-Newman algorithm to find similar labels, and merges the groups with similar labels. This would resolve the token-limit issue as well as avoid having an unnecessary large number of groups, which is not helpful in an affinity diagram.
 
 # Dependencies
-SQuID is written mainly in Python and requires the following Python libraries. Built-in Python packages are not in this list.
+**Note that currently SQuID only works with Python 3.11(and below) and openai 0.28.1(and below). We will work to keep SQuID up-to-date soon**
+SQuID is written mainly in Python. With Python 3.11 on your computer, you can easily install all the dependencies by running python on install_dependency.py. 
 
-- openai
+`python install_dependency.py`
+or
+`python3 install_dependency.py`
+
+The specific packages required are:
+
+- openai==0.28.1
 - networkx
 - pandas
 - matplotlib
@@ -18,12 +25,20 @@ SQuID is written mainly in Python and requires the following Python libraries. B
 - customtkinter
 - scikit-learn
 
-We are planning on writing a script that helps the user install all these packages at once. In addition, for future developers please feel free to add to this list if you find a required library that we have missed in this list.
+# To Run SQuID
+To run SQuID, run Python on main.py. A GUI interface will then show up.
 
-# Other prerequisites
-Because SQuID uses the API service provided by OpenAI, you need to have access to OpenAI APIs in order to use the system.
+`python main.py`
+or
+`python3 main.py`
 
-With a registered OpenAI account, go to https://platform.openai.com/account/api-keys to create a secret key for you or your organization.
-Create a file in the SQuID folder named ".env", which sets up an environment for the program. In the file, you should enter "OPENAI_API_KEY = " followed by your OpenAI secret key. You might need to create the file using a text editor, if you are on MacOS.
+# Data Format
+To run SQuID, your data should be in a csv file, with each piece of data on its own line.
+We have formatted sample datasets in the "datasets" directory. Your data should be in the same format.
 
-With these prerequisites set up, you should be good to go for running SQuID to analyze data!
+# Running SQuID
+Although we have developed a primitive GUI for SQuID, we have not adapted everything to GUI. While you are working on SQuID, the program might freeze or spend long time responding at points. This means that we are trying to get results from OpeanAI's API. If you ran SQuID through the terminal, as specified above, you can just refer to the terminal for progress information and updates.
+
+Thank you so much for using SQuID!
+
+
