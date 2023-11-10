@@ -8,7 +8,8 @@ The basic idea of SQuID is to give the LLM a batch of data within its token limi
 
 # Dependencies
 **Note that currently SQuID only works with Python 3.11(and below) and openai 0.28.1(and below). We will work to keep SQuID up-to-date soon**
-SQuID is written mainly in Python. With Python 3.11 on your computer, you can easily install all the dependencies by running python on install_dependency.py. 
+
+SQuID is written mainly in Python. **With Python 3.11 on your computer, you can easily install all the dependencies by running python on install_dependency.py.** 
 
 `python install_dependency.py`
 or
