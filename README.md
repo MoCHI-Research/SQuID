@@ -17,6 +17,7 @@ or
 
 The specific packages required are:
 
+- numpy
 - openai
 - networkx
 - pandas
