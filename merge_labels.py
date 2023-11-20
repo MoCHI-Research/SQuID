@@ -1,17 +1,49 @@
 import openai
+from openai import OpenAI
 import os
 import networkx
 import pandas
 import csv
 import sys
+from numpy import dot
+from numpy.linalg import norm
 from dotenv import load_dotenv
-from openai.embeddings_utils import get_embedding, cosine_similarity
+#from openai.embeddings_utils import get_embedding, cosine_similarity
 from gptconnection import openai_sys_chatcompletion
 
-load_dotenv()
-openai.api_key = os.getenv('OPENAI_API_KEY')
+#load_dotenv()
+#openai.api_key = os.getenv('OPENAI_API_KEY')
+
+os.environ["OPENAI_API_KEY"] = "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"
+
+client = OpenAI(
+    organization='org-5oRL8cS6ihNsXp8BaKovvGup',
+)
 
 INTERMEDIATE_PATH = "intermediate/"
+
+
+"""
+Get the OpenAI embeddings of a sentence
+Parameters:
+
+"""
+def get_embedding(sent, engine = "text-embedding-ada-002"):
+    response = client.embeddings.create(
+        input= sent,
+        model= engine
+    )
+
+    return response.data[0].embedding
+
+
+"""
+Given two vectors, return their cosine similarity.
+Parameters:
+    a & b: The vectors whose cosine similarity is calculated and returned
+"""
+def cosine_similarity(a, b):
+    return dot(a, b)/(norm(a)*norm(b))
 
 """
 Takes two sentences as input, report and return the cosine similarity of those sentences'embeddings
@@ -301,7 +333,9 @@ def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "la
 Controls operation of the program
 """
 def main():
-    merge_labels(new_embedding=False, new_similarity=False)
+    #merge_labels(new_embedding=False, new_similarity=False)
+    get_embedding("Can you tell me a joke?", "text-embedding-ada-002")
+
 
 if __name__ == "__main__":
     main()

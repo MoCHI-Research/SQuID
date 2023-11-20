@@ -1,46 +1,26 @@
 import openai
+from openai import OpenAI
 import os
 import sys
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import json
 from time import sleep
 
-os.environ["OPENAI_API_KEY"] = "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"
+
+# load_dotenv()
+# openai.api_key = os.getenv('OPENAI_API_KEY')
 
 JSON_FILE = open(os.path.join(os.path.dirname(sys.argv[0]), 'prompts.json'))
 GPT_TEMPLATES = json.load(JSON_FILE)
-load_dotenv()
-openai.api_key = os.getenv('OPENAI_API_KEY')
+
+os.environ["OPENAI_API_KEY"] = "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"
+
+client = OpenAI(
+    organization='org-5oRL8cS6ihNsXp8BaKovvGup',
+)
 
 ERROR_WAIT_TOGGLE = True
 ERROR_WAIT_TIME = 10 # Seconds
-
-"""
-Have an openai model respond to a user prompt with its completion feature
-Parameters:
-    user_message(string): The message user sends to openai model
-    model_name(string): Name of the model the user hopes to use
-    max_tokens(int): Max number of tokens to expect as output; none if using the default max token
-    temperature(float): from 0 to 2; the higher it is the more random the response gets
-Returns(string):
-    the message that the model gives back as response
-"""
-def openai_completion(user_message, model_name = "text-davinci-003", max_tokens = None, temperature = 0):
-    if max_tokens is None:
-        completion = openai.Completion.create(
-            model = model_name,
-            prompt = user_message,
-            temperature = temperature
-        )
-    else:
-        completion = openai.Completion.create(
-            model = model_name,
-            prompt = user_message,
-            max_tokens = max_tokens,
-            temperature = temperature
-        )
-
-    return completion.choices[0].text
 
 
 """
@@ -56,13 +36,13 @@ Returns(string):
 """
 def openai_chatcompletion(user_message, model_name = "gpt-4", max_tokens = None, temperature = 0):
     if max_tokens is None:
-        completion = openai.ChatCompletion.create(
+        completion = client.chat.completions.create(
             model = model_name,
             messages = [{"role": "user", "content": user_message}],
             temperature = temperature
         )
     else:  
-        completion = openai.ChatCompletion.create(
+        completion = client.chat.completions.create(
             model = model_name,
             messages = [{"role": "user", "content": user_message}],
             max_tokens = max_tokens,
@@ -87,41 +67,41 @@ def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-4", max_t
     sys_prompt = GPT_TEMPLATES[sys_key]
     try:
         if max_tokens is None:
-            completion = openai.ChatCompletion.create(
+            completion = client.chat.completions.create(
                 model = model_name,
                 messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user_message}],
                 temperature = temperature
             )
         else:  
-            completion = openai.ChatCompletion.create(
+            completion = client.chat.completions.create(
                 model = model_name,
                 messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user_message}],
                 max_tokens = max_tokens,
                 temperature = temperature
             )
         return completion.choices[0].message.content
-    except openai.error.APIError as e:
+    except openai.APIError as e:
         print(f'OpenAI API returned an API Error: {e}')
         if ERROR_WAIT_TOGGLE:
             print(f'Waiting for {ERROR_WAIT_TIME} seconds')
             sleep(ERROR_WAIT_TIME)
             print('Trying again')
         return None
-    except openai.error.Timeout as e:
+    except openai.Timeout as e:
         print(f'OpenAI API returned a Timeout Error: {e}')
         if ERROR_WAIT_TOGGLE:
             print(f'Waiting for {ERROR_WAIT_TIME} seconds')
             sleep(ERROR_WAIT_TIME)
             print('Trying again')
         return None
-    except openai.error.RateLimitError as e:
+    except openai.RateLimitError as e:
         print(f"OpenAI API request exceeded rate limit: {e}")
         if ERROR_WAIT_TOGGLE:
             print(f'Waiting for {ERROR_WAIT_TIME} seconds')
             sleep(ERROR_WAIT_TIME)
             print('Trying again')
         return None
-    except openai.error.APIConnectionError as e:
+    except openai.APIConnectionError as e:
         print(f"Failed to connect to OpenAI API: {e}")
         pass
 
@@ -149,7 +129,7 @@ def openai_example_chatcompletion(sys_key, eg_input_key, eg_output_key, user_mes
     example_assistant= GPT_TEMPLATES[eg_output_key]
     try:
         if max_tokens is None:
-            completion = openai.ChatCompletion.create(
+            completion = client.chat.completions.create(
                 model = model_name,
                 messages = [{"role": "system", "content": sys_prompt}, 
                             {"role": "user", "content": example_user}, 
@@ -158,7 +138,7 @@ def openai_example_chatcompletion(sys_key, eg_input_key, eg_output_key, user_mes
                 temperature = temperature
             )
         else:  
-            completion = openai.ChatCompletion.create(
+            completion = client.chat.completions.create(
                 model = model_name,
                 messages = [{"role": "system", "content": sys_prompt}, 
                             {"role": "user", "content": example_user}, 
@@ -168,28 +148,28 @@ def openai_example_chatcompletion(sys_key, eg_input_key, eg_output_key, user_mes
                 temperature = temperature
             )
         return completion.choices[0].message.content
-    except openai.error.APIError as e:
+    except openai.APIError as e:
         print(f'OpenAI API returned an API Error: {e}')
         if ERROR_WAIT_TOGGLE:
             print(f'Waiting for {ERROR_WAIT_TIME} seconds')
             sleep(ERROR_WAIT_TIME)
             print('Trying again')
         return None
-    except openai.error.Timeout as e:
+    except openai.Timeout as e:
         print(f'OpenAI API returned a Timeout Error: {e}')
         if ERROR_WAIT_TOGGLE:
             print(f'Waiting for {ERROR_WAIT_TIME} seconds')
             sleep(ERROR_WAIT_TIME)
             print('Trying again')
         return None
-    except openai.error.RateLimitError as e:
+    except openai.RateLimitError as e:
         print(f"OpenAI API request exceeded rate limit: {e}")
         if ERROR_WAIT_TOGGLE:
             print(f'Waiting for {ERROR_WAIT_TIME} seconds')
             sleep(ERROR_WAIT_TIME)
             print('Trying again')
         return None
-    except openai.error.APIConnectionError as e:
+    except openai.APIConnectionError as e:
         print(f"Failed to connect to OpenAI API: {e}")
         pass
 
