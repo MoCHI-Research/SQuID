@@ -3,8 +3,6 @@
 /labels_merged.csv
 /__pycache__
 /.DS_Store
-intermediate/embeddings.csv
-intermediate/similarity.csv
-intermediate/grouped_labels.csv
+intermediate/*
 /setup.py
 
