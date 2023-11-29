@@ -87,7 +87,7 @@ def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-4", max_t
             sleep(ERROR_WAIT_TIME)
             print('Trying again')
         return None
-    except openai.TimeoutError as e:
+    except openai.APITimeoutError as e:
         print(f'OpenAI API returned a Timeout Error: {e}')
         if ERROR_WAIT_TOGGLE:
             print(f'Waiting for {ERROR_WAIT_TIME} seconds')
@@ -155,7 +155,7 @@ def openai_example_chatcompletion(sys_key, eg_input_key, eg_output_key, user_mes
             sleep(ERROR_WAIT_TIME)
             print('Trying again')
         return None
-    except openai.TimeoutError as e:
+    except openai.APITimeoutError as e:
         print(f'OpenAI API returned a Timeout Error: {e}')
         if ERROR_WAIT_TOGGLE:
             print(f'Waiting for {ERROR_WAIT_TIME} seconds')
