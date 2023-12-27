@@ -8,6 +8,7 @@ import re
 import math
 import sys
 import threading
+import asyncio
 
 
 # GLOBAL VARIABLES
@@ -93,7 +94,7 @@ def convert_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
     # If file exists, then that means we are dealing with a layer count > 1
     # First: Save all of the previous data into a list
     # Then: Create a new list that appends the information from the previous data with the new label associated with that row
-    # Else: This is a new file, so initialize the CSV file 
+    # Else: This is a new file, so initialize the CSV file
     if file_exists and len(prev_data) > 0:
         # This is where the appending prev_data to the csv list will happen
         for data in csv_data:
@@ -257,12 +258,12 @@ def affinity_diagram(file, merge_threshold, list_of_data = None, hierarchy = Fal
     # default file_name is output.csv
     # Starts creating the hierarchy of labels
     unique_labels(first_pass_completed, merge_threshold)
-    
+
 def initialize_affinity_diagram(file, merge_threshold):
     """
     Initializes the affinity diagramming process by first removing then
     creating an output.csv file
-    """ 
+    """
 
     output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
 
@@ -270,12 +271,12 @@ def initialize_affinity_diagram(file, merge_threshold):
         os.remove(output_file)
         print("'output.csv' deleted successfully.")
     affinity_diagram(file, merge_threshold, list_of_data = [])
-    
+
     #Add header to the file
-    with open(output_file,newline='') as f:
+    with open(output_file, newline='') as f:
         r = csv.reader(f)
         data = [line for line in r]
-    if data: 
+    if data:
         with open(output_file, 'w', newline='') as f:
             w = csv.writer(f)
             header = []
@@ -286,6 +287,272 @@ def initialize_affinity_diagram(file, merge_threshold):
             w.writerows(data)
 
     print("Job's done.")
+
+
+
+#----------------------------------------------------------------------#
+#                         New Diagramming Process                      # ------------------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------#
+
+# """
+# Diagramming process
+# """
+# def process_batch(file, merge_threshold):
+#     output_file = set_up_output_file()
+#     print("Given threshold: ", merge_threshold)
+#     with open(file, 'r', newline='') as csvfile:
+#             csv_reader = csv.reader(csvfile)
+#             for row in csv_reader:
+#                 print(row[0])
+
+"""
+Sets up an output file
+"""
+def set_output_file(delete=False):
+    output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
+    if delete and os.path.exists(output_file):
+        os.remove(output_file)
+
+    return output_file
+
+"""
+Checks if data exists in the file
+"""
+def existing_data(file):
+    with open(file, 'r', newline='') as file:
+            reader = csv.reader(file)
+            existing_data = list(reader)
+
+    if existing_data:
+        return True
+    else:
+        return False
+
+"""
+Adds headers to csv
+"""
+def add_headers_to_csv(file_path):
+    with open(file_path, 'r', newline='') as file:
+        reader = csv.reader(file)
+        data = list(reader)
+
+    num_columns = len(data[0])
+    headers = ["Data"]
+    headers += [f'Pass {i}' for i in range(1, num_columns)]
+
+    data.insert(0, headers)
+
+    with open(file_path, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerows(data)
+
+"""
+Saves accepted data to file (or writes orig data in
+first column if process has yet to began)
+"""
+def save_data(data, first_pass=False):
+    output_file = set_output_file()
+    if first_pass:
+        with open(output_file, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            for item in data:
+                writer.writerow([item])
+    else:
+        with open(output_file, mode='r') as file:
+            reader = csv.reader(file)
+            header = next(reader)
+            right_column_index = len(header) - 1
+            header_key = header[right_column_index]
+            header.append(data[header_key])
+
+            rows = []
+            for row in reader:
+                key = row[right_column_index]
+                row.append(data[key])
+                rows.append(row)
+
+        with open(output_file, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(header)
+            writer.writerows(rows)
+
+"""
+Writes accepted data to output file
+"""
+def write_tuples_to_file(data):
+    output_file = set_output_file()
+    if existing_data(output_file):
+        print("No existing data")
+    else:
+        print("There exists data")
+
+"""
+Determines size of batches
+"""
+def set_batch_size(data_size):
+    global SIZE_OF_BATCHES
+    if SIZE_OF_BATCHES > data_size:
+        batch_size = data_size
+    else:
+        batch_size = SIZE_OF_BATCHES
+    return batch_size
+
+"""
+Returns an array of all data items from csv
+"""
+def set_data_list(file):
+    list_of_data = []
+    with open(file, newline='') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if row:
+                list_of_data.append(row[0])
+
+    return list_of_data
+
+"""
+Processes a small subset of data items by prompting gpt
+"""
+def process_batch(gpt_template, user_input_string):
+    results = None
+    while results == None:
+        results = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
+    return results
+
+"""
+Returns a numbered list of given data as a string
+"""
+def numbered_data(data):
+    user_input_string = ""
+    current_data = ""
+    for num in range(len(data)):
+        current_data = str(num) + ". " + data[num] + "\n"
+        user_input_string += current_data
+    return user_input_string
+
+"""
+Processes raw gpt response for csv creation
+"""
+def process_results(results, batch):
+    batch_message = """
+    #----------------------------------------------------------------------#
+    #                         Batch In Progress                            #
+    #----------------------------------------------------------------------#
+    """
+    print(batch_message)
+    response_included = [False for _ in range(len(batch))]
+
+    formatted_data = format_results(results)
+    response_included = check_missing_data(len(batch), formatted_data, response_included)
+    formatted_data = adjust_data(formatted_data, response_included)
+    adjust_message = """
+    #----------------------------------------------------------------------#
+    #                         Adjusted Data                                #
+    #----------------------------------------------------------------------#
+    """
+    print(adjust_message)
+    print(formatted_data)
+    csv_data = indices_to_data(formatted_data, batch)
+    csv_message = """
+    #----------------------------------------------------------------------#
+    #                               CSV DATA                               #
+    #----------------------------------------------------------------------#
+    """
+    print(csv_message)
+    print(csv_data)
+    return csv_data
+
+"""
+Adds ungrouped data to the formatted_data
+"""
+def adjust_data(formatted_data, response_included):
+    if all(response_included):
+        return formatted_data
+    else:
+        not_grouped_indices = []
+        for i in range(len(response_included)):
+            if not response_included[i]:
+                not_grouped_indices.append(i)
+        formatted_data.append(("Not Grouped", not_grouped_indices))
+        return formatted_data
+
+"""
+CAN BE DELETED
+"""
+def print_updated_result(updated_result):
+    for group_label, data_items in updated_result:
+        print(f"{group_label}")
+        for data_item in data_items:
+            print(f"  {data_item}")
+        print()
+
+"""
+Formats results into a list of tuples in the format -> (Group Label, [indices])
+"""
+def format_results(results):
+    group_data = []
+
+    for line in results.split('\n'):
+        if line.startswith("Group"):
+            group_name = re.search(r'Group \d+: (.+)', line).group(1)
+        elif re.search(r'\d+\,', line):
+            indices = [int(i.strip()) for i in line.split(',')]
+            group_data.append((group_name, indices))
+        elif re.search(r'\d+\.', line):
+            indices = [int(re.search(r'(\d+)\.', item).group(1)) for item in line.split() if re.search(r'\d+\.', item)]
+            group_data.append((group_name, indices))
+        elif re.search(r'\b\d+\b', line):
+            single_digit = int(re.search(r'\b(\d+)\b', line).group(1))
+            group_data.append((group_name, [single_digit]))
+
+    return group_data
+
+"""
+Changes the index values to the batch data
+"""
+def indices_to_data(formatted_data, batch):
+    csv_format = []
+
+    for group_label, indices in formatted_data:
+        updated_indices = [batch[i] for i in indices]
+        csv_format.append((group_label, updated_indices))
+
+    return csv_format
+
+
+
+"""
+Checks if each data number was grouped
+"""
+def check_missing_data(data_len, formatted_data, response_included):
+    print("Formatted Data: ", formatted_data)
+    print("Response Included: ", response_included)
+    for group_label, indices in formatted_data:
+        for index in indices:
+            if index < data_len:
+                response_included[index] = True
+
+    return response_included
+
+
+"""
+Changes string to have line breaks
+"""
+def add_linebreaks(sentence: str):
+    words = sentence.split()
+    num_words = len(words)
+    words_with_newlines = [word + ("\n" if (i + 1) % 10 == 0 and i + 1 != num_words else " ") for i, word in enumerate(words)]
+    modified_string = ''.join(words_with_newlines)
+    return modified_string
+
+"""
+Returns the set batch size
+"""
+def get_batch_size():
+    global SIZE_OF_BATCHES
+    return SIZE_OF_BATCHES
+
+
 
 #----------------------------------------------------------------------#
 #                         Auxiliary Functions                          # ------------------------------------------------------------------------------------------------------------------------------
