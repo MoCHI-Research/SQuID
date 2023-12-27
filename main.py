@@ -1,7 +1,8 @@
-from interface import SampleApp
+from ui import App
 
 def main():
-    app = SampleApp()
+    app = App()
+    app.wm_minsize(width=1200, height=600)
     app.mainloop()
 
 if __name__ == "__main__":
