@@ -9,9 +9,10 @@ from time import sleep
 
 # load_dotenv()
 # openai.api_key = os.getenv('OPENAI_API_KEY')
-
-JSON_FILE = open(os.path.join(os.path.dirname(sys.argv[0]), 'prompts.json'))
-GPT_TEMPLATES = json.load(JSON_FILE)
+script_dir = os.path.dirname(os.path.realpath(__file__))
+JSON_FILE = os.path.join(script_dir, 'prompts.json')
+# JSON_FILE = open(os.path.join(os.path.dirname(sys.argv[0]), 'prompts.json'))
+GPT_TEMPLATES = json.load(open(JSON_FILE))
 
 os.environ["OPENAI_API_KEY"] = "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"
 
@@ -41,7 +42,7 @@ def openai_chatcompletion(user_message, model_name = "gpt-4", max_tokens = None,
             messages = [{"role": "user", "content": user_message}],
             temperature = temperature
         )
-    else:  
+    else:
         completion = client.chat.completions.create(
             model = model_name,
             messages = [{"role": "user", "content": user_message}],
@@ -72,7 +73,7 @@ def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-4", max_t
                 messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user_message}],
                 temperature = temperature
             )
-        else:  
+        else:
             completion = client.chat.completions.create(
                 model = model_name,
                 messages = [{"role": "system", "content": sys_prompt}, {"role": "user", "content": user_message}],
@@ -131,18 +132,18 @@ def openai_example_chatcompletion(sys_key, eg_input_key, eg_output_key, user_mes
         if max_tokens is None:
             completion = client.chat.completions.create(
                 model = model_name,
-                messages = [{"role": "system", "content": sys_prompt}, 
-                            {"role": "user", "content": example_user}, 
-                            {"role": "assistant", "content": example_assistant}, 
+                messages = [{"role": "system", "content": sys_prompt},
+                            {"role": "user", "content": example_user},
+                            {"role": "assistant", "content": example_assistant},
                             {"role": "user", "content": user_message}],
                 temperature = temperature
             )
-        else:  
+        else:
             completion = client.chat.completions.create(
                 model = model_name,
-                messages = [{"role": "system", "content": sys_prompt}, 
-                            {"role": "user", "content": example_user}, 
-                            {"role": "assistant", "content": example_assistant}, 
+                messages = [{"role": "system", "content": sys_prompt},
+                            {"role": "user", "content": example_user},
+                            {"role": "assistant", "content": example_assistant},
                             {"role": "user", "content": user_message}],
                 max_tokens = max_tokens,
                 temperature = temperature
