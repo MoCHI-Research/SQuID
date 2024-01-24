@@ -5,6 +5,7 @@ import customtkinter
 import time
 import os
 import asyncio
+from label_merger import label_merge
 
 
 customtkinter.set_appearance_mode("System")
@@ -321,8 +322,10 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
             global ACCEPTED_DATA
             NUM_PASSES += 1
             save_data(ACCEPTED_DATA)
+            merge_labels(0.91, original_file = "output.csv", output_file = "output.csv")
             self.controller.create_pos_frame()
             print("No more data to process")
+            # label_merge()
 
     """
     Adjusts the number of batches that need to happen based
@@ -572,16 +575,6 @@ class PassOrStop(customtkinter.CTkFrame):
         self.controller.CreateAffinityDiagram.reset()
         self.controller.CreateAffinityDiagram.tkraise()
 
-class ReasonForLabel(customtkinter.CTkFrame):
-    def __init__(self, parent, controller):
-        super().__init__(parent)
-
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-
-        title = customtkinter.CTkLabel(self, text="Let's generate a reason for a label!")
-        title.grid(row=0, column=0)
-
 class AdjustMergeThreshold(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -590,4 +583,14 @@ class AdjustMergeThreshold(customtkinter.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
 
         title = customtkinter.CTkLabel(self, text="Let's adjust merge threshold!")
+        title.grid(row=0, column=0)
+
+class ReasonForLabel(customtkinter.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
+        title = customtkinter.CTkLabel(self, text="Let's generate a reason for a label!")
         title.grid(row=0, column=0)
