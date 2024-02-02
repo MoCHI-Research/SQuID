@@ -237,7 +237,7 @@ Returns(pandas.DataFrame):
 def read_generate_similarity(input_filename = INTERMEDIATE_PATH + "embeddings.csv", output_filename = INTERMEDIATE_PATH + "similarity.csv"):
     input_file = os.path.join(os.path.dirname(sys.argv[0]), input_file)
     output_file = os.path.join(os.path.dirname(sys.argv[0]), output_file)
-    
+
     embedding_frame = pandas.read_csv(input_filename)
     for _, current_row in embedding_frame.iterrows():
         current_row['embedding'] = convert_text_to_list(current_row['embedding'])
