@@ -1,11 +1,11 @@
 from tkinter import filedialog
+from typing import Dict
 from menu import *
 from typing import List, Tuple
 import customtkinter
 import time
 import os
 import asyncio
-from label_merger import label_merge
 
 
 customtkinter.set_appearance_mode("System")
@@ -575,6 +575,162 @@ class PassOrStop(customtkinter.CTkFrame):
         self.controller.CreateAffinityDiagram.reset()
         self.controller.CreateAffinityDiagram.tkraise()
 
+class ReasonForLabel(customtkinter.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+
+        self.grid_rowconfigure(2, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.controller = controller
+        self.current_pass = None
+        self.error_count = 0
+        self.error_message = ""
+
+        # -----------------------------------------------------------------------------------------------
+
+        main_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        main_frame.grid(row=0, column=0, sticky="nsew")
+        main_frame.grid_columnconfigure(0, weight=1)
+
+        title = customtkinter.CTkLabel(main_frame, text="Generate a Reason for a Label", font=("Verdana", 22, "underline"))
+        title.grid(row=0, column=0, pady=(10, 10))
+
+        # Instructions
+        instructions = "Please enter a valid number that corresponds with a pass number 'for output.csv'.\nNote that to get the raw data with its labels, you will want to start at 0."
+        instructions_label = customtkinter.CTkLabel(main_frame, text=instructions, font=("Verdana", 14, "italic"))
+        instructions_label.grid(row=1, column=0, pady=(0, 10))
+
+        self.pass_num = customtkinter.CTkEntry(main_frame)
+        self.pass_num.grid(row=2, column=0, pady=(10, 5))
+
+        self.pass_button = customtkinter.CTkButton(main_frame, text="Submit Pass", command=self.submit_pass_event)
+        self.pass_button.grid(row=3, column=0, pady=(5, 10))
+
+        self.error = customtkinter.CTkLabel(main_frame, text="", text_color="#FF3333")
+        self.error.grid(row=4, column=0)
+
+        # -----------------------------------------------------------------------------------------------
+
+        data_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        data_frame.grid(row=1, column=0, sticky="nsew")
+        data_frame.grid_columnconfigure(0, weight=1)
+
+        self.table = SplitSelectionTable(data_frame, controller, "Data", "Label", border_color="#3B8ED0", border_width=2, scrollbar_button_color="#3B8ED0", scrollbar_button_hover_color='#144870')
+        self.table.grid(row=0, column=0, padx=(30, 30), pady=(10, 10), sticky="nsew")
+
+        self.response_button = customtkinter.CTkButton(data_frame, text="Generate Reponse", command=self.generate_response_event)
+        self.response_button.grid(row=1, column=0, pady=(20, 20))
+
+        # -----------------------------------------------------------------------------------------------
+
+        reason_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        reason_frame.grid(row=2, column=0, sticky="nsew")
+        reason_frame.grid_columnconfigure(0, weight=1)
+
+        title = customtkinter.CTkLabel(reason_frame, text="GPT Generated Reason", font=("Verdana", 22, "underline"))
+        title.grid(row=0, column=0, pady=(20, 10))
+
+        self.reason = customtkinter.CTkLabel(reason_frame, text="", wraplength=800, font=("Verdana", 14))
+        self.reason.grid(row=1, column=0, padx=(20, 20), pady=(10, 30), sticky="nsew")
+
+    def submit_pass_event(self):
+        entry = self.pass_num.get()
+
+        if entry.isdigit():
+            pass_num = int(entry)
+            if valid_pass(pass_num):
+                self.error.configure(text="")
+                self.error_counter = 0
+                self.current_pass = pass_num
+                data = retrieve_pass(pass_num)
+                data = remove_dict_duplicates(data)
+                self.table.update_table(data)
+            else:
+                self.invalid_input("invalid pass")
+        else:
+            self.invalid_input("invalid entry")
+
+    def invalid_input(self, error):
+        self.assign_error(error)
+        if error == "invalid entry":
+            self.error.configure(text="The entry you submitted is not an integer. Please enter an integer. (" + str(self.error_count) + ")")
+        elif error == "invalid pass":
+            self.error.configure(text="The integer you submitted is not a valid pass. Please enter a valid pass. (" + str(self.error_count) + ")")
+
+    def assign_error(self, error):
+        if self.error_message == error:
+            self.error_count += 1
+        else:
+            self.error_message = error
+            self.error_count = 1
+
+    def generate_response_event(self):
+        data, label = self.table.return_selected_pair()
+        if data == None and label == None:
+            print("No pair has been select")
+        else:
+            self.reason.configure(text="Please wait as we generate a reason...")
+            self.after(100, lambda: self.display_response(data, label))
+
+    def display_response(self, data, label):
+        response = generate_reason(data, label)
+        print("Response: ", response)
+        self.reason.configure(text=response)
+
+
+class SplitSelectionTable(customtkinter.CTkScrollableFrame):
+    def __init__(self, parent, controller, left_title: str, right_title: str, **kwargs):
+        super().__init__(parent, **kwargs)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure((1,2), weight=1)
+
+        self.data_label_pairs = []
+        self.num_radios = 0
+        self.radio_var = customtkinter.IntVar(value=0)
+
+        l_title = customtkinter.CTkLabel(self, text=left_title, font=("Verdana", 22, "underline"))
+        l_title.grid(row=0, column=1, pady=2)
+        r_title = customtkinter.CTkLabel(self, text=right_title, font=("Verdana", 22, "underline"))
+        r_title.grid(row=0, column=2, pady=2)
+
+    def clear_table(self):
+        for radio, data, label in self.data_label_pairs:
+            radio.destroy()
+            data.destroy()
+            label.destroy()
+        self.data_label_pairs = []
+
+    def update_table(self, data: Dict):
+        self.clear_table()
+        for key, value in data.items():
+            self.add_item(key, value)
+
+    def add_item(self, data: str, label: str):
+        self.num_radios += 1
+        radio = customtkinter.CTkRadioButton(self, text="", variable=self.radio_var, value=self.num_radios)
+        radio.grid(row=len(self.data_label_pairs) + 1, column=0, padx=(35,0))
+
+        displayed_data = customtkinter.CTkLabel(self, text=data, wraplength=300)
+        displayed_data.grid(row=len(self.data_label_pairs) + 1, column=1, padx=(5,5), pady=(10,0), sticky="nsew")
+
+        displayed_label = customtkinter.CTkLabel(self, text=label, wraplength=300)
+        displayed_label.grid(row=len(self.data_label_pairs) + 1, column=2, padx=(5, 5), pady=(10, 10), sticky="nsew")
+
+        self.data_label_pairs.append((radio, displayed_data, displayed_label))
+
+    def return_selected_pair(self):
+        selected_pair = self.radio_var.get()
+        if selected_pair - 1 >= 0:
+            _, data, label = self.data_label_pairs[selected_pair - 1]
+            data_text = data.cget("text")
+            label_text = label.cget("text")
+            return data_text, label_text
+        else:
+            return None, None
+
+
+
+
 class AdjustMergeThreshold(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -583,14 +739,4 @@ class AdjustMergeThreshold(customtkinter.CTkFrame):
         self.grid_columnconfigure(0, weight=1)
 
         title = customtkinter.CTkLabel(self, text="Let's adjust merge threshold!")
-        title.grid(row=0, column=0)
-
-class ReasonForLabel(customtkinter.CTkFrame):
-    def __init__(self, parent, controller):
-        super().__init__(parent)
-
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-
-        title = customtkinter.CTkLabel(self, text="Let's generate a reason for a label!")
         title.grid(row=0, column=0)

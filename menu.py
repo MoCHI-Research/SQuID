@@ -304,6 +304,51 @@ def initialize_affinity_diagram(file, merge_threshold):
 #             csv_reader = csv.reader(csvfile)
 #             for row in csv_reader:
 #                 print(row[0])
+"""
+Checks if the passed integer is an existing pass in the csv file
+"""
+def valid_pass(pass_num):
+    if not os.path.exists('output.csv'):
+        return False
+
+    with open('output.csv', 'r', newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        num_columns = len(next(reader))
+
+    if pass_num >= num_columns - 1:
+        return False
+    else:
+        return True
+
+"""
+Removes dictionary key-value pair duplicates
+"""
+def remove_dict_duplicates(dictionary):
+    unique_dict = {}
+    for key, value in dictionary.items():
+        if key not in unique_dict.keys():
+            unique_dict[key] = value
+    return unique_dict
+
+
+"""
+Grabs the associated key value pairs from a given column
+and the column to the right
+"""
+def retrieve_pass(column_number):
+    if not os.path.exists('output.csv'):
+        return False  # 'output.csv' file does not exist
+
+    column_dict = {}
+
+    with open('output.csv', 'r', newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        next(reader)
+        for row in reader:
+            if len(row) > column_number + 1:  # Ensure column exists and cell to the right exists
+                column_dict[row[column_number]] = row[column_number + 1]
+
+    return column_dict
 
 """
 Sets up an output file
@@ -608,11 +653,10 @@ def column_labels(column_num, filename = "output.csv"):
 
 
 # # Generates a reason through GPT for labeling the data with label
-def generate_reason(all_data, data_index, label):
-    print("Data: " + str(all_data[int(data_index) - 1][1]))
-    print("Label: " + str(label))
+def generate_reason(data, label):
+    print("Data: " + data)
+    print("Label: " + label)
 
-    data = all_data[int(data_index) - 1][1]
     user_input_string = "Provide a reason for giving the label " + label + " to the the following data: " + data
     response = None
     gpt_template = "provide_reason"
