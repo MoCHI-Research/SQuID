@@ -421,7 +421,7 @@ class UserSelection(customtkinter.CTkFrame):
         save_cont_button.grid(row=0, column=0, pady=(20, 0))
 
         global UNIQUE_LABELS
-        print("GROUPED DATA WE WILL BE ADDING TO FRAME:", self.grouped_data)
+        #print("GROUPED DATA WE WILL BE ADDING TO FRAME:", self.grouped_data)
         for label, datas in self.grouped_data:
             UNIQUE_LABELS.add(label)
             for data in datas:

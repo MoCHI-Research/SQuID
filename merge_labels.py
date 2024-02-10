@@ -77,11 +77,11 @@ def csv_to_dict(filename = "output.csv"):
         reader = csv.reader(f)
         #next(reader)
         for row in reader:
-            label = row[0]
+            label = row[-1]
             if label in result_dict:
-                result_dict[label].append(row[1:])
+                result_dict[label].append(row[:-1])
             else:
-                result_dict[label] = [row[1:]]
+                result_dict[label] = [row[:-1]]
         f.close()
 
     return result_dict
