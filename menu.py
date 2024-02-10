@@ -413,7 +413,11 @@ def save_data(data, first_pass=False):
             rows = []
             for row in reader:
                 key = row[right_column_index]
-                row.append(data[key])
+                try:
+                    row.append(data[key])
+                except KeyError:
+                    print(data)
+                    print("Key Error with key: " + key)
                 rows.append(row)
 
         with open(output_file, mode='w', newline='') as file:
@@ -541,7 +545,12 @@ def format_results(results):
         if line.startswith("Group"):
             group_name = re.search(r'Group \d+: (.+)', line).group(1)
         elif re.search(r'\d+\,', line):
-            indices = [int(i.strip()) for i in line.split(',')]
+            indices = []
+            for i in line.split(','):
+                i = i.strip()
+                if i[-1] == '.':
+                    i = i[:-1]
+                indices.append(int(i))
             group_data.append((group_name, indices))
         elif re.search(r'\d+\.', line):
             indices = [int(re.search(r'(\d+)\.', item).group(1)) for item in line.split() if re.search(r'\d+\.', item)]
