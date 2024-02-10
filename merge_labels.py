@@ -320,9 +320,12 @@ def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "la
         writer = csv.writer(file)
         #if not file_exists:  # Write the header only if the file didn't exist
         #    writer.writerow(['Group', 'Items'])
+        header_row = ['Data']
+        for i in range(len(next(iter(group_dict.values())))):
+            header_row.append("Pass " + str(i + 1))
         for label in group_dict:
             for sub_levels in group_dict[label]:
-                writer.writerow([label] + sub_levels)
+                writer.writerow(sub_levels + [label])
 
     file.close()
     print("Merging finished")
@@ -333,8 +336,8 @@ def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "la
 Controls operation of the program
 """
 def main():
-    #merge_labels(new_embedding=False, new_similarity=False)
-    get_embedding("Can you tell me a joke?", "text-embedding-ada-002")
+    merge_labels(original_file = "output.csv", new_embedding=False, new_similarity=False)
+    #get_embedding("Can you tell me a joke?", "text-embedding-ada-002")
 
 
 if __name__ == "__main__":
