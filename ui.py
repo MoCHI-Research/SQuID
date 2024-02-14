@@ -526,10 +526,10 @@ class PassOrStop(customtkinter.CTkFrame):
         button_frame.grid_columnconfigure((0, 1), weight=1)
 
         # Buttons
-        gen_next_pass_button = customtkinter.CTkButton(button_frame, width=175, text="Generate Next Pass", command=self.gen_next_pass_event)
-        gen_next_pass_button.grid(row=0, column=0, padx=(150, 0), pady=(20, 0))
         save_results_button = customtkinter.CTkButton(button_frame, width=175, text="Save and End", command=self.save_results_event)
-        save_results_button.grid(row=0, column=1, padx=(0, 150), pady=(20, 0))
+        save_results_button.grid(row=0, column=0, padx=(0, 150), pady=(20, 0))
+        gen_next_pass_button = customtkinter.CTkButton(button_frame, width=175, text="Generate Next Pass", command=self.gen_next_pass_event)
+        gen_next_pass_button.grid(row=0, column=1, padx=(150, 0), pady=(20, 0))
 
     def gen_next_pass_event(self):
         global REJECTED_DATA
