@@ -491,7 +491,7 @@ class PassOrStop(customtkinter.CTkFrame):
 
         results_message = str(num_data) + " unique data points resulted in " + str(num_unique_labels) + " unique group labels."
         if num_unique_labels <= 5:
-            suggestion_message = "We suggest saving the results but you are more than able to continue."
+            suggestion_message = "You can save and end but you are more than able to continue."
         else:
             suggestion_message = "We suggest another pass to process the new group labels made."
 
