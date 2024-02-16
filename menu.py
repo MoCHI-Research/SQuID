@@ -48,258 +48,263 @@ def show_time_elapsed():
 #                       Running Affinity Diagram                       # ------------------------------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------#
 
-def convert_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
-    """
-    Convert the gpt responses, with numbers representing data points, into a CSV file
-    Parameters:
-        gpt_response(string): The GPT response that includes data points as numbers
-        data_list(list of strings): the list of all data points concerned
-        prev_data()
-        not_grouped_data()
-    Returns:
-        output.csv: the CSV file that contains the converted responses
-    """
-    print(f"C->CSV: {convert_to_csv}\nP_D: {prev_data}, NGD: {not_grouped_data}")
-    output_filename = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
-    group_name = ''
-    group_data = []
-    csv_data = []
-    response_include = [False for _ in range(len(data_list))]
-    lines = gpt_response.split('\n')
-    file_exists = os.path.exists(output_filename)
+# def convert_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
+#     """
+#     Convert the gpt responses, with numbers representing data points, into a CSV file
+#     Parameters:
+#         gpt_response(string): The GPT response that includes data points as numbers
+#         data_list (list of strings): the list of all data points concerned
+#         prev_data ()
+#         not_grouped_data ()
+#     Returns:
+#         output.csv: the CSV file that contains the converted responses
+#     """
+#     print(f"C->CSV: {convert_to_csv}\nP_D: {prev_data}, NGD: {not_grouped_data}")
+#     output_filename = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
+#     group_name = ''
+#     group_data = []
+#     csv_data = []
+#     response_include = [False for _ in range(len(data_list))]
+#     lines = gpt_response.split('\n')
+#     file_exists = os.path.exists(output_filename)
 
-    for line in lines:
-        line = line.strip()
-        if line.startswith('Group'):
-            if group_name:
-                csv_data.append((group_name, group_data))
-            group_name = line.split(':', 1)[1].strip()
-            group_data = []
-        elif line:
-            sentence_indices = (re.findall("[0-9]+", line))
-            for sent_index in sentence_indices:
-                current_index = int(sent_index)
-                #If a data (secondary label) is "Not Grouped," do not put it in any of the groups
-                if current_index < len(data_list) and not data_list[current_index] == "Not Grouped":
-                    group_data.append(data_list[current_index])
-                    response_include[current_index] = True
+#     for line in lines:
+#         line = line.strip()
+#         if line.startswith('Group'):
+#             if group_name:
+#                 csv_data.append((group_name, group_data))
+#             group_name = line.split(':', 1)[1].strip()
+#             group_data = []
+#         elif line:
+#             sentence_indices = (re.findall("[0-9]+", line))
+#             for sent_index in sentence_indices:
+#                 current_index = int(sent_index)
+#                 #If a data (secondary label) is "Not Grouped," do not put it in any of the groups
+#                 if current_index < len(data_list) and not data_list[current_index] == "Not Grouped":
+#                     group_data.append(data_list[current_index])
+#                     response_include[current_index] = True
 
-    if group_name and group_data:  # Add the last group
-        csv_data.append((group_name, group_data))
+#     if group_name and group_data:  # Add the last group
+#         csv_data.append((group_name, group_data))
 
-    for current_index in range(len(response_include)):
-        if not response_include[current_index]:
-            not_grouped_data.append(data_list[current_index])
+#     for current_index in range(len(response_include)):
+#         if not response_include[current_index]:
+#             not_grouped_data.append(data_list[current_index])
 
-    if len(not_grouped_data) > 0:
-        csv_data.append(('Not Grouped', not_grouped_data))
+#     if len(not_grouped_data) > 0:
+#         csv_data.append(('Not Grouped', not_grouped_data))
 
-    # If file exists, then that means we are dealing with a layer count > 1
-    # First: Save all of the previous data into a list
-    # Then: Create a new list that appends the information from the previous data with the new label associated with that row
-    # Else: This is a new file, so initialize the CSV file
-    if file_exists and len(prev_data) > 0:
-        # This is where the appending prev_data to the csv list will happen
-        for data in csv_data:
-            for i in range(len(data[1])):
-                for j in range(len(prev_data)):
-                    if data[1][i] == prev_data[j][0]:
-                        prev_data[j].insert(0,data[0])
-        # Writes to the output file with the new column
-        with open(output_filename, 'w', newline='') as file:
-            writer=csv.writer(file)
-            for data in prev_data:
-                writer.writerow(data)
-            file.close()
-    else:
-    # If the output_file exists, then append the information. If it doesn't exist, then write the initial data_labels
-        with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
-            writer = csv.writer(file)
-            for data in csv_data:
-                group = data[0]
-                for item in data[1]:
-                    writer.writerow([group, item])
-            file.close()
+#     # If file exists, then that means we are dealing with a layer count > 1
+#     # First: Save all of the previous data into a list
+#     # Then: Create a new list that appends the information from the previous data with the new label associated with that row
+#     # Else: This is a new file, so initialize the CSV file
+#     if file_exists and len(prev_data) > 0:
+#         # This is where the appending prev_data to the csv list will happen
+#         for data in csv_data:
+#             for i in range(len(data[1])):
+#                 for j in range(len(prev_data)):
+#                     if data[1][i] == prev_data[j][0]:
+#                         prev_data[j].insert(0,data[0])
+#         # Writes to the output file with the new column
+#         with open(output_filename, 'w', newline='') as file:
+#             writer=csv.writer(file)
+#             for data in prev_data:
+#                 writer.writerow(data)
+#             file.close()
+#     else:
+#     # If the output_file exists, then append the information. If it doesn't exist, then write the initial data_labels
+#         with open(output_filename, 'a' if file_exists else 'w', newline='') as file:
+#             writer = csv.writer(file)
+#             for data in csv_data:
+#                 group = data[0]
+#                 for item in data[1]:
+#                     writer.writerow([group, item])
+#             file.close()
 
-def gpt_responses(list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data) -> int:
-    """
-    Asks GPT for a response for the data batches then calls 'convert_to_csv' to compile the responses into a CSV file
-    Parameters:
-        list_of_data(list): the list of each data point
-        completed_gpt_requests(int): the number of batches completed
-        num_of_gpt_requests(int): the final number of batches requests to GPT
-        gpt_template(string): the template prompt that asks GPT to generate our data
-    Returns:
-        completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional
-    """
-    print(f"LOD: {list_of_data}")
-    parsed_list_of_data = []
-    not_grouped = []
+# def gpt_responses(list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data) -> int:
+#     """
+#     Asks GPT for a response for the data batches then calls 'convert_to_csv' to compile the responses into a CSV file
+#     Parameters:
+#         list_of_data (list): the list of each data point
+#         completed_gpt_requests (int): the number of batches completed
+#         num_of_gpt_requests (int): the final number of batches requests to GPT
+#         gpt_template (string): the template prompt that asks GPT to generate our data
+#     Returns:
+#         completed_gpt_requests (int): the number of completed GPT requests to fulfill the while loop conditional
+#     """
+#     print(f"LOD: {list_of_data}")
+#     parsed_list_of_data = []
+#     not_grouped = []
 
-    for data in list_of_data:
-        if data == "Not Grouped":
-            not_grouped.append(data)
-        else:
-            parsed_list_of_data.append(data)
+#     for data in list_of_data:
+#         if data == "Not Grouped":
+#             not_grouped.append(data)
+#         else:
+#             parsed_list_of_data.append(data)
 
-    data_num = len(parsed_list_of_data)
-    response = None
-    user_input_string = ''
+#     data_num = len(parsed_list_of_data)
+#     response = None
+#     user_input_string = ''
 
-    for i in range(data_num):
-        current_data = str(i) + ". " + parsed_list_of_data[i] + "\n"
-        user_input_string += current_data
+#     for i in range(data_num):
+#         current_data = str(i) + ". " + parsed_list_of_data[i] + "\n"
+#         user_input_string += current_data
 
-    while response == None:
-        response = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
-    print("Response:",response)
+#     while response == None:
+#         response = openai_example_chatcompletion(gpt_template, "user_example", "response_example", user_input_string)
+#     print("Response:",response)
 
-    completed_gpt_requests += 1
-    print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
-    convert_to_csv(response, parsed_list_of_data, prev_data, not_grouped)
-    print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
-    return completed_gpt_requests
+#     completed_gpt_requests += 1
+#     print(f"Successfully generated {completed_gpt_requests}/{num_of_gpt_requests} GPT responses.\n")
+#     convert_to_csv(response, parsed_list_of_data, prev_data, not_grouped)
+#     print(f"Successfully converted {completed_gpt_requests}/{num_of_gpt_requests} GPT responses to a CSV.\n")
+#     return completed_gpt_requests
 
-def initialize_gpt_responses(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy):
-    """Creates a one-layer deep affinity diagram
-    Parameters:
-        num_of_gpt_requests(int):
-        list_of_data():
-        completed_gpt_requests(int):
-        gpt_template(string): the template prompt that asks GPT to generate our data
-        batch_size():
-        hierarchy():
-    """
-    print(f"LOD: {list_of_data}, BS: {batch_size}, HCHY: {hierarchy}")
-    start = 0
-    end = batch_size
-    prev_data = []
-    output_filename = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
+# def initialize_gpt_responses(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy):
+#     """Creates a one-layer deep affinity diagram
+#     Parameters:
+#         num_of_gpt_requests (int):
+#         list_of_data ():
+#         completed_gpt_requests (int):
+#         gpt_template(string): the template prompt that asks GPT to generate our data
+#         batch_size ():
+#         hierarchy ():
+#     """
+#     print(f"LOD: {list_of_data}, BS: {batch_size}, HCHY: {hierarchy}")
+#     start = 0
+#     end = batch_size
+#     prev_data = []
+#     output_filename = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
 
-    # If the output_file exists and if we are creating the hierarchy (hierarchy == True), we will save the previous data into prev_data
-    # so that we can write the new labels into the associated row it belongs to
-    if os.path.exists(output_filename) and hierarchy:
-        with open(output_filename, 'r', newline='') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                prev_data.append(row)
+#     # If the output_file exists and if we are creating the hierarchy (hierarchy == True), we will save the previous data into prev_data
+#     # so that we can write the new labels into the associated row it belongs to
+#     if os.path.exists(output_filename) and hierarchy:
+#         with open(output_filename, 'r', newline='') as file:
+#             reader = csv.reader(file)
+#             for row in reader:
+#                 prev_data.append(row)
 
-    while completed_gpt_requests < num_of_gpt_requests:
-        completed_gpt_requests = gpt_responses(list_of_data[start:end], completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data)
-        start = end
-        end += batch_size
-        if end > len(list_of_data):
-            end = len(list_of_data)
+#     while completed_gpt_requests < num_of_gpt_requests:
+#         completed_gpt_requests = gpt_responses(list_of_data[start:end], completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data)
+#         start = end
+#         end += batch_size
+#         if end > len(list_of_data):
+#             end = len(list_of_data)
 
-def unique_labels(first_pass_completed, merge_threshold):
-    """
-    1. Take in the output.csv file
-    2. Check the 0th col, put each unique label into a list
-        if elem not in list:
-            put_in_list
-    3. Run GPT on it
-    """
-    file = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
+# def unique_labels(first_pass_completed, merge_threshold):
+#     """
+#     1. Take in the output.csv file
+#     2. Check the 0th col, put each unique label into a list
+#         if elem not in list:
+#             put_in_list
+#     3. Run GPT on it
+#     Parameters: 
+#         first_pass_completed ()
+#         merge_threshold ()
+#     Returns: 
 
-    # First, grab all unique label names
-    # Then check if the first element of a col is already in unique_labels
-    # If it isn't, add it
-    unique_labels = []
-    with open(file, newline='') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if row[0] not in unique_labels and row[0] != 'Group' and row[0] != '':
-                unique_labels.append(row[0])
+#     """
+#     file = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
 
-    valid_label_num = len(unique_labels)
-    if "Not Grouped" in unique_labels:
-        valid_label_num -= 1
+#     # First, grab all unique label names
+#     # Then check if the first element of a col is already in unique_labels
+#     # If it isn't, add it
+#     unique_labels = []
+#     with open(file, newline='') as f:
+#         reader = csv.reader(f)
+#         for row in reader:
+#             if row[0] not in unique_labels and row[0] != 'Group' and row[0] != '':
+#                 unique_labels.append(row[0])
 
-    # Checks if the first pass has been completed or not
-    # If it hasn't, then that means unique_labels will not contain any duplicate information (not guaranteed, assumption)
-    # Else, if unique_labels > 1 and first_pass_completed == True,
-    # We check every label that was previously assigned.
-    # If there exists a duplicate label in unique_labels that appears as an already assigned label (excluding 'Not Grouped')
-    # Then we return. Else, run the next hierarchy level
-    if first_pass_completed == False:
-        affinity_diagram(file, merge_threshold, unique_labels, True, True)
-    elif valid_label_num > 1:
-        with open(file, newline='') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                if row[1] in unique_labels and row[1] != 'Not Grouped':
-                    return
-        affinity_diagram(file, merge_threshold, unique_labels, True, True)
+#     valid_label_num = len(unique_labels)
+#     if "Not Grouped" in unique_labels:
+#         valid_label_num -= 1
 
-def affinity_diagram(file, merge_threshold, list_of_data = None, hierarchy = False, first_pass_completed = False):
-    """
-    Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
-    Parameters:
-        file(csv file): the user's csv file that contains all of their data
-    Returns:
-        None
-    """
+#     # Checks if the first pass has been completed or not
+#     # If it hasn't, then that means unique_labels will not contain any duplicate information (not guaranteed, assumption)
+#     # Else, if unique_labels > 1 and first_pass_completed == True,
+#     # We check every label that was previously assigned.
+#     # If there exists a duplicate label in unique_labels that appears as an already assigned label (excluding 'Not Grouped')
+#     # Then we return. Else, run the next hierarchy level
+#     if first_pass_completed == False:
+#         affinity_diagram(file, merge_threshold, unique_labels, True, True)
+#     elif valid_label_num > 1:
+#         with open(file, newline='') as f:
+#             reader = csv.reader(f)
+#             for row in reader:
+#                 if row[1] in unique_labels and row[1] != 'Not Grouped':
+#                     return
+#         affinity_diagram(file, merge_threshold, unique_labels, True, True)
 
-    if list_of_data == None:
-        list_of_data = []
-    print("Generating GPT response . . .\n")
-    batch_size = SIZE_OF_BATCHES
-    gpt_template = 'group_data_in_numbers'
+# def affinity_diagram(file, merge_threshold, list_of_data = None, hierarchy = False, first_pass_completed = False):
+#     """
+#     Grabs the data points from a CSV file and asks GPT to sort them by group labels like an affinity diagram
+#     Parameters:
+#         file(csv file): the user's csv file that contains all of their data
+#     Returns:
+#         None
+#     """
 
-    # Checks if the length of the list_of_data (unique_datapoints) is 0
-    # If it is, then that means we're dealing with the first pass
-    # If it isn't, then we're not and we don't need to construct list_of_data
-    if len(list_of_data) == 0:
-        with open(file, newline='') as f:
-            reader = csv.reader(f)
-            for row in reader:
-                if row:
-                    list_of_data.append(row[0])
-    # Initial check to see if batch is bigger than the dataset
-    if batch_size > len(list_of_data):
-        batch_size = len(list_of_data)
+#     if list_of_data == None:
+#         list_of_data = []
+#     print("Generating GPT response . . .\n")
+#     batch_size = SIZE_OF_BATCHES
+#     gpt_template = 'group_data_in_numbers'
 
-    num_of_gpt_requests = math.ceil(len(list_of_data) / batch_size)
-    completed_gpt_requests = 0
+#     # Checks if the length of the list_of_data (unique_datapoints) is 0
+#     # If it is, then that means we're dealing with the first pass
+#     # If it isn't, then we're not and we don't need to construct list_of_data
+#     if len(list_of_data) == 0:
+#         with open(file, newline='') as f:
+#             reader = csv.reader(f)
+#             for row in reader:
+#                 if row:
+#                     list_of_data.append(row[0])
+#     # Initial check to see if batch is bigger than the dataset
+#     if batch_size > len(list_of_data):
+#         batch_size = len(list_of_data)
 
-    print(f'Batches to complete: {num_of_gpt_requests}')
+#     num_of_gpt_requests = math.ceil(len(list_of_data) / batch_size)
+#     completed_gpt_requests = 0
 
-    # Calls GPT for one run of batches over a list of datapoints
-    initialize_gpt_responses(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy)
-    merge_labels(merge_threshold, original_file = "output.csv", output_file = "output.csv")
+#     print(f'Batches to complete: {num_of_gpt_requests}')
 
-    # default file_name is output.csv
-    # Starts creating the hierarchy of labels
-    unique_labels(first_pass_completed, merge_threshold)
+#     # Calls GPT for one run of batches over a list of datapoints
+#     initialize_gpt_responses(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy)
+#     merge_labels(merge_threshold, original_file = "output.csv", output_file = "output.csv")
 
-def initialize_affinity_diagram(file, merge_threshold):
-    """
-    Initializes the affinity diagramming process by first removing then
-    creating an output.csv file
-    """
+#     # default file_name is output.csv
+#     # Starts creating the hierarchy of labels
+#     unique_labels(first_pass_completed, merge_threshold)
 
-    output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
+# def initialize_affinity_diagram(file, merge_threshold):
+#     """
+#     Initializes the affinity diagramming process by first removing then
+#     creating an output.csv file
+#     """
 
-    if os.path.exists(output_file):
-        os.remove(output_file)
-        print("'output.csv' deleted successfully.")
-    affinity_diagram(file, merge_threshold, list_of_data = [])
+#     output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
 
-    #Add header to the file
-    with open(output_file, newline='') as f:
-        r = csv.reader(f)
-        data = [line for line in r]
-    if data:
-        with open(output_file, 'w', newline='') as f:
-            w = csv.writer(f)
-            header = []
-            for i in range(len(data[0]) - 1, 0, -1):
-                header.append("Pass " + str(i))
-            header.append("Data Item")
-            w.writerow(header)
-            w.writerows(data)
+#     if os.path.exists(output_file):
+#         os.remove(output_file)
+#         print("'output.csv' deleted successfully.")
+#     affinity_diagram(file, merge_threshold, list_of_data = [])
 
-    print("Job's done.")
+#     #Add header to the file
+#     with open(output_file, newline='') as f:
+#         r = csv.reader(f)
+#         data = [line for line in r]
+#     if data:
+#         with open(output_file, 'w', newline='') as f:
+#             w = csv.writer(f)
+#             header = []
+#             for i in range(len(data[0]) - 1, 0, -1):
+#                 header.append("Pass " + str(i))
+#             header.append("Data Item")
+#             w.writerow(header)
+#             w.writerows(data)
+
+#     print("Job's done.")
 
 #----------------------------------------------------------------------#
 #                         New Diagramming Process                      # ------------------------------------------------------------------------------------------------------------------------------

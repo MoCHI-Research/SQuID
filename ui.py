@@ -376,6 +376,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
 
         # Alert message
         self.alert_message = customtkinter.CTkLabel(self, text="")
+        
 
 
 class UserSelection(customtkinter.CTkFrame):
@@ -475,6 +476,27 @@ class Alert(customtkinter.CTkFrame):
         self.title = customtkinter.CTkLabel(self, text=alert_message, font=("Verdana", 22, "italic"))
         self.title.grid(row=0, column=0, sticky="nsew")
 
+# class ConfirmSave(customtkinter.CTkToplevel):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.geometry("400x300")
+
+#         self.label = customtkinter.CTkLabel(self, text="Confirmation")
+#         self.label.pack(padx=20, pady=20)
+        
+#         button_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+#         button_frame.grid(row=3, column=0, sticky="nsew")
+#         button_frame.grid_columnconfigure((0, 1), weight=1)
+        
+#         # Confirmation text
+#         confirm_button = customtkinter.CTkButton(self, text="Confirm", command=self.confirmation_event)
+#         confirm_button.grid(row=0, column=0, padx=(0, 150), pady=(20, 0))
+#         cancel_button = customtkinter.CTkButton(self, text="Cancel", command=self.confirmation_event)
+#         cancel_button.grid(row=0, column=1, padx=(150, 0), pady=(20, 0))
+        
+#     def confirmation_event():
+#         print("button pressed")
+
 class PassOrStop(customtkinter.CTkFrame):
     def __init__(self, parent, controller, num_pass: int, num_data: int, num_unique_labels: int):
         super().__init__(parent)
@@ -530,6 +552,9 @@ class PassOrStop(customtkinter.CTkFrame):
         save_results_button.grid(row=0, column=0, padx=(0, 150), pady=(20, 0))
         gen_next_pass_button = customtkinter.CTkButton(button_frame, width=175, text="Generate Next Pass", command=self.gen_next_pass_event)
         gen_next_pass_button.grid(row=0, column=1, padx=(150, 0), pady=(20, 0))
+        
+        # Confirmation to save and end generation
+        self.save_confirmation = None
 
     def gen_next_pass_event(self):
         global REJECTED_DATA
@@ -565,6 +590,11 @@ class PassOrStop(customtkinter.CTkFrame):
         global COMPLETED_GPT_REQUESTS
         global REJECTED_DATA
         global NUM_DATA_PROCESSED
+        
+        # if self.save_confirmation is None or not self.save_confirmation.winfo_exists():
+        #     self.save_confirmation = ConfirmSave(self)  # create window if its None or destroyed
+        # else:
+        #     self.save_confirmation.focus()  # if window exists focus it
 
         COMPLETED_GPT_REQUESTS = 0
         REJECTED_DATA = []
@@ -637,8 +667,8 @@ class ReasonForLabel(customtkinter.CTkFrame):
         entry = self.pass_num.get()
 
         if entry.isdigit():
-            pass_num = int(entry)
-            if valid_pass(pass_num):
+            pass_num = int(entry) - 1 # Added -1 to account for 0 based indexing. Entering 1 will be pass 0, 2 is pass 1, etc.
+            if valid_pass(pass_num) and int(entry) > 0:
                 self.error.configure(text="")
                 self.error_counter = 0
                 self.current_pass = pass_num
