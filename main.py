@@ -1,5 +1,4 @@
 from ui import App
-from interface import SampleApp
 
 def main():
     app = App()

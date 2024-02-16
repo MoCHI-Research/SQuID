@@ -54,9 +54,12 @@ def convert_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
     Parameters:
         gpt_response(string): The GPT response that includes data points as numbers
         data_list(list of strings): the list of all data points concerned
+        prev_data()
+        not_grouped_data()
     Returns:
         output.csv: the CSV file that contains the converted responses
     """
+    print(f"C->CSV: {convert_to_csv}\nP_D: {prev_data}, NGD: {not_grouped_data}")
     output_filename = os.path.join(os.path.dirname(sys.argv[0]), "output.csv")
     group_name = ''
     group_data = []
@@ -118,7 +121,7 @@ def convert_to_csv(gpt_response, data_list, prev_data, not_grouped_data):
                     writer.writerow([group, item])
             file.close()
 
-def gpt_responses(list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data):
+def gpt_responses(list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt_template, prev_data) -> int:
     """
     Asks GPT for a response for the data batches then calls 'convert_to_csv' to compile the responses into a CSV file
     Parameters:
@@ -129,6 +132,7 @@ def gpt_responses(list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt
     Returns:
         completed_gpt_requests(int): the number of completed GPT requests to fulfill the while loop conditional
     """
+    print(f"LOD: {list_of_data}")
     parsed_list_of_data = []
     not_grouped = []
 
@@ -157,7 +161,16 @@ def gpt_responses(list_of_data, completed_gpt_requests, num_of_gpt_requests, gpt
     return completed_gpt_requests
 
 def initialize_gpt_responses(num_of_gpt_requests, list_of_data, completed_gpt_requests, gpt_template, batch_size, hierarchy):
-    """Creates a one-layer deep affinity diagram"""
+    """Creates a one-layer deep affinity diagram
+    Parameters:
+        num_of_gpt_requests(int):
+        list_of_data():
+        completed_gpt_requests(int):
+        gpt_template(string): the template prompt that asks GPT to generate our data
+        batch_size():
+        hierarchy():
+    """
+    print(f"LOD: {list_of_data}, BS: {batch_size}, HCHY: {hierarchy}")
     start = 0
     end = batch_size
     prev_data = []
@@ -288,24 +301,13 @@ def initialize_affinity_diagram(file, merge_threshold):
 
     print("Job's done.")
 
-
-
 #----------------------------------------------------------------------#
 #                         New Diagramming Process                      # ------------------------------------------------------------------------------------------------------------------------------
 #----------------------------------------------------------------------#
 
-# """
-# Diagramming process
-# """
-# def process_batch(file, merge_threshold):
-#     output_file = set_up_output_file()
-#     print("Given threshold: ", merge_threshold)
-#     with open(file, 'r', newline='') as csvfile:
-#             csv_reader = csv.reader(csvfile)
-#             for row in csv_reader:
-#                 print(row[0])
 """
 Checks if the passed integer is an existing pass in the csv file
+used in ui.py
 """
 def valid_pass(pass_num):
     if not os.path.exists('output.csv'):
@@ -322,6 +324,7 @@ def valid_pass(pass_num):
 
 """
 Removes dictionary key-value pair duplicates
+used in ui.py
 """
 def remove_dict_duplicates(dictionary):
     unique_dict = {}
@@ -334,6 +337,7 @@ def remove_dict_duplicates(dictionary):
 """
 Grabs the associated key value pairs from a given column
 and the column to the right
+used in ui.py
 """
 def retrieve_pass(column_number):
     if not os.path.exists('output.csv'):
@@ -352,6 +356,8 @@ def retrieve_pass(column_number):
 
 """
 Sets up an output file
+used in menu.py
+used in ui.py
 """
 def set_output_file(delete=False):
     output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
@@ -362,6 +368,7 @@ def set_output_file(delete=False):
 
 """
 Checks if data exists in the file
+used in menu.py
 """
 def existing_data(file):
     with open(file, 'r', newline='') as file:
@@ -375,6 +382,7 @@ def existing_data(file):
 
 """
 Adds headers to csv
+used in ui.py
 """
 def add_headers_to_csv(file_path):
     with open(file_path, 'r', newline='') as file:
@@ -394,6 +402,7 @@ def add_headers_to_csv(file_path):
 """
 Saves accepted data to file (or writes orig data in
 first column if process has yet to began)
+used in ui.py
 """
 def save_data(data, first_pass=False):
     output_file = set_output_file()
@@ -427,6 +436,7 @@ def save_data(data, first_pass=False):
 
 """
 Writes accepted data to output file
+not used anywhere; could delete(?)
 """
 def write_tuples_to_file(data):
     output_file = set_output_file()
@@ -437,6 +447,7 @@ def write_tuples_to_file(data):
 
 """
 Determines size of batches
+used in ui.py
 """
 def set_batch_size(data_size):
     global SIZE_OF_BATCHES
@@ -448,6 +459,7 @@ def set_batch_size(data_size):
 
 """
 Returns an array of all data items from csv
+used in ui.py start_event()
 """
 def set_data_list(file):
     list_of_data = []
@@ -461,6 +473,7 @@ def set_data_list(file):
 
 """
 Processes a small subset of data items by prompting gpt
+Change name to something; process_batch() exists here and in ui.py --------------->>>>>>>>>>>>>>>>>>>>>>>=
 """
 def process_batch(gpt_template, user_input_string):
     results = None
@@ -470,6 +483,7 @@ def process_batch(gpt_template, user_input_string):
 
 """
 Returns a numbered list of given data as a string
+Used in ui.py process_batch()
 """
 def numbered_data(data):
     user_input_string = ""
@@ -481,6 +495,7 @@ def numbered_data(data):
 
 """
 Processes raw gpt response for csv creation
+Used in ui.py process_batch()
 """
 def process_results(results, batch):
     batch_message = """
@@ -510,30 +525,6 @@ def process_results(results, batch):
     print(csv_message)
     print(csv_data)
     return csv_data
-
-"""
-Adds ungrouped data to the formatted_data
-"""
-def adjust_data(formatted_data, response_included):
-    if all(response_included):
-        return formatted_data
-    else:
-        not_grouped_indices = []
-        for i in range(len(response_included)):
-            if not response_included[i]:
-                not_grouped_indices.append(i)
-        formatted_data.append(("Not Grouped", not_grouped_indices))
-        return formatted_data
-
-"""
-CAN BE DELETED
-"""
-def print_updated_result(updated_result):
-    for group_label, data_items in updated_result:
-        print(f"{group_label}")
-        for data_item in data_items:
-            print(f"  {data_item}")
-        print()
 
 """
 Formats results into a list of tuples in the format -> (Group Label, [indices])
@@ -573,7 +564,19 @@ def indices_to_data(formatted_data, batch):
 
     return csv_format
 
-
+"""
+Adds ungrouped data to the formatted_data
+"""
+def adjust_data(formatted_data, response_included):
+    if all(response_included):
+        return formatted_data
+    else:
+        not_grouped_indices = []
+        for i in range(len(response_included)):
+            if not response_included[i]:
+                not_grouped_indices.append(i)
+        formatted_data.append(("Not Grouped", not_grouped_indices))
+        return formatted_data
 
 """
 Checks if each data number was grouped
