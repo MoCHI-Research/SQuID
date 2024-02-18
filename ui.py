@@ -21,6 +21,8 @@ LEN_OF_ORIG_DATA = 0
 TOTAL_UNPROCESSED_DATA = 0
 NUM_PASSES = 0
 
+FIRST_SAVE_QUERY = True
+OUTPUT_FILE = ''
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -247,15 +249,19 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
             global COMPLETED_GPT_REQUESTS
             global TOTAL_UNPROCESSED_DATA
             global NUM_PASSES
+            global OUTPUT_FILE
+            global FIRST_SAVE_QUERY # ask if this is the first time save has been called
             NUM_GPT_REQUESTS = 0
             LEN_OF_ORIG_DATA = 0
             COMPLETED_GPT_REQUESTS = 0
             TOTAL_UNPROCESSED_DATA = 0
             NUM_PASSES = 0
 
-            output_file = set_output_file(True)
+            # output_file = set_output_file(True)
             data = set_data_list(self.return_and_clear_file())
-            save_data(data, True)
+            OUTPUT_FILE = save_data(data, OUTPUT_FILE, True, FIRST_SAVE_QUERY)
+            if FIRST_SAVE_QUERY:
+                FIRST_SAVE_QUERY = False
             LEN_OF_ORIG_DATA = TOTAL_UNPROCESSED_DATA = len(data)
 
             batch_size = set_batch_size(LEN_OF_ORIG_DATA)
@@ -320,8 +326,9 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
             self.after(100, self.process_batch, remaining_data)
         else:
             global ACCEPTED_DATA
+            global OUTPUT_FILE
             NUM_PASSES += 1
-            save_data(ACCEPTED_DATA)
+            save_data(ACCEPTED_DATA, OUTPUT_FILE)
             merge_labels(0.91, original_file = "output.csv", output_file = "output.csv")
             self.controller.create_pos_frame()
             print("No more data to process")
@@ -476,27 +483,6 @@ class Alert(customtkinter.CTkFrame):
         self.title = customtkinter.CTkLabel(self, text=alert_message, font=("Verdana", 22, "italic"))
         self.title.grid(row=0, column=0, sticky="nsew")
 
-# class ConfirmSave(customtkinter.CTkToplevel):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.geometry("400x300")
-
-#         self.label = customtkinter.CTkLabel(self, text="Confirmation")
-#         self.label.pack(padx=20, pady=20)
-        
-#         button_frame = customtkinter.CTkFrame(self, fg_color="transparent")
-#         button_frame.grid(row=3, column=0, sticky="nsew")
-#         button_frame.grid_columnconfigure((0, 1), weight=1)
-        
-#         # Confirmation text
-#         confirm_button = customtkinter.CTkButton(self, text="Confirm", command=self.confirmation_event)
-#         confirm_button.grid(row=0, column=0, padx=(0, 150), pady=(20, 0))
-#         cancel_button = customtkinter.CTkButton(self, text="Cancel", command=self.confirmation_event)
-#         cancel_button.grid(row=0, column=1, padx=(150, 0), pady=(20, 0))
-        
-#     def confirmation_event():
-#         print("button pressed")
-
 class PassOrStop(customtkinter.CTkFrame):
     def __init__(self, parent, controller, num_pass: int, num_data: int, num_unique_labels: int):
         super().__init__(parent)
@@ -573,8 +559,7 @@ class PassOrStop(customtkinter.CTkFrame):
         UNIQUE_LABELS = set()
         LEN_OF_ORIG_DATA = 0
         TOTAL_UNPROCESSED_DATA = 0
-
-
+        
         data = list(set(ACCEPTED_DATA.values()))
         ACCEPTED_DATA = {}
         LEN_OF_ORIG_DATA = TOTAL_UNPROCESSED_DATA = len(data)
@@ -585,25 +570,23 @@ class PassOrStop(customtkinter.CTkFrame):
         self.controller.create_alert_frame(alert_message)
         self.after(100, self.controller.CreateAffinityDiagram.process_batch, data)
 
-
     def save_results_event(self):
         global COMPLETED_GPT_REQUESTS
         global REJECTED_DATA
         global NUM_DATA_PROCESSED
+        global OUTPUT_FILE
+        global FIRST_SAVE_QUERY
         
-        # if self.save_confirmation is None or not self.save_confirmation.winfo_exists():
-        #     self.save_confirmation = ConfirmSave(self)  # create window if its None or destroyed
-        # else:
-        #     self.save_confirmation.focus()  # if window exists focus it
-
         COMPLETED_GPT_REQUESTS = 0
         REJECTED_DATA = []
         NUM_DATA_PROCESSED = 0
-        output_file = set_output_file()
-        add_headers_to_csv(output_file)
+        # output_file = set_output_file()
+        add_headers_to_csv(OUTPUT_FILE)
 
         self.controller.CreateAffinityDiagram.reset()
         self.controller.CreateAffinityDiagram.tkraise()
+        OUTPUT_FILE = ''
+        FIRST_SAVE_QUERY = True
 
 class ReasonForLabel(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
