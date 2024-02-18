@@ -9,7 +9,7 @@ import math
 import sys
 import threading
 import asyncio
-
+import customtkinter
 
 # GLOBAL VARIABLES
 SIZE_OF_BATCHES = 75
@@ -365,7 +365,13 @@ used in menu.py
 used in ui.py
 """
 def set_output_file(delete=False):
-    output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
+    output_file = customtkinter.filedialog.asksaveasfilename(
+        defaultextension=".csv", 
+        filetypes=[("Text Files", "*.csv"), ("All Files", "*.*")], 
+        initialfile="output.csv", 
+        title="Save File")
+
+    # output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
     if delete and os.path.exists(output_file):
         os.remove(output_file)
 
@@ -409,8 +415,9 @@ Saves accepted data to file (or writes orig data in
 first column if process has yet to began)
 used in ui.py
 """
-def save_data(data, first_pass=False):
-    output_file = set_output_file()
+def save_data(data, output_file, first_pass=False, first_save=False):
+    if first_save:
+        output_file = set_output_file()
     if first_pass:
         with open(output_file, mode='w', newline='') as file:
             writer = csv.writer(file)
@@ -438,6 +445,7 @@ def save_data(data, first_pass=False):
             writer = csv.writer(file)
             writer.writerow(header)
             writer.writerows(rows)
+    return output_file
 
 """
 Writes accepted data to output file
