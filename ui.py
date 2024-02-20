@@ -149,7 +149,7 @@ class FeatureFrame(customtkinter.CTkFrame):
         super().__init__(parent)
 
         self.controller = controller
-        self.configure(fg_color="grey15")
+        self.configure(fg_color=["grey90", "grey15"])
 
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=10)
@@ -157,10 +157,10 @@ class FeatureFrame(customtkinter.CTkFrame):
         title = customtkinter.CTkLabel(self, text="Features", font=("Verdana", 22, "underline"))
         title.grid(row=0, column=0, sticky="nsew")
 
-        self.create_affinity_diagram_button = customtkinter.CTkButton(self, text="Create an Affinity Diagram", width=230, height=50, fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.create_affinity_diagram_event)
+        self.create_affinity_diagram_button = customtkinter.CTkButton(self, text="Create an Affinity Diagram", width=230, height=50, hover_color=["#A3DCFF", "#1C669E"], text_color=["#000000", "#FFFFFF"], fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.create_affinity_diagram_event)
         self.create_affinity_diagram_button.grid(row=1, column=0, padx=(20, 20), pady=(15,15))
 
-        self.reason_for_label_button = customtkinter.CTkButton(self, text="Generate a Reason for a Label", width=230, height=50, fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.reason_for_label_event)
+        self.reason_for_label_button = customtkinter.CTkButton(self, text="Generate a Reason for a Label", width=230, height=50, hover_color=["#A3DCFF", "#1C669E"], text_color=["#000000", "#FFFFFF"], fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.reason_for_label_event)
         self.reason_for_label_button.grid(row=2, column=0, padx=(20, 20), pady=(15,15))
 
         # self.adjust_merge_threshold_button = customtkinter.CTkButton(self, text="Adjust Merge Threshold", width=230, height=50, fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.adjust_merge_threshold_event)
@@ -173,12 +173,12 @@ class FeatureFrame(customtkinter.CTkFrame):
 
     def create_affinity_diagram_event(self):
         self.reset_button_indicators()
-        self.create_affinity_diagram_button.configure(fg_color='#144870')
+        self.create_affinity_diagram_button.configure(fg_color=['#A3CEF0', '#144870'])
         self.controller.CreateAffinityDiagram.tkraise()
 
     def reason_for_label_event(self):
         self.reset_button_indicators()
-        self.reason_for_label_button.configure(fg_color='#144870')
+        self.reason_for_label_button.configure(fg_color=['#A3CEF0', '#144870'])
         self.controller.ReasonForLabel.tkraise()
 
     # def adjust_merge_threshold_event(self):
@@ -233,7 +233,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
         question_mark = customtkinter.CTkImage(light_image=Image.open("question_mark.png"),
                                           dark_image=Image.open("question_mark.png"),
                                           size=(25, 25))
-        self.hint_label = customtkinter.CTkButton(threshold_frame, text = "?", font=("Verdana", 12), fg_color="transparent", border_color="#1F6AA5", border_width=2, width=5, corner_radius=100, hover=False)
+        self.hint_label = customtkinter.CTkButton(threshold_frame, text = "?", text_color=["#000000", "#FFFFFF"], font=("Verdana", 12), fg_color="transparent", border_color="#1F6AA5", border_width=2, width=5, corner_radius=100, hover=False)
         self.hint_label.grid(row=0, column=2, padx = 5)
         merge_hint = """The threshold should be a decimal between 0 to 1. The default value is 0.91.
 Smaller thresholds lead to a diagram with fewer groups,
