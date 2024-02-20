@@ -339,7 +339,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
             global OUTPUT_FILE
             NUM_PASSES += 1
             save_data(ACCEPTED_DATA, OUTPUT_FILE)
-            merge_labels(self.controller.get_threshold(), original_file = "output.csv", output_file = "output.csv")
+            ACCEPTED_DATA = merge_labels(self.controller.get_threshold(), original_file = "output.csv", output_file = "output.csv")
             self.controller.create_pos_frame()
             print("No more data to process")
             # label_merge()
@@ -382,6 +382,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
             self.alert_message.configure(text="The file entered is not a .csv file.\nPlease go back and select a .csv file.", text_color="#cc4125")
             return False
         else:
+            self.alert_message.configure(text="")
             return True
     
     """
@@ -389,24 +390,24 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
     """
     def valid_threshold(self):
         given_input = self.threshold_entry.get()
-        # If nothing is inputted, keep threshold as before and continues to run program
-        if given_input == None:
-            return True
                
         current_threshold = self.controller.get_threshold()
 
         try:
             current_threshold = float(given_input)
         except:
-            self.alert_message.configure(text="The threshold you entered is invalid. \nPlease enter a number between 0 and 1.", text_color="#cc4125")
+            self.alert_message.configure(text="""The threshold you entered is invalid.\nPlease enter a number between 0 and 1.\nOur recommended value is 0.91.""", 
+                                         text_color="#cc4125")
             return False
         
         if current_threshold < 0 or current_threshold > 1:
-            self.alert_message.configure(text="The threshold you entered is invalid. \nPlease enter a number between 0 and 1.", text_color="#cc4125")
+            self.alert_message.configure(text="""The threshold you entered is invalid.\nPlease enter a number between 0 and 1.\nOur recommended value is 0.91.""", 
+                                         text_color="#cc4125")
             return False
-        
-        self.controller.change_threshold(current_threshold)
-        return True
+        else:
+            self.alert_message.configure(text="")
+            self.controller.change_threshold(current_threshold)
+            return True
 
 
 
@@ -419,7 +420,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
         self.file_status_box.configure(state="disabled")
 
         # Alert message
-        self.alert_message = customtkinter.CTkLabel(self, text="")
+        self.alert_message.configure(text="", text_color="#cc4125")
         
 
 

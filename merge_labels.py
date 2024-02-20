@@ -329,7 +329,13 @@ def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "la
 
     file.close()
     print("Merging finished")
-    return True
+    
+    accepted_data = {}
+    for label in group_dict:
+        for sub_levels in group_dict[label]:
+            accepted_data[sub_levels[-1]] = label
+    
+    return accepted_data
 
 
 """
