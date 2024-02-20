@@ -46,19 +46,19 @@ class App(customtkinter.CTk):
         # Creating class/frame instances
         self.FeatureFrame = FeatureFrame(self, controller=self)
         self.ReasonForLabel = ReasonForLabel(self, controller=self)
-        self.AdjustMergeThreshold = AdjustMergeThreshold(self, controller=self)
+        #self.AdjustMergeThreshold = AdjustMergeThreshold(self, controller=self)
         self.CreateAffinityDiagram = CreateAffinityDiagram(self, controller=self)
 
         # Displaying instances
         self.FeatureFrame.grid(row=0, column=0, sticky="nesw")
         self.ReasonForLabel.grid(row=0, column=1, sticky="nsew")
-        self.AdjustMergeThreshold.grid(row=0, column=1, sticky="nsew")
+        #self.AdjustMergeThreshold.grid(row=0, column=1, sticky="nsew")
         self.CreateAffinityDiagram.grid(row=0, column=1, sticky="nsew")
 
         # Sets up final visual touch aspects
         self.FeatureFrame.create_affinity_diagram_event()
 
-    def return_threshold(self):
+    def get_threshold(self):
         return self.merge_threshold
 
     def change_threshold(self, value):
@@ -161,13 +161,13 @@ class FeatureFrame(customtkinter.CTkFrame):
         self.reason_for_label_button = customtkinter.CTkButton(self, text="Generate a Reason for a Label", width=230, height=50, fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.reason_for_label_event)
         self.reason_for_label_button.grid(row=2, column=0, padx=(20, 20), pady=(15,15))
 
-        self.adjust_merge_threshold_button = customtkinter.CTkButton(self, text="Adjust Merge Threshold", width=230, height=50, fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.adjust_merge_threshold_event)
-        self.adjust_merge_threshold_button.grid(row=3, column=0, padx=(20, 20), pady=(15,15))
+        # self.adjust_merge_threshold_button = customtkinter.CTkButton(self, text="Adjust Merge Threshold", width=230, height=50, fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.adjust_merge_threshold_event)
+        # self.adjust_merge_threshold_button.grid(row=3, column=0, padx=(20, 20), pady=(15,15))
 
     def reset_button_indicators(self):
         self.create_affinity_diagram_button.configure(fg_color="transparent")
         self.reason_for_label_button.configure(fg_color="transparent")
-        self.adjust_merge_threshold_button.configure(fg_color="transparent")
+        # self.adjust_merge_threshold_button.configure(fg_color="transparent")
 
     def create_affinity_diagram_event(self):
         self.reset_button_indicators()
@@ -179,10 +179,10 @@ class FeatureFrame(customtkinter.CTkFrame):
         self.reason_for_label_button.configure(fg_color='#144870')
         self.controller.ReasonForLabel.tkraise()
 
-    def adjust_merge_threshold_event(self):
-        self.reset_button_indicators()
-        self.adjust_merge_threshold_button.configure(fg_color='#144870')
-        self.controller.AdjustMergeThreshold.tkraise()
+    # def adjust_merge_threshold_event(self):
+    #     self.reset_button_indicators()
+    #     self.adjust_merge_threshold_button.configure(fg_color='#144870')
+    #     self.controller.AdjustMergeThreshold.tkraise()
 
 class CreateAffinityDiagram(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
@@ -214,13 +214,27 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
         self.file_status_box.grid(row=0, column=1, pady=30)
         self.file_status_box.configure(state="disabled")
 
+        # Frame container for threshold label and entry
+        threshold_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        threshold_frame.grid(row=3, column=0)
+
+        # Merge Threshold Label
+        self.threshold_label = customtkinter.CTkLabel(threshold_frame, text = "Merge Threshold: ", font=("Verdana", 14))
+        self.threshold_label.grid(row=0, column=0)
+
+        # Merge Threshold box
+        self.threshold_entry = customtkinter.CTkEntry(threshold_frame, width = 100, font=("Verdana", 14))
+        self.threshold_entry.grid(row=0, column=1)
+        self.threshold_entry.configure(state="normal")
+        self.threshold_entry.insert(0, str(self.controller.get_threshold())) 
+
         # Alert message
-        self.alert_message = customtkinter.CTkLabel(self, text="")
-        self.alert_message.grid(row=3, column=0, pady=(30, 2))
+        self.alert_message = customtkinter.CTkLabel(self, text="",)
+        self.alert_message.grid(row=4, column=0, pady=(30, 2))
 
         # Start button
         start_button = customtkinter.CTkButton(self, text = "Start", font=("Verdana", 14), command = self.start_event)
-        start_button.grid(row=4, column=0)
+        start_button.grid(row=5, column=0)
 
     """
     Prompts user to select a file
@@ -243,7 +257,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
     Begins affinity diagram making process (with file validity check)
     """
     def start_event(self):
-        if self.valid_file(self.file_path):
+        if self.valid_file(self.file_path) and self.valid_threshold():
             global NUM_GPT_REQUESTS
             global LEN_OF_ORIG_DATA
             global COMPLETED_GPT_REQUESTS
@@ -329,7 +343,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
             global OUTPUT_FILE
             NUM_PASSES += 1
             save_data(ACCEPTED_DATA, OUTPUT_FILE)
-            merge_labels(0.91, original_file = "output.csv", output_file = "output.csv")
+            merge_labels(self.controller.get_threshold(), original_file = "output.csv", output_file = "output.csv")
             self.controller.create_pos_frame()
             print("No more data to process")
             # label_merge()
@@ -373,6 +387,33 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
             return False
         else:
             return True
+    
+    """
+    Checks if the given threshold is valid. If so, change the merge threshold
+    """
+    def valid_threshold(self):
+        given_input = self.threshold_entry.get()
+        # If nothing is inputted, keep threshold as before and continues to run program
+        if given_input == None:
+            return True
+               
+        current_threshold = self.controller.get_threshold()
+
+        try:
+            current_threshold = float(given_input)
+        except:
+            self.alert_message.configure(text="The threshold you entered is invalid. \nPlease enter a number between 0 and 1.", text_color="#cc4125")
+            return False
+        
+        if current_threshold < 0 or current_threshold > 1:
+            self.alert_message.configure(text="The threshold you entered is invalid. \nPlease enter a number between 0 and 1.", text_color="#cc4125")
+            return False
+        
+        self.controller.change_threshold(current_threshold)
+        return True
+
+
+
 
     def reset(self):
         # File entry widget
@@ -744,12 +785,12 @@ class SplitSelectionTable(customtkinter.CTkScrollableFrame):
 
 
 
-class AdjustMergeThreshold(customtkinter.CTkFrame):
-    def __init__(self, parent, controller):
-        super().__init__(parent)
+# class AdjustMergeThreshold(customtkinter.CTkFrame):
+#     def __init__(self, parent, controller):
+#         super().__init__(parent)
 
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
+#         self.grid_rowconfigure(0, weight=1)
+#         self.grid_columnconfigure(0, weight=1)
 
-        title = customtkinter.CTkLabel(self, text="Let's adjust merge threshold!")
-        title.grid(row=0, column=0)
+#         title = customtkinter.CTkLabel(self, text="Let's adjust merge threshold!")
+#         title.grid(row=0, column=0)
