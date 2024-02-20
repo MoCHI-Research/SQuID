@@ -233,7 +233,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
         question_mark = customtkinter.CTkImage(light_image=Image.open("question_mark.png"),
                                           dark_image=Image.open("question_mark.png"),
                                           size=(25, 25))
-        self.hint_label = customtkinter.CTkLabel(threshold_frame, text = "", image = question_mark)
+        self.hint_label = customtkinter.CTkButton(threshold_frame, text = "?", font=("Verdana", 12), fg_color="transparent", border_color="#1F6AA5", border_width=2, width=5, corner_radius=100, hover=False)
         self.hint_label.grid(row=0, column=2, padx = 5)
         merge_hint = """The threshold should be a decimal between 0 to 1. The default value is 0.91.
 Smaller thresholds lead to a diagram with fewer groups,
@@ -686,7 +686,7 @@ class ReasonForLabel(customtkinter.CTkFrame):
         title.grid(row=0, column=0, pady=(10, 10))
 
         # Instructions
-        instructions = "Please enter a valid number that corresponds with a pass number 'for output.csv'.\nNote that to get the raw data with its labels, you will want to start at 0."
+        instructions = "Please enter a valid number that corresponds with a pass number for the most recent generated affinity diagram file.\nNote that to get the raw data with its labels, you will want to start at 0."
         instructions_label = customtkinter.CTkLabel(main_frame, text=instructions, font=("Verdana", 14, "italic"))
         instructions_label.grid(row=1, column=0, pady=(0, 10))
 
