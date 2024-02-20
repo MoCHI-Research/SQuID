@@ -21,7 +21,6 @@ LEN_OF_ORIG_DATA = 0
 TOTAL_UNPROCESSED_DATA = 0
 NUM_PASSES = 0
 
-FIRST_SAVE_QUERY = True
 OUTPUT_FILE = ''
 
 class App(customtkinter.CTk):
@@ -250,7 +249,6 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
             global TOTAL_UNPROCESSED_DATA
             global NUM_PASSES
             global OUTPUT_FILE
-            global FIRST_SAVE_QUERY # ask if this is the first time save has been called
             NUM_GPT_REQUESTS = 0
             LEN_OF_ORIG_DATA = 0
             COMPLETED_GPT_REQUESTS = 0
@@ -259,9 +257,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
 
             # output_file = set_output_file(True)
             data = set_data_list(self.return_and_clear_file())
-            OUTPUT_FILE = save_data(data, OUTPUT_FILE, True, FIRST_SAVE_QUERY)
-            if FIRST_SAVE_QUERY:
-                FIRST_SAVE_QUERY = False
+            OUTPUT_FILE = save_data(data, OUTPUT_FILE, True)
             LEN_OF_ORIG_DATA = TOTAL_UNPROCESSED_DATA = len(data)
 
             batch_size = set_batch_size(LEN_OF_ORIG_DATA)
@@ -575,18 +571,41 @@ class PassOrStop(customtkinter.CTkFrame):
         global REJECTED_DATA
         global NUM_DATA_PROCESSED
         global OUTPUT_FILE
-        global FIRST_SAVE_QUERY
         
         COMPLETED_GPT_REQUESTS = 0
         REJECTED_DATA = []
         NUM_DATA_PROCESSED = 0
         # output_file = set_output_file()
         add_headers_to_csv(OUTPUT_FILE)
+        
+        output_file = customtkinter.filedialog.asksaveasfilename(
+            defaultextension=".csv", 
+            filetypes=[("Text Files", "*.csv"), ("All Files", "*.*")], 
+            initialfile="output.csv", 
+            title="Save File")
 
+        # Open the old CSV file in read mode
+        with open(OUTPUT_FILE, 'r') as old_file:
+            # Create a CSV reader object
+            reader = csv.reader(old_file)
+
+            # Open the new CSV file in write mode
+            with open(output_file, 'w', newline='') as new_file:
+                # Create a CSV writer object
+                writer = csv.writer(new_file)
+
+                # Copy the header row from the old file to the new file
+                header = next(reader)
+                writer.writerow(header)
+
+                # Copy the remaining rows from the old file to the new file
+                for row in reader:
+                    writer.writerow(row)
+
+        # Change the location so that reason for a label can work
+        OUTPUT_FILE = output_file
         self.controller.CreateAffinityDiagram.reset()
         self.controller.CreateAffinityDiagram.tkraise()
-        OUTPUT_FILE = ''
-        FIRST_SAVE_QUERY = True
 
 class ReasonForLabel(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
@@ -733,6 +752,8 @@ class SplitSelectionTable(customtkinter.CTkScrollableFrame):
 
     def return_selected_pair(self):
         selected_pair = self.radio_var.get()
+        print(str(len(self.data_label_pairs)))
+        print(str(selected_pair))
         if selected_pair - 1 >= 0:
             _, data, label = self.data_label_pairs[selected_pair - 1]
             data_text = data.cget("text")
