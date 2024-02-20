@@ -407,15 +407,17 @@ We recommend a threshold between 0.85 and 1 for best results."""
                
         current_threshold = self.controller.get_threshold()
 
+        message = """The threshold you entered is invalid.\nPlease enter a number between 0 and 1.\nThe recommended value is 0.91."""
+
         try:
             current_threshold = float(given_input)
         except:
-            self.alert_message.configure(text="""The threshold you entered is invalid.\nPlease enter a number between 0 and 1.\nOur recommended value is 0.91.""", 
+            self.alert_message.configure(text=message, 
                                          text_color="#cc4125")
             return False
         
         if current_threshold < 0 or current_threshold > 1:
-            self.alert_message.configure(text="""The threshold you entered is invalid.\nPlease enter a number between 0 and 1.\nOur recommended value is 0.91.""", 
+            self.alert_message.configure(text=message, 
                                          text_color="#cc4125")
             return False
         else:
