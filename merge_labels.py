@@ -10,6 +10,8 @@ from numpy.linalg import norm
 from dotenv import load_dotenv
 #from openai.embeddings_utils import get_embedding, cosine_similarity
 from gptconnection import openai_sys_chatcompletion
+from pathlib import Path
+
 
 #load_dotenv()
 #openai.api_key = os.getenv('OPENAI_API_KEY')
@@ -295,7 +297,7 @@ Parameters:
     new_embedding(bool): True if new similarity needs to be created; False if using exsiting similarities
 """
 def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "labels_merged.csv", new_embedding = True, new_similarity = True):
-
+    Path(INTERMEDIATE_PATH).mkdir(parents=True, exist_ok=True)
     group_dict = csv_to_dict(original_file)
     label_list = [label for label in group_dict]
 

@@ -476,11 +476,13 @@ used in ui.py start_event()
 def set_data_list(file):
     list_of_data = []
     with open(file, newline='') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            if row:
-                list_of_data.append(row[0])
-
+        # reader = csv.reader(f)
+        # for row in reader:
+        #     if row:
+        #         list_of_data.append(row[0])
+        for line in f:
+            list_of_data.append(line.strip("\n"))
+        
     return list_of_data
 
 """
