@@ -24,6 +24,7 @@ The specific packages required are:
 - plotly
 - python-dotenv
 - customtkinter
+- CTkToolTip
 - scikit-learn
 
 # To Run SQuID

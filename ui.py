@@ -3,9 +3,12 @@ from typing import Dict
 from menu import *
 from typing import List, Tuple
 import customtkinter
+from CTkToolTip import *
 import time
 import os
 import asyncio
+
+from PIL import ImageTk, Image
 
 
 customtkinter.set_appearance_mode("System")
@@ -222,10 +225,21 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
         self.threshold_label.grid(row=0, column=0)
 
         # Merge Threshold box
-        self.threshold_entry = customtkinter.CTkEntry(threshold_frame, width = 100, font=("Verdana", 14))
+        self.threshold_entry = customtkinter.CTkEntry(threshold_frame, width = 100, font=("Verdana", 14), state="normal")
         self.threshold_entry.grid(row=0, column=1)
-        self.threshold_entry.configure(state="normal")
         self.threshold_entry.insert(0, str(self.controller.get_threshold())) 
+
+        #Question mark for hints
+        question_mark = customtkinter.CTkImage(light_image=Image.open("question_mark.png"),
+                                          dark_image=Image.open("question_mark.png"),
+                                          size=(25, 25))
+        self.hint_label = customtkinter.CTkLabel(threshold_frame, text = "", image = question_mark)
+        self.hint_label.grid(row=0, column=2, padx = 5)
+        merge_hint = """The threshold should be a decimal between 0 to 1. The default value is 0.91.
+Smaller thresholds lead to a diagram with fewer groups,
+and larger thresholds lead to a diagram with more groups.
+We recommend a threshold between 0.85 and 1 for best results."""
+        self.merge_tip = CTkToolTip(self.hint_label, delay = 0.15, text="", message = merge_hint)
 
         # Alert message
         self.alert_message = customtkinter.CTkLabel(self, text="",)
