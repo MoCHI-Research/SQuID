@@ -229,10 +229,6 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
         self.threshold_entry.grid(row=0, column=1)
         self.threshold_entry.insert(0, str(self.controller.get_threshold())) 
 
-        #Question mark for hints
-        question_mark = customtkinter.CTkImage(light_image=Image.open("question_mark.png"),
-                                          dark_image=Image.open("question_mark.png"),
-                                          size=(25, 25))
         self.hint_label = customtkinter.CTkButton(threshold_frame, text = "?", text_color=["#000000", "#FFFFFF"], font=("Verdana", 12), fg_color="transparent", border_color="#1F6AA5", border_width=2, width=5, corner_radius=100, hover=False)
         self.hint_label.grid(row=0, column=2, padx = 5)
         merge_hint = """The threshold should be a decimal between 0 to 1. The default value is 0.91.
