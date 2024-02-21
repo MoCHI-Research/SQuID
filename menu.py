@@ -53,10 +53,10 @@ Checks if the passed integer is an existing pass in the csv file
 used in ui.py
 """
 def valid_pass(pass_num):
-    if not os.path.exists('temp_output.csv'):
+    if not os.path.exists('output.csv'):
         return False
 
-    with open('temp_output.csv', 'r', newline='') as csvfile:
+    with open('output.csv', 'r', newline='') as csvfile:
         reader = csv.reader(csvfile)
         num_columns = len(next(reader))
 
@@ -83,12 +83,12 @@ and the column to the right
 used in ui.py
 """
 def retrieve_pass(column_number):
-    if not os.path.exists('temp_output.csv'):
-        return False  # 'temp_output.csv' file does not exist
+    if not os.path.exists('output.csv'):
+        return False  # 'output.csv' file does not exist
 
     column_dict = {}
 
-    with open('temp_output.csv', 'r', newline='') as csvfile:
+    with open('output.csv', 'r', newline='') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)
         for row in reader:
@@ -109,7 +109,7 @@ def set_output_file(delete=False):
     #     initialfile="output.csv", 
     #     title="Save File")
 
-    output_file = os.path.join(os.path.dirname(sys.argv[0]), 'temp_output.csv')
+    output_file = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
     if delete and os.path.exists(output_file):
         os.remove(output_file)
 
@@ -368,7 +368,7 @@ def get_batch_size():
 #----------------------------------------------------------------------#
 
 # # Retrieves all data with the label_to_search
-def retrieve_data_with_label(label_to_search, column_num, filename = "temp_output.csv"):
+def retrieve_data_with_label(label_to_search, column_num, filename = "output.csv"):
     filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
     if not os.path.isfile(filename):
         print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
@@ -386,7 +386,7 @@ def retrieve_data_with_label(label_to_search, column_num, filename = "temp_outpu
     return all_data_with_label
 
 # # Returns how many passes there are by counting number of columns in output.csv
-def num_columns(filename = "temp_output.csv"):
+def num_columns(filename = "output.csv"):
     filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
     if not os.path.isfile(filename):
         print(f"File '{filename}' does not exist in the current directory. Please go back to the menu and create an affinity diagram to use this feature.")
@@ -399,7 +399,7 @@ def num_columns(filename = "temp_output.csv"):
             return column_count
 
 # # Returns all unique labels from a given column number
-def column_labels(column_num, filename = "temp_output.csv"):
+def column_labels(column_num, filename = "output.csv"):
     unique_entries = set()
     filename = os.path.join(os.path.dirname(sys.argv[0]), filename)
 

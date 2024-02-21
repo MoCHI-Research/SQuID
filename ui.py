@@ -349,7 +349,7 @@ We recommend a threshold between 0.85 and 1 for best results."""
             global OUTPUT_FILE
             NUM_PASSES += 1
             save_data(ACCEPTED_DATA, OUTPUT_FILE)
-            ACCEPTED_DATA = merge_labels(self.controller.get_threshold(), original_file = "temp_output.csv", output_file = "temp_output.csv")
+            ACCEPTED_DATA = merge_labels(self.controller.get_threshold(), original_file = "output.csv", output_file = "output.csv")
             self.controller.create_pos_frame()
             print("No more data to process")
             # label_merge()
@@ -635,7 +635,7 @@ class PassOrStop(customtkinter.CTkFrame):
         output_file = customtkinter.filedialog.asksaveasfilename(
             defaultextension=".csv", 
             filetypes=[("Text Files", "*.csv"), ("All Files", "*.*")], 
-            initialfile="temp_output.csv", 
+            initialfile="output.csv", 
             title="Save File")
 
         # Open the old CSV file in read mode
