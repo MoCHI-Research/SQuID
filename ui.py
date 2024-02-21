@@ -640,21 +640,11 @@ class PassOrStop(customtkinter.CTkFrame):
 
         # Open the old CSV file in read mode
         with open(OUTPUT_FILE, 'r') as old_file:
-            # Create a CSV reader object
-            reader = csv.reader(old_file)
+            content = old_file.read()
 
-            # Open the new CSV file in write mode
-            with open(output_file, 'w', newline='') as new_file:
-                # Create a CSV writer object
-                writer = csv.writer(new_file)
-
-                # Copy the header row from the old file to the new file
-                header = next(reader)
-                writer.writerow(header)
-
-                # Copy the remaining rows from the old file to the new file
-                for row in reader:
-                    writer.writerow(row)
+        # Open the new CSV file in write mode
+        with open(output_file, 'w', newline='') as new_file:
+            new_file.write(content)
 
         # Change the location so that reason for a label can work
         OUTPUT_FILE = output_file
