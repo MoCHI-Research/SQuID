@@ -127,7 +127,6 @@ Returns(string):
     the message that the model gives back as response
 """
 def openai_example_chatcompletion(sys_key, eg_input_key, eg_output_key, user_message, model_name = "gpt-4", max_tokens = None, temperature = 0):
-    print(os.environ.get('OPENAI_API_KEY'))
     client = OpenAI(
         organization='org-5oRL8cS6ihNsXp8BaKovvGup',
     )
