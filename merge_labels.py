@@ -16,7 +16,7 @@ from pathlib import Path
 #load_dotenv()
 #openai.api_key = os.getenv('OPENAI_API_KEY')
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 
 client = OpenAI(
     organization='org-5oRL8cS6ihNsXp8BaKovvGup',
