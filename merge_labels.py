@@ -16,12 +16,6 @@ from pathlib import Path
 #load_dotenv()
 #openai.api_key = os.getenv('OPENAI_API_KEY')
 
-os.environ["OPENAI_API_KEY"] = ""
-
-client = OpenAI(
-    organization='org-5oRL8cS6ihNsXp8BaKovvGup',
-)
-
 
 if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
     EXE_LOCATION = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
@@ -37,6 +31,7 @@ Parameters:
 
 """
 def get_embedding(sent, engine = "text-embedding-ada-002"):
+    global client
     response = client.embeddings.create(
         input= sent,
         model= engine
@@ -303,6 +298,11 @@ Parameters:
     new_embedding(bool): True if new similarity needs to be created; False if using exsiting similarities
 """
 def merge_labels(merge_threshold = 0.91, original_file = None, output_file = "labels_merged.csv", new_embedding = True, new_similarity = True):
+    global client 
+    client = OpenAI(
+        organization='org-5oRL8cS6ihNsXp8BaKovvGup',
+    )
+
     Path(os.path.join(EXE_LOCATION, INTERMEDIATE_PATH)).mkdir(parents=True, exist_ok=True)
     group_dict = csv_to_dict(original_file)
     label_list = [label for label in group_dict]

@@ -757,8 +757,10 @@ class ReasonForLabel(customtkinter.CTkFrame):
 
     def generate_response_event(self):
         data, label = self.table.return_selected_pair()
-        if data == None and label == None:
-            print("No pair has been select")
+        if not os.environ.get("OPENAI_API_KEY"):
+            self.reason.configure(text="Please enter an API key in settings.")
+        elif data == None and label == None:
+            self.reason.configure(text="No pair has been selected")
         else:
             self.reason.configure(text="Please wait as we generate a reason...")
             self.after(100, lambda: self.display_response(data, label))
