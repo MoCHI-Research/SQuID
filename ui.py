@@ -7,6 +7,7 @@ from CTkToolTip import *
 import time
 import os
 import asyncio
+import tkinter as tk
 
 from PIL import ImageTk, Image
 
@@ -48,12 +49,14 @@ class App(customtkinter.CTk):
         # Creating class/frame instances
         self.FeatureFrame = FeatureFrame(self, controller=self)
         self.ReasonForLabel = ReasonForLabel(self, controller=self)
+        self.Settings = Settings(self, controller=self)
         #self.AdjustMergeThreshold = AdjustMergeThreshold(self, controller=self)
         self.CreateAffinityDiagram = CreateAffinityDiagram(self, controller=self)
 
         # Displaying instances
         self.FeatureFrame.grid(row=0, column=0, sticky="nesw")
         self.ReasonForLabel.grid(row=0, column=1, sticky="nsew")
+        self.Settings.grid(row=0, column=1, sticky="nsew")
         #self.AdjustMergeThreshold.grid(row=0, column=1, sticky="nsew")
         self.CreateAffinityDiagram.grid(row=0, column=1, sticky="nsew")
 
@@ -166,9 +169,13 @@ class FeatureFrame(customtkinter.CTkFrame):
         # self.adjust_merge_threshold_button = customtkinter.CTkButton(self, text="Adjust Merge Threshold", width=230, height=50, fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.adjust_merge_threshold_event)
         # self.adjust_merge_threshold_button.grid(row=3, column=0, padx=(20, 20), pady=(15,15))
 
+        self.settings_button = customtkinter.CTkButton(self, text="Settings", width=230, height=50, hover_color=["#A3DCFF", "#1C669E"], text_color=["#000000", "#FFFFFF"], fg_color="transparent", border_color="#3B8ED0", border_width=2, font=("Verdana", 14), command=self.settings_event)
+        self.settings_button.grid(row=3, column=0, padx=(20, 20), pady=(15,15))
+
     def reset_button_indicators(self):
         self.create_affinity_diagram_button.configure(fg_color="transparent")
         self.reason_for_label_button.configure(fg_color="transparent")
+        self.settings_button.configure(fg_color="transparent")
         # self.adjust_merge_threshold_button.configure(fg_color="transparent")
 
     def create_affinity_diagram_event(self):
@@ -180,6 +187,11 @@ class FeatureFrame(customtkinter.CTkFrame):
         self.reset_button_indicators()
         self.reason_for_label_button.configure(fg_color=['#A3CEF0', '#144870'])
         self.controller.ReasonForLabel.tkraise()
+
+    def settings_event(self):
+        self.reset_button_indicators()
+        self.settings_button.configure(fg_color=['#A3CEF0', '#144870'])
+        self.controller.Settings.tkraise()
 
     # def adjust_merge_threshold_event(self):
     #     self.reset_button_indicators()
@@ -227,7 +239,7 @@ class CreateAffinityDiagram(customtkinter.CTkFrame):
         # Merge Threshold box
         self.threshold_entry = customtkinter.CTkEntry(threshold_frame, width = 100, font=("Verdana", 14), state="normal")
         self.threshold_entry.grid(row=0, column=1)
-        self.threshold_entry.insert(0, str(self.controller.get_threshold())) 
+        self.threshold_entry.insert(0, str(self.controller.get_threshold()))
 
         self.hint_label = customtkinter.CTkButton(threshold_frame, text = "?", text_color=["#000000", "#FFFFFF"], font=("Verdana", 12), fg_color="transparent", border_color="#1F6AA5", border_width=2, width=5, corner_radius=100, hover=False)
         self.hint_label.grid(row=0, column=2, padx = 5)
@@ -394,13 +406,13 @@ We recommend a threshold between 0.85 and 1 for best results."""
         else:
             self.alert_message.configure(text="")
             return True
-    
+
     """
     Checks if the given threshold is valid. If so, change the merge threshold
     """
     def valid_threshold(self):
         given_input = self.threshold_entry.get()
-               
+
         current_threshold = self.controller.get_threshold()
 
         message = """The threshold you entered is invalid.\nPlease enter a number between 0 and 1.\nThe recommended value is 0.91."""
@@ -408,12 +420,12 @@ We recommend a threshold between 0.85 and 1 for best results."""
         try:
             current_threshold = float(given_input)
         except:
-            self.alert_message.configure(text=message, 
+            self.alert_message.configure(text=message,
                                          text_color="#cc4125")
             return False
-        
+
         if current_threshold < 0 or current_threshold > 1:
-            self.alert_message.configure(text=message, 
+            self.alert_message.configure(text=message,
                                          text_color="#cc4125")
             return False
         else:
@@ -433,7 +445,7 @@ We recommend a threshold between 0.85 and 1 for best results."""
 
         # Alert message
         self.alert_message.configure(text="", text_color="#cc4125")
-        
+
 
 
 class UserSelection(customtkinter.CTkFrame):
@@ -588,7 +600,7 @@ class PassOrStop(customtkinter.CTkFrame):
         save_results_button.grid(row=0, column=0, padx=(0, 150), pady=(20, 0))
         gen_next_pass_button = customtkinter.CTkButton(button_frame, width=175, text="Generate Next Pass", command=self.gen_next_pass_event)
         gen_next_pass_button.grid(row=0, column=1, padx=(150, 0), pady=(20, 0))
-        
+
         # Confirmation to save and end generation
         self.save_confirmation = None
 
@@ -609,7 +621,7 @@ class PassOrStop(customtkinter.CTkFrame):
         UNIQUE_LABELS = set()
         LEN_OF_ORIG_DATA = 0
         TOTAL_UNPROCESSED_DATA = 0
-        
+
         data = list(set(ACCEPTED_DATA.values()))
         ACCEPTED_DATA = {}
         LEN_OF_ORIG_DATA = TOTAL_UNPROCESSED_DATA = len(data)
@@ -625,17 +637,17 @@ class PassOrStop(customtkinter.CTkFrame):
         global REJECTED_DATA
         global NUM_DATA_PROCESSED
         global OUTPUT_FILE
-        
+
         COMPLETED_GPT_REQUESTS = 0
         REJECTED_DATA = []
         NUM_DATA_PROCESSED = 0
         # output_file = set_output_file()
         add_headers_to_csv(OUTPUT_FILE)
-        
+
         output_file = customtkinter.filedialog.asksaveasfilename(
-            defaultextension=".csv", 
-            filetypes=[("Text Files", "*.csv"), ("All Files", "*.*")], 
-            initialfile="output.csv", 
+            defaultextension=".csv",
+            filetypes=[("Text Files", "*.csv"), ("All Files", "*.*")],
+            initialfile="output.csv",
             title="Save File")
 
         # Open the old CSV file in read mode
@@ -817,7 +829,69 @@ class SplitSelectionTable(customtkinter.CTkScrollableFrame):
             return None, None
 
 
+class Settings(customtkinter.CTkFrame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
 
+        self.controller = controller
+        self.grid_columnconfigure(0, weight=1)
+
+        # Title label
+        title = customtkinter.CTkLabel(self, text="Settings", font=("Verdana", 22, "underline"))
+        title.grid(row=0, column=0, pady=30)
+
+        # Instructions
+        instructions = "Please enter you API key in the field below and press 'Set API Key' to begin using SQuID."
+        instructions_label = customtkinter.CTkLabel(self, text=instructions, font=("Verdana", 14, "italic"))
+        instructions_label.grid(row=1, column=0, pady=(10, 10))
+
+        # Frame container for file button and entry
+        API_Key_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        API_Key_frame.grid(row=2, column=0)
+
+        # Select File Button
+        set_API_key_button = customtkinter.CTkButton(API_Key_frame, text="Set API Key", font=("Verdana", 14), command=self.set_API_Key_event)
+        set_API_key_button.grid(row=0, column=1, pady=5, padx=10)
+
+        # File selection labels
+        self.API_Key_entry = customtkinter.CTkEntry(API_Key_frame, width=600, placeholder_text="Paste API Key Here", font=("Verdana", 14, "italic"))
+        self.API_Key_entry.grid(row=0, column=0, pady=5)
+
+        # Status/Error Frame
+        error_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        error_frame.grid(row=3, column=0)
+
+        # Error label
+        self.error = customtkinter.CTkLabel(error_frame, text="", text_color="#FF3333")
+        self.error.grid(row=0, column=0)
+
+        # Status/Error Frame
+        status_frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        status_frame.grid(row=4, column=0)
+
+        # Status label
+        self.default_status = "Current API Key: None"
+        self.Key_status = customtkinter.CTkLabel(status_frame, width=300, height=50, corner_radius=10, text=self.default_status, font=("Verdana", 16), fg_color="#1F6AA5", text_color="#FFFFFF")
+        self.Key_status.grid(row=0, column=0, pady=30)
+
+
+
+    def set_API_Key_event(self):
+        API_entry = self.API_Key_entry.get()
+        if self.is_api_key_valid(API_entry):
+            self.clear_error()
+            self.API_Key_entry.delete(0, tk.END)
+            self.Key_status.configure(text="Current API Key: " + API_entry[0:2] + "..." + API_entry[-4:])
+        else:
+            API_entry = ""
+            self.error.configure(text="Key is not valid. Please enter a valid key.")
+
+
+    def clear_error(self):
+        self.error.configure(text="")
+
+    def is_api_key_valid(self, key):
+        return True
 
 # class AdjustMergeThreshold(customtkinter.CTkFrame):
 #     def __init__(self, parent, controller):
