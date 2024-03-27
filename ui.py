@@ -871,7 +871,8 @@ class Settings(customtkinter.CTkFrame):
         if self.is_api_key_valid(API_entry):
             self.clear_error()
             self.API_Key_entry.delete(0, tk.END)
-            self.Key_status.configure(text="Current API Key: " + API_entry[0:2] + "..." + API_entry[-4:])
+            os.environ["OPENAI_API_KEY"] = API_entry
+            self.Key_status.configure(text="Current API Key: " + os.environ.get("OPENAI_API_KEY")[0:2] + "..." + os.environ.get("OPENAI_API_KEY")[-4:])
         else:
             API_entry = ""
             self.error.configure(text="Key is not valid. Please enter a valid key.")
@@ -881,7 +882,7 @@ class Settings(customtkinter.CTkFrame):
         self.error.configure(text="")
 
     def is_api_key_valid(self, key):
-        return True
+        return len(key) > 5
 
 # class AdjustMergeThreshold(customtkinter.CTkFrame):
 #     def __init__(self, parent, controller):

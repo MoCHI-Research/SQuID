@@ -14,11 +14,7 @@ JSON_FILE = os.path.join(script_dir, 'prompts.json')
 # JSON_FILE = open(os.path.join(os.path.dirname(sys.argv[0]), 'prompts.json'))
 GPT_TEMPLATES = json.load(open(JSON_FILE))
 
-os.environ["OPENAI_API_KEY"] = "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"
-
-client = OpenAI(
-    organization='org-5oRL8cS6ihNsXp8BaKovvGup',
-)
+os.environ["OPENAI_API_KEY"] = ""
 
 ERROR_WAIT_TOGGLE = True
 ERROR_WAIT_TIME = 10 # Seconds
@@ -36,6 +32,9 @@ Returns(string):
     the message that the model gives back as response
 """
 def openai_chatcompletion(user_message, model_name = "gpt-4", max_tokens = None, temperature = 0):
+    client = OpenAI(
+        organization='org-5oRL8cS6ihNsXp8BaKovvGup',
+    )
     if max_tokens is None:
         completion = client.chat.completions.create(
             model = model_name,
@@ -66,6 +65,9 @@ Returns(string):
 """
 def openai_sys_chatcompletion(sys_key, user_message, model_name = "gpt-4", max_tokens = None, temperature = 0):
     sys_prompt = GPT_TEMPLATES[sys_key]
+    client = OpenAI(
+        organization='org-5oRL8cS6ihNsXp8BaKovvGup',
+    )
     try:
         if max_tokens is None:
             completion = client.chat.completions.create(
@@ -125,6 +127,10 @@ Returns(string):
     the message that the model gives back as response
 """
 def openai_example_chatcompletion(sys_key, eg_input_key, eg_output_key, user_message, model_name = "gpt-4", max_tokens = None, temperature = 0):
+    print(os.environ.get('OPENAI_API_KEY'))
+    client = OpenAI(
+        organization='org-5oRL8cS6ihNsXp8BaKovvGup',
+    )
     sys_prompt = GPT_TEMPLATES[sys_key]
     example_user = GPT_TEMPLATES[eg_input_key]
     example_assistant= GPT_TEMPLATES[eg_output_key]
