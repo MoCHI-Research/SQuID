@@ -395,7 +395,10 @@ We recommend a threshold between 0.85 and 1 for best results."""
     """
     def valid_file(self, file):
         if file == None or file == "":
-            self.alert_message.configure(text="You have not selected a .csv file yet.", text_color="#cc4125")
+            self.alert_message.configure(text="Please select a .csv file.", text_color="#cc4125")
+            return False
+        elif not os.environ.get("OPENAI_API_KEY"):
+            self.alert_message.configure(text="Please go to settings to enter your API key.", text_color="#cc4125")
             return False
         elif not os.path.exists(file):
             self.alert_message.configure(text="The file entered does not exist.\nPlease go back and reselect.", text_color="#cc4125")
