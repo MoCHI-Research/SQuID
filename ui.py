@@ -645,7 +645,6 @@ class PassOrStop(customtkinter.CTkFrame):
         REJECTED_DATA = []
         NUM_DATA_PROCESSED = 0
         # output_file = set_output_file()
-        add_headers_to_csv(OUTPUT_FILE)
 
         output_file = customtkinter.filedialog.asksaveasfilename(
             defaultextension=".csv",
@@ -656,15 +655,18 @@ class PassOrStop(customtkinter.CTkFrame):
         # Open the old CSV file in read mode
         with open(OUTPUT_FILE, 'r') as old_file:
             content = old_file.read()
+            
+        if output_file:
+            add_headers_to_csv(OUTPUT_FILE)
 
-        # Open the new CSV file in write mode
-        with open(output_file, 'w', newline='') as new_file:
-            new_file.write(content)
+            # Open the new CSV file in write mode
+            with open(output_file, 'w', newline='') as new_file:
+                new_file.write(content)
 
-        # Change the location so that reason for a label can work
-        OUTPUT_FILE = output_file
-        self.controller.CreateAffinityDiagram.reset()
-        self.controller.CreateAffinityDiagram.tkraise()
+            # Change the location so that reason for a label can work
+            OUTPUT_FILE = output_file
+            self.controller.CreateAffinityDiagram.reset()
+            self.controller.CreateAffinityDiagram.tkraise()
 
 class ReasonForLabel(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
