@@ -166,6 +166,8 @@ def save_data(data, output_file, first_pass=False):
             header = next(reader)
             right_column_index = len(header) - 1
             header_key = header[right_column_index]
+            header_key = re.sub(r'(?is)\n', '\r', header_key) # Make sure to use \r for proper dictionary key index
+            
             header.append(data[header_key])
 
             rows = []
