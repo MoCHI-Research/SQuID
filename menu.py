@@ -321,8 +321,12 @@ def indices_to_data(formatted_data, batch):
     csv_format = []
 
     for group_label, indices in formatted_data:
-        updated_indices = [batch[i] for i in indices]
-        csv_format.append((group_label, updated_indices))
+        updated_indices = []
+        for i in indices:
+            if i < len(batch):
+                updated_indices.append(batch[i])
+        if updated_indices:
+            csv_format.append((group_label, updated_indices))
 
     return csv_format
 

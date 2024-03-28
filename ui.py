@@ -652,12 +652,13 @@ class PassOrStop(customtkinter.CTkFrame):
             initialfile="output.csv",
             title="Save File")
 
-        # Open the old CSV file in read mode
-        with open(OUTPUT_FILE, 'r') as old_file:
-            content = old_file.read()
-            
         if output_file:
+            print("Saving...")
             add_headers_to_csv(OUTPUT_FILE)
+
+            # Open the old CSV file in read mode
+            with open(OUTPUT_FILE, 'r') as old_file:
+                content = old_file.read()
 
             # Open the new CSV file in write mode
             with open(output_file, 'w', newline='') as new_file:
