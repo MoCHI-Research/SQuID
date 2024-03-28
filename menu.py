@@ -166,7 +166,7 @@ def save_data(data, output_file, first_pass=False):
             header = next(reader)
             right_column_index = len(header) - 1
             header_key = header[right_column_index]
-            header_key = re.sub(r'(?is)\n', '\r', header_key) # Make sure to use \r for proper dictionary key index
+            
             
             header.append(data[header_key])
 
@@ -176,8 +176,8 @@ def save_data(data, output_file, first_pass=False):
                 try:
                     row.append(data[key])
                 except KeyError:
-                    print(data)
-                    print("Key Error with key: " + key)
+                    #print(data)
+                    print("Key Error with key: ", [key])
                 rows.append(row)
 
         with open(output_file, mode='w', newline='') as file:
@@ -221,7 +221,15 @@ def set_data_list(file):
         #     if row:
         #         list_of_data.append(row[0])
         for line in f:
-            list_of_data.append(line.strip("\n"))
+            #list_of_data.append(line.strip("\r"))
+            line = line.strip("\n")
+            line = re.sub(r'(?is)\r', '\n', line) # Make sure to use \n for proper dictionary key index
+            list_of_data.append(line)
+
+        
+        # print("aaaaaaaaaa")
+        # for datum in list_of_data:
+        #     print([datum])
         
     return list_of_data
 
