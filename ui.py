@@ -690,7 +690,7 @@ class ReasonForLabel(customtkinter.CTkFrame):
         title.grid(row=0, column=0, pady=(10, 10))
 
         # Instructions
-        instructions = "Please enter a valid number that corresponds with a pass number for the most recent generated affinity diagram file.\nNote that to get the raw data with its labels, you will want to start at 0."
+        instructions = "Please enter a valid number that corresponds with a pass number for the most recent generated affinity diagram file.\nNote that to get the raw data with its labels, you will want to start at 1."
         instructions_label = customtkinter.CTkLabel(main_frame, text=instructions, font=("Verdana", 14, "italic"))
         instructions_label.grid(row=1, column=0, pady=(0, 10))
 
