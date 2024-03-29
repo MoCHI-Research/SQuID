@@ -13,7 +13,7 @@ import customtkinter
 
 # GLOBAL VARIABLES
 SIZE_OF_BATCHES = 75
-FORCE_STOP = 60
+FORCE_STOP = 50
 DATASET_PATH = "datasets/"
 
 # A flag to tell the thread to stop
