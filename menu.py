@@ -53,10 +53,11 @@ Checks if the passed integer is an existing pass in the csv file
 used in ui.py
 """
 def valid_pass(pass_num):
-    if not os.path.exists('output.csv'):
+    output_path = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
+    if not os.path.exists(output_path):
         return False
 
-    with open('output.csv', 'r', newline='') as csvfile:
+    with open(output_path, 'r', newline='') as csvfile:
         reader = csv.reader(csvfile)
         num_columns = len(next(reader))
 
@@ -83,13 +84,13 @@ and the column to the right
 used in ui.py
 """
 def retrieve_pass(column_number):
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    if not os.path.exists(os.path.join(current_directory, 'output.csv')):
+    output_path = os.path.join(os.path.dirname(sys.argv[0]), 'output.csv')
+    if not os.path.exists(output_path):
         return False  # 'output.csv' file does not exist
 
     column_dict = {}
 
-    with open('output.csv', 'r', newline='') as csvfile:
+    with open(output_path, 'r', newline='') as csvfile:
         reader = csv.reader(csvfile)
         next(reader)
         for row in reader:
