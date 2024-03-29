@@ -13,6 +13,7 @@ import customtkinter
 
 # GLOBAL VARIABLES
 SIZE_OF_BATCHES = 75
+FORCE_STOP = 60
 DATASET_PATH = "datasets/"
 
 # A flag to tell the thread to stop
@@ -178,7 +179,7 @@ def save_data(data, output_file, first_pass=False):
                 try:
                     row.append(data[key])
                 except KeyError:
-                    #print(data)
+                    print(data)
                     print("Key Error with key: ", [key])
                 rows.append(row)
 
@@ -295,9 +296,12 @@ Formats results into a list of tuples in the format -> (Group Label, [indices])
 """
 def format_results(results):
     group_data = []
-
-    for line in results.split('\n'):
+    result_list = results.split('\n')
+    for j in range(len(result_list)):
+        line = result_list[j]
         if line.startswith("Group"):
+            if j > FORCE_STOP:
+                return group_data
             group_name = re.search(r'Group \d+: (.+)', line).group(1)
         elif re.search(r'\d+\,', line):
             indices = []
