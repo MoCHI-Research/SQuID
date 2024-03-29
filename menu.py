@@ -170,8 +170,12 @@ def save_data(data, output_file, first_pass=False):
             right_column_index = len(header) - 1
             header_key = header[right_column_index]
             
-            
-            header.append(data[header_key])
+            try:
+                header.append(data[header_key])
+            except KeyError:
+                print(data)
+                print("Key Error with key: ", [header_key])
+                header.append("Not Grouped")
 
             rows = []
             for row in reader:
