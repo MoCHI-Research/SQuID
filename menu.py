@@ -181,6 +181,7 @@ def save_data(data, output_file, first_pass=False):
                 except KeyError:
                     print(data)
                     print("Key Error with key: ", [key])
+                    row.append("Not Grouped")
                 rows.append(row)
 
         with open(output_file, mode='w', newline='') as file:
