@@ -183,6 +183,7 @@ def save_data(data, output_file, first_pass=False):
                     print("Key Error with key: ", [key])
                     row.append("Not Grouped")
                 rows.append(row)
+            rows = sorted(rows, key = lambda x: tuple(reversed(x)))
 
         with open(output_file, mode='w', newline='') as file:
             writer = csv.writer(file)
