@@ -795,6 +795,8 @@ class SplitSelectionTable(customtkinter.CTkScrollableFrame):
             data.destroy()
             label.destroy()
         self.data_label_pairs = []
+        self.num_radios = 0
+        self.radio_var = customtkinter.IntVar(value=0)
 
     def update_table(self, data: Dict):
         self.clear_table()

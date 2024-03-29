@@ -83,7 +83,8 @@ and the column to the right
 used in ui.py
 """
 def retrieve_pass(column_number):
-    if not os.path.exists('output.csv'):
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    if not os.path.exists(os.path.join(current_directory, 'output.csv')):
         return False  # 'output.csv' file does not exist
 
     column_dict = {}
