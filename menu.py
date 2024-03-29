@@ -177,7 +177,7 @@ def save_data(data, output_file, first_pass=False):
                 print("Key Error with key: ", [header_key])
                 header.append("Not Grouped")
 
-            rows = []
+            rows = [header]
             for row in reader:
                 key = row[right_column_index]
                 try:
@@ -191,7 +191,6 @@ def save_data(data, output_file, first_pass=False):
 
         with open(output_file, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(header)
             writer.writerows(rows)
     return output_file
 
